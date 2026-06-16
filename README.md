@@ -58,7 +58,7 @@ newspaper-scraper/
     extractor.py      # shared parsing helpers + per-site extractors (two-phase)
     writer.py         # CSV output: per-site + combined
     pipeline.py       # orchestrator: config -> extractors -> dedup -> writer
-  output/             # generated CSVs (gitignored)
+  output/             # generated CSVs (committed: the pilot corpus)
   logs/               # scrape logs (gitignored)
   recon/RECON.md      # landscape audit notes (the backbone of this README)
   run.py              # entry point
@@ -137,16 +137,48 @@ python run.py --site all            # every configured site + combined.csv
 
 Output CSVs land in `output/`; a timestamped log lands in `logs/`.
 
+## Data quality and verification
+
+Real-world HTML is messy, so the corpus was verified rather than assumed correct.
+
+- **Caught and fixed an author-extraction bug (Duke).** The first Duke
+  implementation selected `.article--byline`, which on SNWorks pages *also*
+  wraps the lead-image photo credit. The result: articles were attributed to the
+  photographer (e.g. "Photo by Amare Swierc") instead of the writer. The fix
+  targets the byline labeled "By" and explicitly skips any byline whose prefix
+  contains "Photo by", and joins co-authors. After re-running all 100 Duke
+  articles, zero authors contained a photo credit and the correct writers (e.g.
+  "Sarah Diaz", "Dylan Halper, Ella Moore") appear. This was found only by
+  opening the output and reading it.
+- **Sanity checks on `output/combined.csv`** (157 rows): 0 duplicate URLs across
+  sites, 0 blank URLs, Duke and Northwestern dates all valid ISO `YYYY-MM-DD`,
+  and every Yale `text` field populated (no empty strings).
+- **A few legitimately thin rows, not errors.** One Northwestern row
+  ("Weekly Crossword") and one Yale row ("IN PHOTOS: Commencement") have little
+  or no prose because they are a crossword and a photo gallery; some Yale
+  "Silhouette" rows are podcast episode pages. For a text-as-data corpus these
+  non-article content types are noise; filtering them by section/genre is a
+  natural next step.
+
 ## Limitations and next steps
 
 These are known, deliberate boundaries of the pilot — several are themselves
 findings:
 
+- **This pilot captures recent articles, not historical depth.** The corpus
+  spans roughly the last few weeks to two months per site (Northwestern
+  2026-06-12..06-15, Duke 2026-04-09..06-14). Measuring *ideological change over
+  time* — the project's actual goal — requires deep historical archives, which
+  is the natural next phase (see the archive-traversal note below). The pilot
+  establishes a generalizable pipeline; extending its temporal reach is a
+  configuration/discovery problem, not an architectural one.
 - **RSS only surfaces recent items.** Northwestern's WordPress feed returns
   ~10-15 recent posts, so a run yields well under the `max_articles=100` cap.
   This is a property of RSS discovery, not a failure. Full-archive collection
   would require **sitemap (`/sitemap.xml`) or archive-page/pagination
-  traversal**, documented here as the next step.
+  traversal** (the same HTML-pagination approach already used for Duke could be
+  pointed at Northwestern's category archives to go deeper), documented here as
+  the next step.
 - **Yale publication dates require JavaScript.** Yale's body text is
   server-rendered (recoverable via the requests fallback), but the byline date
   is hydrated client-side. It is captured when Playwright renders the page; in a
