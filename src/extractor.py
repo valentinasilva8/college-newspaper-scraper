@@ -34,6 +34,7 @@ Access notes (see recon/RECON.md):
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import random
@@ -43,7 +44,7 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, Iterator
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import feedparser
 import requests
@@ -131,7 +132,73 @@ def _polite_sleep(config: dict) -> None:
 
 def _empty_page() -> dict:
     """Uniform empty phase-2 result."""
-    return {"text": "", "author": "", "publication_date": "", "subtitle": ""}
+    return {
+        "text": "",
+        "author": "",
+        "publication_date": "",
+        "subtitle": "",
+        "section": "",
+        "subsection": "",
+    }
+
+
+def split_kicker(text: str) -> tuple[str, str]:
+    """Split a "Section | Subsection" kicker into ``(section, subsection)``.
+
+    Used by papers that print a two-level kicker above the headline (Duke's
+    SNWorks theme renders e.g. ``"News | University"``). Extra levels beyond the
+    second are ignored; a single-level kicker yields an empty subsection.
+    """
+    parts = [clean_text(p) for p in (text or "").split("|")]
+    parts = [p for p in parts if p]
+    if not parts:
+        return "", ""
+    if len(parts) == 1:
+        return parts[0], ""
+    return parts[0], parts[1]
+
+
+def resolve_section_path(
+    soup: BeautifulSoup, primary: str
+) -> tuple[str, str]:
+    """Resolve a primary category name into ``(section, subsection)``.
+
+    Papers on the SNO theme (Northwestern) expose only the most-specific
+    category via ``<meta property="article:section">`` (e.g. ``"Academic"``),
+    not its parent. The site nav, however, encodes the full taxonomy as
+    ``/category/<parent>/<child>/`` links plus single-segment top-level links.
+    We read that nav from the same page to map the primary category to its
+    parent:
+
+      - if ``primary`` matches a ``/category/<parent>/<child>/`` link, return
+        ``(parent_label, primary)`` -- e.g. ``("Campus", "Academic")``;
+      - otherwise ``primary`` is itself a top-level section, so return
+        ``(primary, "")`` -- e.g. ``("Arts and Entertainment", "")``.
+
+    Labels are taken verbatim from the publication's own nav (no normalization).
+    """
+    if not primary:
+        return "", ""
+    child_map: dict[str, tuple[str, str]] = {}  # child_label_lower -> (parent_slug, child_label)
+    top_map: dict[str, str] = {}  # slug -> label
+    for a in soup.find_all("a", href=True):
+        label = clean_text(a.get_text(" "))
+        if not label:
+            continue
+        segs = [s for s in urlparse(a["href"]).path.strip("/").split("/") if s]
+        if len(segs) >= 3 and segs[0] == "category":
+            child_map.setdefault(label.lower(), (segs[1], label))
+        elif len(segs) == 1:
+            top_map.setdefault(segs[0], label)
+        elif len(segs) == 2 and segs[0] == "category":
+            top_map.setdefault(segs[1], label)
+
+    hit = child_map.get(primary.lower())
+    if hit:
+        parent_slug, child_label = hit
+        parent_label = top_map.get(parent_slug, parent_slug.replace("-", " ").title())
+        return parent_label, child_label
+    return primary, ""
 
 
 _MONTH_NAMES = (
@@ -279,8 +346,23 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
         return _empty_page()
     paragraphs = [p.get_text(" ") for p in body.find_all("p")]
     text = clean_text(" ".join(paragraphs))
+
+    # Section hierarchy: <meta article:section> gives only the most-specific
+    # category (e.g. "Academic"); resolve its parent from the nav taxonomy so we
+    # capture "Campus / Academic" rather than just "Academic". Top-level
+    # categories (e.g. "Arts and Entertainment") resolve to an empty subsection.
+    primary = _meta_content(soup, "article:section")
+    section, subsection = resolve_section_path(soup, primary)
+
     # Author/date come from the RSS feed in phase 1.
-    return {"text": text, "author": "", "publication_date": "", "subtitle": ""}
+    return {
+        "text": text,
+        "author": "",
+        "publication_date": "",
+        "subtitle": "",
+        "section": section,
+        "subsection": subsection,
+    }
 
 
 def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -296,13 +378,16 @@ def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
             continue  # never yield an Article with an empty url
         page = _extract_text_northwestern(url, fetcher)
         raw_date = meta.get("publication_date") or page.get("publication_date", "")
+        # Prefer the page's resolved section path; fall back to the RSS tag.
+        section = page.get("section", "") or meta.get("section", "")
         yield Article(
             institution=institution,
             title=meta.get("title", ""),
             subtitle="",  # SNO og:description is an auto body excerpt, not a deck
             author=clean_text(meta.get("author", "") or page.get("author", "")),
             publication_date=normalize_date(raw_date, url),
-            section=meta.get("section", ""),
+            section=section,
+            subsection=page.get("subsection", ""),
             url=url,
             text=page.get("text", ""),
             scraped_at=datetime.now(timezone.utc).isoformat(),
@@ -441,7 +526,58 @@ def _extract_text_duke(url: str, fetcher: "Fetcher") -> dict:
 
     subtitle = _meta_content(soup, "og:description")
 
-    return {"text": text, "author": author, "publication_date": pub, "subtitle": subtitle}
+    # Section hierarchy: SNWorks prints the category as the <a> immediately above
+    # the headline -- usually two-level ("News | University") but sometimes a
+    # single level ("News"). Use it whenever present; only fall back to the
+    # JSON-LD articleSection list if no kicker is found at all. The kicker is a
+    # short label, so guard against accidentally grabbing an unrelated link.
+    section, subsection = "", ""
+    h1 = soup.find("h1")
+    kicker = h1.find_previous("a") if h1 else None
+    kicker_txt = clean_text(kicker.get_text(" ")) if kicker else ""
+    if kicker_txt and len(kicker_txt) <= 60:
+        section, subsection = split_kicker(kicker_txt)
+    if not section:
+        section, subsection = _duke_section_from_jsonld(soup)
+
+    return {
+        "text": text,
+        "author": author,
+        "publication_date": pub,
+        "subtitle": subtitle,
+        "section": section,
+        "subsection": subsection,
+    }
+
+
+def _duke_section_from_jsonld(soup: BeautifulSoup) -> tuple[str, str]:
+    """Fallback Duke section/subsection from JSON-LD ``articleSection``.
+
+    SNWorks emits ``articleSection`` as a slug list mixing real categories with
+    layout/placement flags (e.g. ``["news", "topstory", "newsletter-top", ...]``).
+    We drop the placement flags and keep the first two real category slugs, then
+    title-case them.
+    """
+    # Substrings that mark a placement/layout slug rather than a real section.
+    placement_markers = ("topstory", "newsletter", "featured", "secondary", "carousel")
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string or "{}")
+        except (ValueError, TypeError):
+            continue
+        for obj in data if isinstance(data, list) else [data]:
+            if not isinstance(obj, dict):
+                continue
+            secs = obj.get("articleSection")
+            if isinstance(secs, list) and secs:
+                real = [
+                    clean_text(str(s)).replace("-", " ").title()
+                    for s in secs
+                    if not any(m in str(s).lower() for m in placement_markers)
+                ]
+                if real:
+                    return real[0], (real[1] if len(real) > 1 else "")
+    return "", ""
 
 
 def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -461,13 +597,16 @@ def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
             logger.warning("Skipping Duke article with empty body: %s", url)
             continue
         raw_date = page.get("publication_date") or meta.get("publication_date", "")
+        # Prefer the per-article kicker section; fall back to the crawl label.
+        section = page.get("section", "") or meta.get("section", "")
         yield Article(
             institution=institution,
             title=meta.get("title", ""),
             subtitle=page.get("subtitle", ""),
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
-            section=meta.get("section", ""),
+            section=section,
+            subsection=page.get("subsection", ""),
             url=url,
             text=text,
             scraped_at=datetime.now(timezone.utc).isoformat(),
@@ -780,6 +919,7 @@ def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
             section=meta.get("section", ""),
+            subsection="",  # Yale's taxonomy is single-level (verified: no sub-nav)
             url=url,
             text=text,
             scraped_at=datetime.now(timezone.utc).isoformat(),

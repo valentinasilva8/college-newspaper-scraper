@@ -61,6 +61,21 @@ selectors would work. Each entry records what broke, how we noticed, and the fix
 | Yale single author only | Screenshot article: `Jolynda Wang` vs `Jolynda Wang & Aria Lynn-Skov` | `_collect_byline_authors()` on all `/author/` links |
 | Northwestern `subtitle` | Compared `og:description` to on-page content — it's a body excerpt | Leave `subtitle` empty (uniform column); document in README |
 | Duke photo credit as author | Spot-check CSV authors | Skip bylines with `"Photo by"` prefix; join writer bylines |
+| Section flattened to one level | CSV `section` vs live nav: Duke/NW nest categories, Yale does not | Add uniform `subsection`; Duke from kicker, NW from nav `/category/<parent>/<child>/` map, Yale single-level |
+
+### Section taxonomy per site (verified from live nav)
+
+| Site | Depth | `section` source | `subsection` source |
+|------|-------|------------------|---------------------|
+| Duke | 2 levels | kicker `"News \| University"` above `<h1>` (JSON-LD `articleSection` fallback) | second kicker segment |
+| Northwestern | 2 levels | parent resolved from nav `/category/<parent>/<child>/` | `<meta article:section>` (most-specific category) |
+| Yale | 1 level | per-section discovery page (`/university`, `/city`, …) | none — nav has no sub-menus (empty) |
+
+Northwestern's RSS `<category>` tags are an **unordered bag** (section,
+subsection, nav buckets, and topic/person tags mixed together), so they cannot
+be used to infer hierarchy; the parent is resolved from the site nav instead.
+Labels are kept verbatim from each paper — cross-paper section normalization is
+a deliberate non-goal of the pilot.
 
 ### Uniform schema (`subtitle` column)
 

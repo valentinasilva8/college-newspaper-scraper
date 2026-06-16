@@ -88,7 +88,8 @@ merges phase-2 values over phase-1 values.
 | `subtitle` | editor-written deck when the CMS exposes one; **empty when it does not** (see below) |
 | `author` | byline (cleaned); multiple writers joined with `, ` |
 | `publication_date` | ISO 8601 `YYYY-MM-DD`, or `UNPARSED:<raw>` if unparseable |
-| `section` | site section/category |
+| `section` | top-level category in the paper's own taxonomy |
+| `subsection` | child category when the paper nests sections; **empty otherwise** |
 | `url` | canonical article URL (dedup key) |
 | `text` | full body text (cleaned) |
 | `scraped_at` | ISO 8601 timestamp of collection |
@@ -104,6 +105,28 @@ merges phase-2 values over phase-1 values.
 The column exists on every CSV so the schema stays uniform; Northwestern rows
 simply leave it blank. This is a documented accuracy judgment, not a missing
 feature.
+
+### Section hierarchy: `section` + `subsection`
+
+Each paper uses a different category depth, so a single `section` field would
+either lose detail or mix levels. We capture **two levels** uniformly:
+
+| Site | `section` | `subsection` | Source |
+|------|-----------|--------------|--------|
+| Duke | `News` | `University`, `Local/National`, … | per-article kicker `"News \| University"` above the headline (JSON-LD `articleSection` fallback) |
+| Northwestern | `Campus`, `A&E`, … | `Academic`, `Events`, … (empty for top-level articles) | `<meta article:section>` (most-specific) resolved to its parent via the nav `/category/<parent>/<child>/` taxonomy |
+| Yale | `University`, `City`, `Sports`, … | **always empty** | per-section discovery page; Yale's nav is **single-level** (verified: no sub-menus) |
+
+Rules:
+
+- `section` is the broad bucket, `subsection` the specific child. Labels are
+  taken **verbatim from each publication's own nav** — no cross-paper
+  normalization (that would be a separate, documented modeling step).
+- When a paper's category is itself top-level (Yale entirely; Northwestern
+  articles filed directly under "A&E" or "Crosswords"), `subsection` is left
+  empty rather than duplicated or invented.
+- This mirrors the `subtitle` rule: a uniform column, populated only with
+  genuinely correct values, empty where the level does not exist.
 
 ### Design choices baked into the infrastructure
 
@@ -213,6 +236,19 @@ it** — the judgment trail is the differentiator of this submission.
    deck. We verified this on a live Northwestern article. Rather than store a
    misleading excerpt as subtitle, the uniform `subtitle` column is left empty for
    Northwestern (and will be for other SNO sites such as UChicago in Phase 3).
+
+10. **Section hierarchy was being flattened.** The first pass stored only one
+    category level: Northwestern took the RSS feed's *first* tag (an unordered
+    bag mixing sections, subsections, nav buckets like "Top Stories", and even
+    people's names — so `tags[0]` was effectively arbitrary, e.g. "Academic"
+    with no parent), and Duke was hard-coded to `"News"`. **Caught:** comparing
+    the CSV `section` values to the live site nav, which clearly nests
+    categories (Duke `News > University`, Northwestern `Campus > Academic`),
+    while Yale's nav is single-level. **Fix:** added a uniform `subsection`
+    column and resolved the full path per paper — Duke from its
+    `"Section \| Subsection"` kicker, Northwestern by mapping
+    `<meta article:section>` to its parent through the nav
+    `/category/<parent>/<child>/` taxonomy, Yale left single-level by design.
 
 9. **Duke author vs photo credit (earlier fix).** SNWorks `.article--byline`
    also wraps lead-image photo credits (`"Photo by …"`). **Fix:** skip bylines

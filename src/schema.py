@@ -22,7 +22,8 @@ class Article:
     subtitle: str  # editor-written deck when the CMS exposes one; empty otherwise
     author: str
     publication_date: str  # normalized to ISO 8601 (YYYY-MM-DD) or "UNPARSED:<raw>"
-    section: str
+    section: str  # top-level category (publication's own taxonomy)
+    subsection: str  # child category when the paper nests sections; empty otherwise
     url: str
     text: str
     scraped_at: str  # ISO 8601 timestamp of when the record was collected
