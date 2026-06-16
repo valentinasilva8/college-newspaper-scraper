@@ -133,6 +133,22 @@ def _empty_page() -> dict:
     return {"text": "", "author": "", "publication_date": ""}
 
 
+def _largest_p_container(soup: BeautifulSoup):
+    """Heuristic fallback: the element holding the most direct <p> children.
+
+    Useful when a site's body container class is unknown/changes; the article
+    body is almost always the densest paragraph cluster on the page.
+    """
+    best = None
+    best_count = 0
+    for el in soup.find_all(["div", "article", "section"]):
+        count = len(el.find_all("p", recursive=False))
+        if count > best_count:
+            best_count = count
+            best = el
+    return best if best_count >= 3 else None
+
+
 # ----------------------------------------------------------------------
 # Northwestern (The Daily Northwestern) -- RSS discovery + static HTML
 # ----------------------------------------------------------------------
@@ -245,12 +261,13 @@ def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
     max_pages = config.get("max_pages", 5)
 
     session = _duke_session()
-    results: list[dict] = []
-    seen: set[str] = set()
+    # Keyed by URL to merge the multiple cards (thumbnail + headline anchors)
+    # that point at the same article; preserves insertion order.
+    by_url: dict[str, dict] = {}
     next_url: str | None = section_url
     pages = 0
 
-    while next_url and pages < max_pages and len(results) < max_articles:
+    while next_url and pages < max_pages and len(by_url) < max_articles:
         _polite_sleep(config)
         try:
             resp = session.get(next_url, timeout=15)
@@ -260,26 +277,33 @@ def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
             break
 
         soup = make_soup(resp.text)
-        # SNWorks article URLs look like /article/<slug>-YYYYMMDD.
+        # SNWorks article URLs look like /article/<slug>-YYYYMMDD. Each card has
+        # several anchors for the same URL: an image anchor (no text, headline in
+        # aria-label) and a headline anchor (text). Prefer whichever has a title.
         for a in soup.select("a[href^='/article/']"):
             href = a.get("href", "")
             if not href:
                 continue
             full = urljoin(base_url, href)
-            if full in seen:
-                continue
-            seen.add(full)
-            results.append(
-                {
+            title = clean_text(a.get_text(" "))
+            if not title:
+                # Image/thumbnail anchors expose the headline via aria-label.
+                title = re.sub(
+                    r"^read\s+", "", clean_text(a.get("aria-label", "")), flags=re.IGNORECASE
+                )
+            existing = by_url.get(full)
+            if existing is None:
+                if len(by_url) >= max_articles:
+                    continue
+                by_url[full] = {
                     "url": full,
-                    "title": clean_text(a.get_text(" ")),
+                    "title": title,
                     "author": "",
                     "publication_date": "",
                     "section": "",
                 }
-            )
-            if len(results) >= max_articles:
-                break
+            elif title and not existing["title"]:
+                existing["title"] = title
 
         # Pagination lives in <ol class="index-pagination"> as a "Next" anchor.
         next_url = None
@@ -291,7 +315,7 @@ def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
                     break
         pages += 1
 
-    return results[:max_articles]
+    return list(by_url.values())[:max_articles]
 
 
 def _extract_text_duke(url: str, fetcher: "Fetcher") -> dict:
@@ -315,10 +339,21 @@ def _extract_text_duke(url: str, fetcher: "Fetcher") -> dict:
     else:
         text = clean_text(" ".join(p.get_text(" ") for p in body.find_all("p")))
 
-    # Author byline: .article--byline (strip a leading "By ").
-    byline = soup.select_one(".article--byline")
-    author = clean_text(byline.get_text(" ")) if byline else ""
-    author = re.sub(r"^by\s+", "", author, flags=re.IGNORECASE)
+    # Author: pick the byline labeled "By" (the writer). SNWorks also renders a
+    # lead-image photo credit as .article--byline but with a "Photo by" prefix,
+    # so we skip any byline whose prefix mentions "photo". Joins co-authors.
+    author = ""
+    for byline in soup.select(".article--byline"):
+        prefix_el = byline.select_one(".article--byline-prefix")
+        prefix_txt = clean_text(prefix_el.get_text(" ")).lower() if prefix_el else ""
+        if "photo" in prefix_txt:
+            continue
+        if prefix_txt.startswith("by"):
+            names = [clean_text(a.get_text(" ")) for a in byline.select(".article--author")]
+            names = [n for n in names if n]
+            if names:
+                author = ", ".join(names)
+                break
 
     # Date: first <time datetime="..."> on the page; fallback to URL suffix.
     time_el = soup.select_one("time[datetime]")
@@ -377,42 +412,63 @@ def _is_checkpoint(html: str) -> bool:
     return any(marker in html for marker in _CHECKPOINT_MARKERS)
 
 
-def _render_yale(url: str) -> str | None:
-    """Render ``url`` with headless Chromium to clear the JS checkpoint.
+# Once a Playwright launch fails in a given run (e.g. no browser, sandboxed
+# environment), stop retrying it -- otherwise every article pays the launch
+# timeout before falling back. Reset per process.
+_playwright_disabled = False
 
-    Falls back to a browser-UA requests GET if Playwright is unavailable or the
-    nav fails. Returns rendered HTML, or None if still challenged/blocked.
-    """
+
+def _render_with_playwright(url: str) -> str | None:
+    """Render ``url`` with headless Chromium; None on any failure."""
+    global _playwright_disabled
+    if _playwright_disabled:
+        return None
     # Keep Playwright's browser binaries inside the gitignored project folder.
     os.environ.setdefault(
         "PLAYWRIGHT_BROWSERS_PATH", str(PROJECT_ROOT / "playwright-browsers")
     )
-
-    html: str | None = None
     try:
         from playwright.sync_api import sync_playwright  # lazy import
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent=BROWSER_UA)
-            page = context.new_page()
-            page.goto(url, wait_until="networkidle", timeout=30000)
-            # Poll for the checkpoint to clear (it self-resolves after JS runs).
-            html = page.content()
-            for _ in range(6):
-                if not _is_checkpoint(html):
-                    break
-                page.wait_for_timeout(1500)
+            # Short launch timeout so a broken/unavailable browser fails fast.
+            browser = p.chromium.launch(headless=True, timeout=20000)
+            try:
+                context = browser.new_context(user_agent=BROWSER_UA)
+                page = context.new_page()
+                page.goto(url, wait_until="networkidle", timeout=30000)
                 html = page.content()
-            browser.close()
+                # Poll for the checkpoint to clear (self-resolves after JS runs).
+                for _ in range(6):
+                    if not _is_checkpoint(html):
+                        break
+                    page.wait_for_timeout(1500)
+                    html = page.content()
+                return html
+            finally:
+                browser.close()
     except Exception as exc:  # Playwright missing/broken, or navigation failed.
-        logger.warning("Playwright render failed for %s: %s", url, exc)
-        html = None
+        logger.warning(
+            "Playwright unavailable (%s); disabling it for this run and using "
+            "the requests fallback.",
+            exc.__class__.__name__,
+        )
+        _playwright_disabled = True
+        return None
 
+
+def _render_yale(url: str) -> str | None:
+    """Get article HTML past Yale's Vercel checkpoint.
+
+    Prefers Playwright (renders JS, so client-side author/date hydrate); falls
+    back to a browser-UA requests GET (recovers server-rendered body text).
+    Returns HTML, or None if still challenged/blocked.
+    """
+    html = _render_with_playwright(url)
     if html is not None and not _is_checkpoint(html):
         return html
 
-    # Fallback: plain requests with a browser UA (often still challenged).
+    # Fallback: plain requests with a browser UA.
     try:
         resp = requests.get(url, headers={"User-Agent": BROWSER_UA}, timeout=20)
         if resp.status_code == 200 and not _is_checkpoint(resp.text):
@@ -423,9 +479,8 @@ def _render_yale(url: str) -> str | None:
     return None
 
 
-# Defensive: a date-stamped path is the strongest signal of an article URL on a
-# custom CMS whose exact pattern is JS-gated (e.g. /YYYY/MM/DD/slug/).
-_YALE_ARTICLE_PATH = re.compile(r"/20\d{2}/\d{2}/\d{2}/[^/]")
+# Yale (Payload CMS) serves articles at /articles/<slug> (verified at runtime).
+_YALE_ARTICLE_PATH = re.compile(r"/articles/[a-z0-9][a-z0-9-]+/?$", re.IGNORECASE)
 
 
 def _discover_yale(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
@@ -473,22 +528,34 @@ def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
         return _empty_page()
     soup = make_soup(html)
 
-    # Try candidate body containers in order; custom CMS, so be defensive.
+    # Body: Payload CMS renders the article into .payload-richtext (.prose).
+    # Try known containers first, then fall back to the largest <p> cluster.
     body = None
-    for selector in ("article", ".article-content", ".entry-content", ".post-content", "main"):
+    for selector in (".payload-richtext", "article", ".article-content", ".entry-content", ".post-content", "main"):
         candidate = soup.select_one(selector)
         if candidate and candidate.find_all("p"):
             body = candidate
             break
     if body is None:
+        body = _largest_p_container(soup)
+    if body is None:
         logger.warning("Yale body container not found for %s", url)
         return _empty_page()
     text = clean_text(" ".join(p.get_text(" ") for p in body.find_all("p")))
 
-    # Byline candidates (class/rel vary on a custom CMS).
-    byline = soup.select_one(".byline, .author, [rel='author'], .article-author")
-    author = clean_text(byline.get_text(" ")) if byline else ""
-    author = re.sub(r"^by\s+", "", author, flags=re.IGNORECASE)
+    # Author/date are hydrated client-side; only present when Playwright renders.
+    # Best-effort across several markups (byline links, time tag, "By NAME").
+    author = ""
+    byline = soup.select_one(
+        "a[href*='/staff'], a[href*='/author'], [rel='author'], "
+        "[class*='author'], [class*='byline']"
+    )
+    if byline:
+        author = re.sub(r"^by\s+", "", clean_text(byline.get_text(" ")), flags=re.IGNORECASE)
+    if not author:
+        m = re.search(r"\bBy\s+([A-Z][a-z]+(?:\s+[A-Z][a-z.'-]+){1,3})", soup.get_text(" "))
+        if m:
+            author = clean_text(m.group(1))
 
     time_el = soup.select_one("time[datetime]")
     pub = time_el.get("datetime", "") if time_el else ""
