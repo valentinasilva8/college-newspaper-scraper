@@ -44,6 +44,29 @@ def write_site_csv(site: str, articles: Iterable[Article]) -> Path:
     return path
 
 
+def read_site_csv(site: str) -> list[Article]:
+    """Load existing per-site rows from ``output/<site>.csv``.
+
+    Returns an empty list when the file is missing. Missing columns in older
+    CSVs are filled with ``""`` so incremental merges stay compatible.
+    """
+    path = OUTPUT_DIR / f"{site}.csv"
+    if not path.is_file():
+        return []
+
+    fieldnames = Article.fieldnames()
+    rows: list[Article] = []
+    with path.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        for raw in reader:
+            data = {name: (raw.get(name) or "") for name in fieldnames}
+            if not data.get("url"):
+                continue
+            rows.append(Article(**data))
+    logger.info("Loaded %d existing row(s) for '%s' from %s", len(rows), site, path.name)
+    return rows
+
+
 def write_combined_csv(articles: Iterable[Article]) -> Path:
     """Write the combined corpus to ``output/combined.csv``.
 

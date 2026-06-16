@@ -17,7 +17,7 @@ import yaml
 from .extractor import SITE_EXTRACTORS
 from .fetcher import Fetcher
 from .schema import Article
-from .writer import write_combined_csv, write_site_csv
+from .writer import read_site_csv, write_combined_csv, write_site_csv
 
 logger = logging.getLogger(__name__)
 
@@ -74,11 +74,18 @@ def _build_fetcher(site_config: dict) -> Fetcher:
     )
 
 
-def run_site(site_key: str, config: dict[str, Any], seen_urls: set[str]) -> list[Article]:
-    """Run a single site's extractor; return the deduplicated records.
+def run_site(
+    site_key: str,
+    config: dict[str, Any],
+    seen_urls: set[str],
+    *,
+    incremental: bool = True,
+) -> list[Article]:
+    """Run a single site's extractor; return the merged per-site corpus.
 
-    URL-keyed deduplication happens HERE (in the orchestrator), not inside
-    individual extractors -- so dedup logic is shared and consistent.
+    When ``incremental`` is True (default), existing rows in
+    ``output/<site>.csv`` are preserved and their URLs are passed to the
+    extractor via ``skip_urls`` so phase-2 fetches are not repeated.
     """
     if site_key not in SITE_EXTRACTORS:
         raise KeyError(f"No extractor registered for site '{site_key}'")
@@ -87,29 +94,64 @@ def run_site(site_key: str, config: dict[str, Any], seen_urls: set[str]) -> list
     sites = config.get("sites", {})
     site_cfg = _merge_site_config(defaults, sites.get(site_key, {}))
 
+    existing: list[Article] = read_site_csv(site_key) if incremental else []
+    # Only skip URLs whose existing row already has body text (re-fetch empties).
+    skip_urls = {article.url for article in existing if article.text.strip()}
+    site_cfg["skip_urls"] = skip_urls
+    site_cfg["refresh_discovery"] = not incremental
+
+    for article in existing:
+        seen_urls.add(article.url)
+
     extractor = SITE_EXTRACTORS[site_key]
     fetcher = _build_fetcher(site_cfg)
 
-    logger.info("Running extractor for '%s'", site_key)
-    articles: list[Article] = []
+    logger.info(
+        "Running extractor for '%s' (%d existing row(s), incremental=%s)",
+        site_key,
+        len(existing),
+        incremental,
+    )
+    new_articles: list[Article] = []
     try:
         for article in extractor(site_cfg, fetcher):
             if article.url in seen_urls:
                 logger.debug("Duplicate URL skipped: %s", article.url)
                 continue
             seen_urls.add(article.url)
-            articles.append(article)
+            new_articles.append(article)
     finally:
         fetcher.close()
 
-    write_site_csv(site_key, articles)
-    return articles
+    updated_urls = {article.url for article in new_articles}
+    merged = [
+        article
+        for article in existing
+        if article.url not in updated_urls and article.text.strip()
+    ]
+    merged.extend(new_articles)
+    write_site_csv(site_key, merged)
+    logger.info(
+        "Site '%s': %d new row(s), %d total row(s) written.",
+        site_key,
+        len(new_articles),
+        len(merged),
+    )
+    return merged
 
 
-def run(site: str, config: dict[str, Any] | None = None) -> list[Article]:
-    """Run one site or all sites; write per-site + combined CSV output.
+def run(
+    site: str,
+    config: dict[str, Any] | None = None,
+    *,
+    incremental: bool = True,
+    write_combined: bool = False,
+) -> list[Article]:
+    """Run one site or all sites; write per-site CSV output.
 
     ``site`` is a site key (e.g. "duke") or the literal "all".
+    ``write_combined`` is off by default so ``combined.csv`` is only rebuilt
+    when explicitly requested.
     """
     config = config if config is not None else load_config()
 
@@ -121,9 +163,12 @@ def run(site: str, config: dict[str, Any] | None = None) -> list[Article]:
     seen_urls: set[str] = set()
     all_articles: list[Article] = []
     for key in site_keys:
-        all_articles.extend(run_site(key, config, seen_urls))
+        all_articles.extend(
+            run_site(key, config, seen_urls, incremental=incremental)
+        )
 
-    write_combined_csv(all_articles)
+    if write_combined:
+        write_combined_csv(all_articles)
     logger.info(
         "Done. %d site(s), %d unique article(s) total.",
         len(site_keys),

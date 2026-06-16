@@ -9,8 +9,7 @@ defaults:
   # Honest, consistent research User-Agent (also used for robots.txt checks).
   user_agent: "CollegeNewspaperResearchBot/1.0 (academic research; contact: valentinatsilva@proton.me)"
 
-  # Cap per site per run. Full historical archives are NOT collected in this
-  # pilot (see README -> "Next steps" for sitemap/archive traversal).
+  # Cap per site per run (new articles fetched; incremental merge preserves existing rows).
   max_articles: 100
 
   rate_limit:
@@ -26,20 +25,26 @@ sites:
     base_url: "https://www.dukechronicle.com"
     # SNWorks CMS, server-rendered. No RSS endpoint. WAF (awselb) returns 403
     # for the honest research UA, so the Duke module uses a browser UA (see
-    # extractor.py / RECON.md). Discovery walks /section/news pagination.
+    # extractor.py / RECON.md). Discovery walks /section/news deep pagination.
     method: "html"
     section_url: "https://www.dukechronicle.com/section/news"
     section_label: "News"
-    max_pages: 5            # cap pagination so we never crawl the full archive
-    max_articles: 100
+    year_start: 2015
+    year_end: 2026
+    per_year: 3             # first run: ~12 years x 3 = ~36 candidates
+    duke_pages_per_year: 28 # listing page heuristic (higher page = older)
+    duke_page_window: 3     # pages scanned on each side of the estimate
+    max_pages: 400          # cap for binary-search fallback only
+    max_articles: 40
     selectors:
       article_link: "a[href^='/article/']"   # SNWorks article URL pattern
       article_body: ".article-content"        # body container (.full-article.prose)
       byline: ".article--byline"              # author byline
       time: "time[datetime]"                  # publication date
     rate_limit:
-      delay_min: 1.0
-      delay_max: 3.0
+      # robots.txt (readable with browser UA) requests Crawl-delay: 10.
+      delay_min: 10.0
+      delay_max: 12.0
       max_concurrency: 1
 
   yale:
@@ -47,9 +52,11 @@ sites:
     base_url: "https://yaledailynews.com"
     # Custom CMS behind a Vercel bot-detection checkpoint that requires JS, so
     # we render with Playwright (headless Chromium) and fall back to a browser
-    # UA via requests. Selectors are resolved defensively at runtime.
+    # UA via requests. Sitemap widens recent coverage; no deep historical archive.
     method: "playwright"
-    max_articles: 100
+    discovery_mode: "sitemap"
+    articles_sitemap: "https://yaledailynews.com/articles-sitemap.xml"
+    max_articles: 50
     selectors:
       # Candidate body containers tried in order (custom CMS, JS-gated).
       article_body_candidates:
@@ -66,9 +73,14 @@ sites:
   northwestern:
     name: "The Daily Northwestern (Northwestern University)"
     base_url: "https://dailynorthwestern.com"
-    method: "rss"
-    rss_url: "https://dailynorthwestern.com/feed/rss/"
-    max_articles: 100
+    method: "sitemap"
+    discovery_mode: "sitemap"
+    sitemap_index: "https://dailynorthwestern.com/sitemap.xml"
+    rss_url: "https://dailynorthwestern.com/feed/rss/"  # legacy; RSS surfaces ~10 recent items
+    year_start: 2000
+    year_end: 2026
+    per_year: 2             # first run: ~27 years x 2 = ~54 candidates
+    max_articles: 60
     selectors:
       # SNO/FLEX Pro theme: full article body container (verified during recon).
       article_body: "#sno-story-body-content"

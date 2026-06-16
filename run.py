@@ -26,13 +26,27 @@ def build_parser() -> argparse.ArgumentParser:
         choices=choices,
         help="Site key to scrape, or 'all' for every configured site.",
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Ignore existing per-site CSV rows and rebuild from scratch.",
+    )
+    parser.add_argument(
+        "--combined",
+        action="store_true",
+        help="Also write output/combined.csv (off by default).",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     pipeline.setup_logging()
-    pipeline.run(args.site)
+    pipeline.run(
+        args.site,
+        incremental=not args.overwrite,
+        write_combined=args.combined,
+    )
     return 0
 
 
