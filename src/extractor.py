@@ -543,6 +543,11 @@ def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
         return _empty_page()
     text = clean_text(" ".join(p.get_text(" ") for p in body.find_all("p")))
 
+    # Title backfill: some listing anchors are image-only (no text), so capture
+    # the article <h1> here for extract_yale to use when discovery had none.
+    h1 = soup.select_one("h1")
+    page_title = clean_text(h1.get_text(" ")) if h1 else ""
+
     # Author/date are hydrated client-side; only present when Playwright renders.
     # Best-effort across several markups (byline links, time tag, "By NAME").
     author = ""
@@ -559,7 +564,7 @@ def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
 
     time_el = soup.select_one("time[datetime]")
     pub = time_el.get("datetime", "") if time_el else ""
-    return {"text": text, "author": author, "publication_date": pub}
+    return {"text": text, "author": author, "publication_date": pub, "title": page_title}
 
 
 def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -586,7 +591,7 @@ def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         raw_date = page.get("publication_date") or meta.get("publication_date", "")
         yield Article(
             institution=institution,
-            title=meta.get("title", ""),
+            title=meta.get("title", "") or page.get("title", ""),
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
             section=meta.get("section", ""),
