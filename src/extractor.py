@@ -11,7 +11,8 @@ Two-phase pattern (per site):
       ``url, title, author, publication_date, section``.
   Phase 2 (full text): ``_extract_text_<site>(url, fetcher) -> dict``
       fetches one article page and returns a UNIFORM dict
-      ``{"text", "author", "publication_date"}``.
+      ``{"text", "author", "publication_date", "subtitle"}`` (plus optional
+      ``title`` for Yale listing backfill).
 
 Why phase 2 returns a dict (not a bare string): for Yale and Duke the author
 and date live on the article page, not in the listing, so phase 2 must surface
@@ -130,7 +131,80 @@ def _polite_sleep(config: dict) -> None:
 
 def _empty_page() -> dict:
     """Uniform empty phase-2 result."""
-    return {"text": "", "author": "", "publication_date": ""}
+    return {"text": "", "author": "", "publication_date": "", "subtitle": ""}
+
+
+_MONTH_NAMES = (
+    r"January|February|March|April|May|June|July|August|"
+    r"September|October|November|December"
+)
+
+
+def find_long_date(text: str, *, prefer_time_prefixed: bool = True) -> str:
+    """Extract a long-form publication date from free text.
+
+  Site-agnostic helper for when ``<time datetime>`` is absent. When
+  ``prefer_time_prefixed`` is True (default), match a byline timestamp such as
+  ``"11:36 p.m., May 27, 2026"`` first -- this avoids grabbing a site masthead's
+  current date (``"Monday, June 15, 2026"``), which carries no time prefix.
+  Falls back to a bare long-form date when no time-prefixed match exists.
+    """
+    if not text:
+        return ""
+    if prefer_time_prefixed:
+        m = re.search(
+            r"\d{1,2}:\d{2}\s*[ap]\.m\.,\s*((?:" + _MONTH_NAMES + r")\s+\d{1,2},\s+20\d{2})",
+            text,
+        )
+        if m:
+            return m.group(1)
+    m = re.search(
+        r"(?:" + _MONTH_NAMES + r")\s+\d{1,2},\s+20\d{2}",
+        text,
+    )
+    return m.group(0) if m else ""
+
+
+def _meta_content(soup: BeautifulSoup, key: str) -> str:
+    """Return cleaned ``<meta property|name=key>`` content, or ""."""
+    for attr in ("property", "name"):
+        tag = soup.find("meta", attrs={attr: key})
+        if tag and tag.get("content"):
+            return clean_text(tag["content"])
+    return ""
+
+
+def _collect_byline_authors(soup: BeautifulSoup, link_selector: str) -> str:
+    """Gather byline author names from anchor elements; dedupe and join.
+
+    Strips a leading ``By `` from each link text, dedupes case-insensitively
+    (preserving first-seen casing), and joins with ``, ``.
+    """
+    seen_lower: set[str] = set()
+    names: list[str] = []
+    for a in soup.select(link_selector):
+        name = re.sub(r"^by\s+", "", clean_text(a.get_text(" ")), flags=re.IGNORECASE)
+        if not name:
+            continue
+        key = name.lower()
+        if key in seen_lower:
+            continue
+        seen_lower.add(key)
+        names.append(name)
+    return ", ".join(names)
+
+
+def _subtitle_from_og_or_deck(soup: BeautifulSoup) -> str:
+    """Editor deck from ``og:description``, or the ``<h2>`` immediately after ``<h1>``."""
+    subtitle = _meta_content(soup, "og:description")
+    if subtitle:
+        return subtitle
+    h1 = soup.find("h1")
+    if h1:
+        h2 = h1.find_next_sibling("h2")
+        if h2:
+            return clean_text(h2.get_text(" "))
+    return ""
 
 
 def _largest_p_container(soup: BeautifulSoup):
@@ -206,7 +280,7 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
     paragraphs = [p.get_text(" ") for p in body.find_all("p")]
     text = clean_text(" ".join(paragraphs))
     # Author/date come from the RSS feed in phase 1.
-    return {"text": text, "author": "", "publication_date": ""}
+    return {"text": text, "author": "", "publication_date": "", "subtitle": ""}
 
 
 def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -225,6 +299,7 @@ def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         yield Article(
             institution=institution,
             title=meta.get("title", ""),
+            subtitle="",  # SNO og:description is an auto body excerpt, not a deck
             author=clean_text(meta.get("author", "") or page.get("author", "")),
             publication_date=normalize_date(raw_date, url),
             section=meta.get("section", ""),
@@ -257,6 +332,7 @@ def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
     """Phase 1: walk the /section/news listing (+ pagination) for article links."""
     base_url = config.get("base_url", "https://www.dukechronicle.com")
     section_url = config.get("section_url") or f"{base_url}/section/news"
+    section_label = config.get("section_label", "News")
     max_articles = config.get("max_articles", 100)
     max_pages = config.get("max_pages", 5)
 
@@ -300,7 +376,7 @@ def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
                     "title": title,
                     "author": "",
                     "publication_date": "",
-                    "section": "",
+                    "section": section_label,
                 }
             elif title and not existing["title"]:
                 existing["title"] = title
@@ -363,7 +439,9 @@ def _extract_text_duke(url: str, fetcher: "Fetcher") -> dict:
         if m:
             pub = m.group(1)
 
-    return {"text": text, "author": author, "publication_date": pub}
+    subtitle = _meta_content(soup, "og:description")
+
+    return {"text": text, "author": author, "publication_date": pub, "subtitle": subtitle}
 
 
 def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -386,6 +464,7 @@ def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         yield Article(
             institution=institution,
             title=meta.get("title", ""),
+            subtitle=page.get("subtitle", ""),
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
             section=meta.get("section", ""),
@@ -418,8 +497,24 @@ def _is_checkpoint(html: str) -> bool:
 _playwright_disabled = False
 
 
-def _render_with_playwright(url: str) -> str | None:
-    """Render ``url`` with headless Chromium; None on any failure."""
+def _render_with_playwright(
+    url: str, wait_for_js: str | None = None
+) -> tuple[str, str] | None:
+    """Render ``url`` with headless Chromium; None on any failure.
+
+    Returns ``(html, inner_text)`` where ``html`` is the serialized DOM (used to
+    parse body text and author) and ``inner_text`` is ``document.body.innerText``
+    of the rendered page. We need both because Yale renders the byline date in a
+    custom element / shadow DOM that ``page.content()`` does NOT serialize, but
+    which ``innerText`` does expose -- so the date can only be recovered from the
+    rendered text, not the HTML.
+
+    ``wait_for_js`` is an optional JS predicate (``() => boolean``); when given,
+    we poll until it returns true before snapshotting. This avoids racing Yale's
+    client-side hydration of the byline date -- a fixed sleep is flaky (the date
+    sometimes loads in <2.5s, sometimes slower) -- and falls through after a few
+    seconds for content that legitimately has no timestamp (galleries, podcasts).
+    """
     global _playwright_disabled
     if _playwright_disabled:
         return None
@@ -429,25 +524,7 @@ def _render_with_playwright(url: str) -> str | None:
     )
     try:
         from playwright.sync_api import sync_playwright  # lazy import
-
-        with sync_playwright() as p:
-            # Short launch timeout so a broken/unavailable browser fails fast.
-            browser = p.chromium.launch(headless=True, timeout=20000)
-            try:
-                context = browser.new_context(user_agent=BROWSER_UA)
-                page = context.new_page()
-                page.goto(url, wait_until="networkidle", timeout=30000)
-                html = page.content()
-                # Poll for the checkpoint to clear (self-resolves after JS runs).
-                for _ in range(6):
-                    if not _is_checkpoint(html):
-                        break
-                    page.wait_for_timeout(1500)
-                    html = page.content()
-                return html
-            finally:
-                browser.close()
-    except Exception as exc:  # Playwright missing/broken, or navigation failed.
+    except Exception as exc:  # Playwright not installed.
         logger.warning(
             "Playwright unavailable (%s); disabling it for this run and using "
             "the requests fallback.",
@@ -456,23 +533,104 @@ def _render_with_playwright(url: str) -> str | None:
         _playwright_disabled = True
         return None
 
+    try:
+        with sync_playwright() as p:
+            # Short launch timeout so a broken/unavailable browser fails fast.
+            # A launch failure means the browser itself is broken, so disable
+            # Playwright for the rest of the run; a per-URL navigation timeout
+            # (handled below) only skips that one URL.
+            try:
+                browser = p.chromium.launch(headless=True, timeout=20000)
+            except Exception as exc:
+                logger.warning(
+                    "Playwright browser failed to launch (%s); disabling it for "
+                    "this run and using the requests fallback.",
+                    exc.__class__.__name__,
+                )
+                _playwright_disabled = True
+                return None
+            try:
+                context = browser.new_context(user_agent=BROWSER_UA)
+                page = context.new_page()
+                # Use domcontentloaded (reliable) rather than networkidle, which
+                # never settles on Yale's homepage; then give JS time to hydrate
+                # the author/date, which are client-rendered.
+                page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                if wait_for_js:
+                    # Poll until the target content (the byline timestamp) has
+                    # hydrated, re-checking every 1.5s for up to ~9s. We sleep
+                    # first so JS gets a chance to run, then evaluate the
+                    # predicate. Date-less content (galleries, podcasts) never
+                    # satisfies it and simply uses the full budget, after which
+                    # the caller records an UNPARSED date rather than a wrong one.
+                    for _ in range(6):
+                        page.wait_for_timeout(1500)
+                        try:
+                            if page.evaluate(wait_for_js):
+                                break
+                        except Exception:
+                            pass
+                else:
+                    page.wait_for_timeout(2500)
+                html = page.content()
+                # Poll for the checkpoint to clear (self-resolves after JS runs).
+                for _ in range(6):
+                    if not _is_checkpoint(html):
+                        break
+                    page.wait_for_timeout(1500)
+                    html = page.content()
+                inner_text = ""
+                try:
+                    inner_text = page.evaluate("document.body.innerText") or ""
+                except Exception:
+                    inner_text = ""
+                return html, inner_text
+            except Exception as exc:  # Per-URL navigation/timeout: skip this URL.
+                logger.warning(
+                    "Playwright render failed for %s (%s); skipping this URL.",
+                    url,
+                    exc.__class__.__name__,
+                )
+                return None
+            finally:
+                browser.close()
+    except Exception as exc:  # Unexpected Playwright failure.
+        logger.warning(
+            "Playwright error (%s); disabling it for this run and using the "
+            "requests fallback.",
+            exc.__class__.__name__,
+        )
+        _playwright_disabled = True
+        return None
 
-def _render_yale(url: str) -> str | None:
+
+# JS predicate: true once the byline timestamp ("11:36 p.m., May 27, 2026")
+# has hydrated. Used to wait out client-side rendering on article pages.
+_YALE_DATE_READY_JS = (
+    r"() => /\d{1,2}:\d{2}\s*[ap]\.m\.,\s*(January|February|March|April|May|"
+    r"June|July|August|September|October|November|December)\s+\d{1,2},\s+20\d{2}/i"
+    r".test(document.body.innerText)"
+)
+
+
+def _render_yale(url: str, wait_for_js: str | None = None) -> tuple[str, str] | None:
     """Get article HTML past Yale's Vercel checkpoint.
 
     Prefers Playwright (renders JS, so client-side author/date hydrate); falls
     back to a browser-UA requests GET (recovers server-rendered body text).
-    Returns HTML, or None if still challenged/blocked.
+    Returns ``(html, inner_text)`` -- ``inner_text`` is the rendered page text
+    when Playwright was used and "" for the requests fallback (which cannot see
+    JS-rendered content such as the date). Returns None if still blocked.
     """
-    html = _render_with_playwright(url)
-    if html is not None and not _is_checkpoint(html):
-        return html
+    rendered = _render_with_playwright(url, wait_for_js=wait_for_js)
+    if rendered is not None and not _is_checkpoint(rendered[0]):
+        return rendered
 
     # Fallback: plain requests with a browser UA.
     try:
         resp = requests.get(url, headers={"User-Agent": BROWSER_UA}, timeout=20)
         if resp.status_code == 200 and not _is_checkpoint(resp.text):
-            return resp.text
+            return resp.text, ""
         logger.warning("Yale still behind Vercel checkpoint for %s", url)
     except requests.RequestException as exc:
         logger.warning("Yale fallback fetch failed for %s: %s", url, exc)
@@ -483,49 +641,69 @@ def _render_yale(url: str) -> str | None:
 _YALE_ARTICLE_PATH = re.compile(r"/articles/[a-z0-9][a-z0-9-]+/?$", re.IGNORECASE)
 
 
+# Yale section landing pages -> human-readable section labels (verified at runtime).
+_YALE_SECTION_PAGES: list[tuple[str, str]] = [
+    ("university", "University"),
+    ("city", "City"),
+    ("scitech", "SciTech"),
+    ("arts", "Arts"),
+    ("sports", "Sports"),
+    ("opinion", "Opinion"),
+    ("investigations", "Investigations"),
+    ("wknd", "WKND"),
+    ("magazine", "Magazine"),
+]
+
+
 def _discover_yale(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
-    """Phase 1: render listing pages and collect date-stamped article links."""
-    base_url = config.get("base_url", "https://yaledailynews.com")
-    discovery_urls = config.get("discovery_urls") or [f"{base_url}/"]
+    """Phase 1: render per-section landing pages and collect article links."""
+    base_url = config.get("base_url", "https://yaledailynews.com").rstrip("/")
     max_articles = config.get("max_articles", 100)
 
-    results: list[dict] = []
-    seen: set[str] = set()
-    for durl in discovery_urls:
-        if len(results) >= max_articles:
+    # Keyed by URL so the first section that lists an article wins.
+    by_url: dict[str, dict] = {}
+    section_pages = config.get("section_pages")
+    if section_pages:
+        pages = [(slug, label) for slug, label in section_pages]
+    else:
+        pages = _YALE_SECTION_PAGES
+
+    for slug, section_label in pages:
+        if len(by_url) >= max_articles:
             break
+        durl = f"{base_url}/{slug}"
         _polite_sleep(config)
-        html = _render_yale(durl)
-        if not html:
+        rendered = _render_yale(durl)
+        if not rendered:
             logger.warning("Yale discovery blocked/empty for %s", durl)
             continue
+        html = rendered[0]
         soup = make_soup(html)
         for a in soup.find_all("a", href=True):
             full = urljoin(base_url, a["href"])
             if not _YALE_ARTICLE_PATH.search(full):
                 continue
-            if full in seen:
+            if full in by_url:
                 continue
-            seen.add(full)
-            results.append(
-                {
-                    "url": full,
-                    "title": clean_text(a.get_text(" ")),
-                    "author": "",
-                    "publication_date": "",
-                    "section": "",
-                }
-            )
-            if len(results) >= max_articles:
+            if len(by_url) >= max_articles:
                 break
-    return results[:max_articles]
+            by_url[full] = {
+                "url": full,
+                "title": clean_text(a.get_text(" ")),
+                "author": "",
+                "publication_date": "",
+                "section": section_label,
+            }
+
+    return list(by_url.values())[:max_articles]
 
 
 def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
     """Phase 2: render an article and return text + author + date."""
-    html = _render_yale(url)
-    if not html:
+    rendered = _render_yale(url, wait_for_js=_YALE_DATE_READY_JS)
+    if not rendered:
         return _empty_page()
+    html, inner_text = rendered
     soup = make_soup(html)
 
     # Body: Payload CMS renders the article into .payload-richtext (.prose).
@@ -548,15 +726,8 @@ def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
     h1 = soup.select_one("h1")
     page_title = clean_text(h1.get_text(" ")) if h1 else ""
 
-    # Author/date are hydrated client-side; only present when Playwright renders.
-    # Best-effort across several markups (byline links, time tag, "By NAME").
-    author = ""
-    byline = soup.select_one(
-        "a[href*='/staff'], a[href*='/author'], [rel='author'], "
-        "[class*='author'], [class*='byline']"
-    )
-    if byline:
-        author = re.sub(r"^by\s+", "", clean_text(byline.get_text(" ")), flags=re.IGNORECASE)
+    # Author: collect all /author/ byline links (supports co-authors).
+    author = _collect_byline_authors(soup, 'a[href*="/author/"]')
     if not author:
         m = re.search(r"\bBy\s+([A-Z][a-z]+(?:\s+[A-Z][a-z.'-]+){1,3})", soup.get_text(" "))
         if m:
@@ -564,7 +735,20 @@ def _extract_text_yale(url: str, fetcher: "Fetcher") -> dict:
 
     time_el = soup.select_one("time[datetime]")
     pub = time_el.get("datetime", "") if time_el else ""
-    return {"text": text, "author": author, "publication_date": pub, "title": page_title}
+    if not pub:
+        # Yale renders the byline date in shadow/custom elements absent from
+        # page.content(); read it from rendered innerText via find_long_date.
+        pub = find_long_date(inner_text or "", prefer_time_prefixed=True)
+
+    subtitle = _subtitle_from_og_or_deck(soup)
+
+    return {
+        "text": text,
+        "author": author,
+        "publication_date": pub,
+        "subtitle": subtitle,
+        "title": page_title,
+    }
 
 
 def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
@@ -592,6 +776,7 @@ def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         yield Article(
             institution=institution,
             title=meta.get("title", "") or page.get("title", ""),
+            subtitle=page.get("subtitle", ""),
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
             section=meta.get("section", ""),

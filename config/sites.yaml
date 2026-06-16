@@ -29,6 +29,7 @@ sites:
     # extractor.py / RECON.md). Discovery walks /section/news pagination.
     method: "html"
     section_url: "https://www.dukechronicle.com/section/news"
+    section_label: "News"
     max_pages: 5            # cap pagination so we never crawl the full archive
     max_articles: 100
     selectors:
@@ -48,9 +49,6 @@ sites:
     # we render with Playwright (headless Chromium) and fall back to a browser
     # UA via requests. Selectors are resolved defensively at runtime.
     method: "playwright"
-    discovery_urls:
-      - "https://yaledailynews.com/"
-      - "https://yaledailynews.com/news/"
     max_articles: 100
     selectors:
       # Candidate body containers tried in order (custom CMS, JS-gated).

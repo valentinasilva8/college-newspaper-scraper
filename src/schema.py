@@ -19,6 +19,7 @@ class Article:
 
     institution: str
     title: str
+    subtitle: str  # editor-written deck when the CMS exposes one; empty otherwise
     author: str
     publication_date: str  # normalized to ISO 8601 (YYYY-MM-DD) or "UNPARSED:<raw>"
     section: str

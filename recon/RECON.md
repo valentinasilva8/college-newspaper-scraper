@@ -23,13 +23,19 @@ shared Fetcher. Honors `Crawl-delay: 6` through config (`delay_min: 6`).
 path. A browser UA is required to reach the publicly available article HTML.
 This override is scoped to the Duke module (a dedicated `requests.Session`); the
 shared Fetcher is unchanged, and Duke fetches use the same randomized politeness
-delays. Discovery walks `/section/news` pagination; bodies come from
-`div.article-content`.
+delays. Discovery walks `/section/news` pagination; each article is tagged
+`section = "News"`. Bodies come from `div.article-content`; subtitle from
+`og:description`.
 
 **Yale** — custom CMS behind Vercel's security checkpoint. We render with
-Playwright (headless Chromium) and fall back to a browser-UA requests GET. The
-checkpoint may still block headless automation; if so, Yale yields zero, which
-we treat as a finding about the site's bot protection rather than a failure.
+Playwright (headless Chromium) and fall back to a browser-UA requests GET.
+Discovery walks per-section landing pages (`/university`, `/city`, `/scitech`,
+`/arts`, `/sports`, `/opinion`, `/investigations`, `/wknd`, `/magazine`) so each
+article URL carries a section label. Author/date/subtitle hydrate client-side;
+dates are read from rendered `innerText` via the shared `find_long_date`
+helper. The checkpoint may still block headless automation in some environments;
+if so, Yale yields zero or partial results, which we treat as a finding about
+the site's bot protection rather than a failure.
 
 **robots.txt** — The shared Fetcher checks robots.txt at runtime for the honest
 UA. Results: Northwestern readable + permissive (Crawl-delay 6 honored via
@@ -38,3 +44,30 @@ config); Duke and Yale both unreadable (403 / JS checkpoint).
 **RSS vs full text** — even where RSS exists (Northwestern), feeds carry
 summaries only, so phase 2 (HTML article fetch) is required for full body text
 across all sites.
+
+## Post-implementation accuracy findings (Phase 1)
+
+These were discovered by reading CSV output against live pages, not by assuming
+selectors would work. Each entry records what broke, how we noticed, and the fix.
+
+| Issue | How we caught it | Fix |
+|-------|------------------|-----|
+| Yale dates all `UNPARSED:` in `--site all` | Full run after Duke; no Playwright disable message but dates empty | `networkidle` → `domcontentloaded` + hydration poll; don't disable Playwright on per-URL timeout |
+| 47 Yale dates all = today | CSV dates didn't match article bylines; masthead date visible on page | `find_long_date(..., prefer_time_prefixed=True)` — anchor on `"9:48 a.m., June 9, 2026"` not `"Monday, June 15, 2026"` |
+| Dates still flaky after masthead fix | `innerText` had date, `page.content()` did not | Read date from Playwright `innerText` (shadow DOM); shared `find_long_date` helper |
+| Playwright silent failure (no dates) | `playwright launch` test; binary was x86_64 on arm64 Mac | Reinstall Chromium for host architecture |
+| Yale `section` empty (0/47) | CSV column audit | Per-section discovery (`/university`, `/city`, …) tags each article URL |
+| Duke `section` empty (0/100) | CSV column audit | `section_label: "News"` from `/section/news` crawl path |
+| Yale single author only | Screenshot article: `Jolynda Wang` vs `Jolynda Wang & Aria Lynn-Skov` | `_collect_byline_authors()` on all `/author/` links |
+| Northwestern `subtitle` | Compared `og:description` to on-page content — it's a body excerpt | Leave `subtitle` empty (uniform column); document in README |
+| Duke photo credit as author | Spot-check CSV authors | Skip bylines with `"Photo by"` prefix; join writer bylines |
+
+### Uniform schema (`subtitle` column)
+
+All sites share the same CSV columns. `subtitle` is populated only where the CMS
+exposes a genuine editor deck:
+
+- **Yale / Duke:** `og:description` (verified deck, not body text).
+- **Northwestern:** intentionally empty — SNO/FLEX `og:description` is an
+  auto-generated excerpt (~first 380 characters of the article), not a distinct
+  subtitle field. Storing it would mislabel body text as an editor-written deck.
