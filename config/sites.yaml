@@ -24,14 +24,18 @@ sites:
   duke:
     name: "The Chronicle (Duke University)"
     base_url: "https://www.dukechronicle.com"
-    method: "rss"           # one of: rss | html | playwright
-    rss_url: ""             # TODO: fill in during reconnaissance
+    # SNWorks CMS, server-rendered. No RSS endpoint. WAF (awselb) returns 403
+    # for the honest research UA, so the Duke module uses a browser UA (see
+    # extractor.py / RECON.md). Discovery walks /section/news pagination.
+    method: "html"
+    section_url: "https://www.dukechronicle.com/section/news"
+    max_pages: 5            # cap pagination so we never crawl the full archive
     max_articles: 100
-    selectors:              # TODO: fill in during reconnaissance
-      article_body: ""
-      author: ""
-      section: ""
-      publication_date: ""
+    selectors:
+      article_link: "a[href^='/article/']"   # SNWorks article URL pattern
+      article_body: ".article-content"        # body container (.full-article.prose)
+      byline: ".article--byline"              # author byline
+      time: "time[datetime]"                  # publication date
     rate_limit:
       delay_min: 1.0
       delay_max: 3.0
@@ -40,14 +44,22 @@ sites:
   yale:
     name: "Yale Daily News (Yale University)"
     base_url: "https://yaledailynews.com"
-    method: "rss"
-    rss_url: ""             # TODO: fill in during reconnaissance
+    # Custom CMS behind a Vercel bot-detection checkpoint that requires JS, so
+    # we render with Playwright (headless Chromium) and fall back to a browser
+    # UA via requests. Selectors are resolved defensively at runtime.
+    method: "playwright"
+    discovery_urls:
+      - "https://yaledailynews.com/"
+      - "https://yaledailynews.com/news/"
     max_articles: 100
-    selectors:              # TODO: fill in during reconnaissance
-      article_body: ""
-      author: ""
-      section: ""
-      publication_date: ""
+    selectors:
+      # Candidate body containers tried in order (custom CMS, JS-gated).
+      article_body_candidates:
+        - "article"
+        - ".article-content"
+        - ".entry-content"
+        - ".post-content"
+        - "main"
     rate_limit:
       delay_min: 1.0
       delay_max: 3.0
@@ -57,14 +69,14 @@ sites:
     name: "The Daily Northwestern (Northwestern University)"
     base_url: "https://dailynorthwestern.com"
     method: "rss"
-    rss_url: ""             # TODO: fill in during reconnaissance
+    rss_url: "https://dailynorthwestern.com/feed/rss/"
     max_articles: 100
-    selectors:              # TODO: fill in during reconnaissance
-      article_body: ""
-      author: ""
-      section: ""
-      publication_date: ""
+    selectors:
+      # SNO/FLEX Pro theme: full article body container (verified during recon).
+      article_body: "#sno-story-body-content"
     rate_limit:
-      delay_min: 1.0
-      delay_max: 3.0
+      # robots.txt requests Crawl-delay: 6, so we wait at least 6s between
+      # requests to honor it (config-only; shared Fetcher is unchanged).
+      delay_min: 6.0
+      delay_max: 8.0
       max_concurrency: 1
