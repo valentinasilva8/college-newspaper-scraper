@@ -40,7 +40,7 @@ Runs are **incremental by default**: existing rows in a per-site CSV are preserv
 ## Data quality and verification
 
 The most important fixes were caught by comparing each site's output with its
-live article pages rather than assuming the output was correct. That comparison
+live article pages. That comparison
 surfaced problems a schema check alone would miss: on **Duke**, the byline
 selector was capturing lead-image photo credits ("Photo by…") instead of writers,
 and multi-author bylines were truncated to the first name — both fixed to select
