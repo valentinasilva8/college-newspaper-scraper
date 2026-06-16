@@ -1,0 +1,10 @@
+# Pinned to versions installed during scaffolding (Python 3.13).
+# Direct dependencies for the college newspaper scraping pilot.
+
+requests==2.34.2
+beautifulsoup4==4.15.0
+feedparser==6.0.12
+lxml==6.1.1
+PyYAML==6.0.3
+playwright==1.60.0
+python-dateutil==2.9.0.post0

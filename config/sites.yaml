@@ -1,0 +1,70 @@
+# Per-site scraping configuration for the college newspaper corpus pilot.
+#
+# Adding a new institution = add an entry under `sites:` here and one
+# `extract_<key>` function in src/extractor.py. Nothing else.
+#
+# Values under `defaults:` apply to every site unless the site overrides them.
+
+defaults:
+  # Honest, consistent research User-Agent (also used for robots.txt checks).
+  user_agent: "CollegeNewspaperResearchBot/1.0 (academic research; contact: valentinatsilva@proton.me)"
+
+  # Cap per site per run. Full historical archives are NOT collected in this
+  # pilot (see README -> "Next steps" for sitemap/archive traversal).
+  max_articles: 100
+
+  rate_limit:
+    delay_min: 1.0          # seconds, randomized lower bound between requests
+    delay_max: 3.0          # seconds, randomized upper bound between requests
+    # Sequential by design for the pilot: one request at a time per domain.
+    # This is intentional politeness, not a limitation. Raise later to scale.
+    max_concurrency: 1
+
+sites:
+  duke:
+    name: "The Chronicle (Duke University)"
+    base_url: "https://www.dukechronicle.com"
+    method: "rss"           # one of: rss | html | playwright
+    rss_url: ""             # TODO: fill in during reconnaissance
+    max_articles: 100
+    selectors:              # TODO: fill in during reconnaissance
+      article_body: ""
+      author: ""
+      section: ""
+      publication_date: ""
+    rate_limit:
+      delay_min: 1.0
+      delay_max: 3.0
+      max_concurrency: 1
+
+  yale:
+    name: "Yale Daily News (Yale University)"
+    base_url: "https://yaledailynews.com"
+    method: "rss"
+    rss_url: ""             # TODO: fill in during reconnaissance
+    max_articles: 100
+    selectors:              # TODO: fill in during reconnaissance
+      article_body: ""
+      author: ""
+      section: ""
+      publication_date: ""
+    rate_limit:
+      delay_min: 1.0
+      delay_max: 3.0
+      max_concurrency: 1
+
+  northwestern:
+    name: "The Daily Northwestern (Northwestern University)"
+    base_url: "https://dailynorthwestern.com"
+    method: "rss"
+    rss_url: ""             # TODO: fill in during reconnaissance
+    max_articles: 100
+    selectors:              # TODO: fill in during reconnaissance
+      article_body: ""
+      author: ""
+      section: ""
+      publication_date: ""
+    rate_limit:
+      delay_min: 1.0
+      delay_max: 3.0
+      max_concurrency: 1

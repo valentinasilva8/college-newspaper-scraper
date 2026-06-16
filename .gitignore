@@ -1,0 +1,7 @@
+.venv/
+output/
+logs/
+__pycache__/
+*.pyc
+.DS_Store
+playwright-browsers/
