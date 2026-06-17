@@ -74,6 +74,7 @@ DISCOVERY_PROGRESS_EVERY = 10
 # Northwestern Yoast sitemap buckets (gitignored via logs/).
 NW_SITEMAP_CACHE = PROJECT_ROOT / "logs" / "cache" / "northwestern_sitemap_by_year.json"
 DUKE_DISCOVERY_CACHE = PROJECT_ROOT / "logs" / "cache" / "duke_articles_by_year.json"
+CHICAGO_DISCOVERY_CACHE = PROJECT_ROOT / "logs" / "cache" / "chicago_articles_by_year.json"
 
 # SNWorks /section/news pagination: higher page number ≈ older articles (~28 pages/year).
 DUKE_PAGES_PER_YEAR = 28
@@ -1608,6 +1609,341 @@ def extract_yale(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
 
 
 # ----------------------------------------------------------------------
+# Chicago (The Chicago Maroon) -- SNO/FLEX theme on WordPress, static HTML
+# ----------------------------------------------------------------------
+#
+# The Maroon runs the same SNO/FLEX theme as Northwestern (confirmed by the
+# .sno-story-date class and matching robots.txt), so we reuse Northwestern's body
+# selectors and Yale's long-date parser. Two differences drive its own module:
+#   1. Discovery uses the WordPress-core sitemap (wp-sitemap-posts-post-*.xml),
+#      whose <url> entries carry <lastmod>. Article URLs are /<id>/<section>/<slug>
+#      with NO date in the path, so we bucket candidates by <lastmod> year.
+#   2. There is no machine-readable publish date (no article:published_time, no
+#      <time>, no JSON-LD), only the visible .sno-story-date ("August 4, 2016").
+#      We read that, and fall back to <lastmod> only when it is missing.
+
+# Article URL shape: https://chicagomaroon.com/<numeric-id>/<section>/<slug>[/]
+_CHICAGO_ARTICLE_PATH = re.compile(
+    r"^https?://(?:www\.)?chicagomaroon\.com/\d+/[^/]+/[^/]+/?$"
+)
+
+# Byline anchors include author roles ("Editor-in-Chief (’18–’19)") alongside
+# names; drop any whose text reads as a role rather than a person.
+_CHICAGO_ROLE_RE = re.compile(
+    r"\b(editor|chief|reporter|manager|contributor|columnist|writer|"
+    r"photographer|director|producer|designer|staff|senior|deputy|associate|"
+    r"head|correspondent|illustrator|cartoonist|developer|analyst|intern|"
+    r"fellow|maroon|crossword|podcast|host)\b",
+    re.I,
+)
+
+
+def _year_from_iso(value: str) -> int | None:
+    """Year from a leading ISO date/datetime string, or None."""
+    if value and value[:4].isdigit():
+        return int(value[:4])
+    return None
+
+
+def _chicago_section_from_url(url: str) -> str:
+    """Section label from the /<id>/<section>/<slug> URL path (fallback)."""
+    segs = [s for s in urlparse(url).path.strip("/").split("/") if s]
+    if len(segs) >= 2:
+        return segs[1].replace("-", " ").title()
+    return ""
+
+
+def _chicago_byline_authors(soup: BeautifulSoup) -> str:
+    """Author names from .sno-story-byline, excluding role anchors."""
+    byline = soup.select_one(".sno-story-byline")
+    if not byline:
+        return ""
+    names: list[str] = []
+    seen: set[str] = set()
+    for a in byline.select('a[href*="/staff_name/"]'):
+        name = clean_text(a.get_text(" "))
+        if not name or "(" in name or any(ch.isdigit() for ch in name):
+            continue
+        if _CHICAGO_ROLE_RE.search(name):
+            continue
+        key = name.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        names.append(name)
+    if names:
+        return ", ".join(names)
+    # Fallback: first chunk of the raw byline text after a leading "By".
+    raw = re.sub(r"^by\s+", "", clean_text(byline.get_text(" ")), flags=re.IGNORECASE)
+    return clean_text(raw.split(",")[0])
+
+
+def _load_chicago_cache() -> tuple[dict[int, list[list[str]]], str] | None:
+    """Return ``(by_year, cached_at)`` from the on-disk cache, or None."""
+    if not CHICAGO_DISCOVERY_CACHE.is_file():
+        return None
+    try:
+        data = json.loads(CHICAGO_DISCOVERY_CACHE.read_text(encoding="utf-8"))
+        by_year_raw = data.get("by_year") or {}
+        by_year = {
+            int(year): [list(pair) for pair in pairs]
+            for year, pairs in by_year_raw.items()
+        }
+        return by_year, str(data.get("cached_at", ""))
+    except (OSError, ValueError, TypeError) as exc:
+        logger.warning("Chicago Maroon cache unreadable (%s); rescanning.", exc)
+        return None
+
+
+def _save_chicago_cache(by_year: dict[int, list[list[str]]]) -> None:
+    """Persist (url, lastmod) pairs bucketed by lastmod year."""
+    CHICAGO_DISCOVERY_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "cached_at": datetime.now(timezone.utc).isoformat(),
+        "by_year": {str(year): pairs for year, pairs in sorted(by_year.items())},
+    }
+    CHICAGO_DISCOVERY_CACHE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    logger.info(
+        "Chicago Maroon discovery cache saved -> %s (%d years)",
+        CHICAGO_DISCOVERY_CACHE.name,
+        len(by_year),
+    )
+
+
+def _fetch_chicago_by_year(
+    config: dict, fetcher: "Fetcher"
+) -> dict[int, list[list[str]]]:
+    """Scan WordPress post sub-sitemaps and bucket (url, lastmod) by year."""
+    sitemap_index = config.get(
+        "sitemap_index", "https://chicagomaroon.com/sitemap.xml"
+    )
+    try:
+        index_resp = fetcher.get(sitemap_index)
+    except requests.RequestException as exc:
+        logger.warning("Chicago Maroon sitemap index fetch failed: %s", exc)
+        return {}
+    if index_resp is None:
+        logger.warning("Chicago Maroon sitemap index blocked by robots.txt")
+        return {}
+
+    sub_sitemaps = [
+        loc
+        for loc in _parse_sitemap_locs(index_resp.text)
+        if "wp-sitemap-posts-post" in loc and loc.endswith(".xml")
+    ]
+    total = len(sub_sitemaps)
+    logger.info("Chicago Maroon sitemap: scanning %d post sub-sitemap(s)", total)
+
+    by_year: dict[int, list[list[str]]] = defaultdict(list)
+    for idx, sub_url in enumerate(sub_sitemaps, start=1):
+        try:
+            sub_resp = fetcher.get(sub_url)
+        except requests.RequestException as exc:
+            logger.warning(
+                "Chicago Maroon sub-sitemap fetch failed for %s: %s", sub_url, exc
+            )
+            continue
+        if sub_resp is None:
+            continue
+        sub_soup = BeautifulSoup(sub_resp.text, "xml")
+        for url_el in sub_soup.find_all("url"):
+            loc_el = url_el.find("loc")
+            if not loc_el or not loc_el.text:
+                continue
+            loc = loc_el.text.strip()
+            if not _CHICAGO_ARTICLE_PATH.match(loc):
+                continue
+            lm_el = url_el.find("lastmod")
+            lastmod = lm_el.text.strip() if lm_el and lm_el.text else ""
+            year = _year_from_iso(lastmod)
+            if year is None:
+                continue
+            by_year[year].append([loc, lastmod])
+
+        if idx == 1 or idx % DISCOVERY_PROGRESS_EVERY == 0 or idx == total:
+            article_count = sum(len(pairs) for pairs in by_year.values())
+            logger.info(
+                "Chicago Maroon sitemap progress: %d/%d sub-sitemap(s), "
+                "%d article URL(s) bucketed",
+                idx,
+                total,
+                article_count,
+            )
+    return dict(by_year)
+
+
+def _sample_chicago(
+    by_year: dict[int, list[list[str]]],
+    *,
+    year_start: int,
+    year_end: int,
+    per_year: int,
+    oversample: int = 4,
+) -> list[dict]:
+    """Stratified per-year candidates (oversampled for body-text backfill)."""
+    results: list[dict] = []
+    for year in range(year_start, year_end + 1):
+        candidates = sorted(by_year.get(year, []), key=lambda pair: pair[0])
+        for loc, lastmod in _stratified_sample(candidates, per_year * oversample):
+            results.append(
+                {
+                    "url": loc,
+                    "title": "",
+                    "author": "",
+                    "publication_date": "",
+                    "section": _chicago_section_from_url(loc),
+                    "lastmod": lastmod,
+                    "year": year,
+                }
+            )
+    return results
+
+
+def _discover_chicago(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
+    """Discovery: WordPress post sitemaps, bucketed by <lastmod> year."""
+    year_start = int(config.get("year_start", 2016))
+    year_end = int(config.get("year_end", datetime.now(timezone.utc).year))
+    per_year = int(config.get("per_year", 2))
+    refresh = config.get("refresh_discovery", False)
+
+    by_year: dict[int, list[list[str]]] | None = None
+    if not refresh:
+        cached = _load_chicago_cache()
+        if cached is not None:
+            by_year, cached_at = cached
+            article_count = sum(len(pairs) for pairs in by_year.values())
+            logger.info(
+                "Chicago Maroon: using cache (%d article URL(s), %d years, "
+                "cached %s)",
+                article_count,
+                len(by_year),
+                cached_at or "unknown",
+            )
+
+    if by_year is None:
+        by_year = _fetch_chicago_by_year(config, fetcher)
+        if by_year:
+            _save_chicago_cache(by_year)
+
+    results = _sample_chicago(
+        by_year, year_start=year_start, year_end=year_end, per_year=per_year
+    )
+    logger.info(
+        "Chicago Maroon sitemap discovery: %d candidate URL(s) across %d-%d",
+        len(results),
+        year_start,
+        year_end,
+    )
+    return results
+
+
+def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
+    """Phase 2: fetch the article and return SNO body text + author/date/section."""
+    try:
+        resp = fetcher.get(url)
+    except requests.RequestException as exc:
+        logger.warning("Chicago Maroon fetch failed for %s: %s", url, exc)
+        return _empty_page()
+    if resp is None:
+        logger.warning("Chicago Maroon fetch skipped (robots.txt) for %s", url)
+        return _empty_page()
+
+    soup = make_soup(resp.text)
+    # SNO theme body container (same chain as Northwestern's two eras).
+    body = (
+        soup.find(id="sno-story-body-content")
+        or soup.find(id="sno-sites-main-content")
+        or soup.find(id="classic_story")
+        or _largest_p_container(soup)
+    )
+    if body is None:
+        logger.warning("Chicago Maroon body container not found for %s", url)
+        return _empty_page()
+    text = clean_text(" ".join(p.get_text(" ") for p in body.find_all("p")))
+
+    # og:title is the reliable headline here; the page <h1> is the site masthead
+    # ("Chicago Maroon"), so prefer the meta and only fall back to the SNO headline.
+    title = _meta_content(soup, "og:title")
+    if not title:
+        headline = soup.find(id="sno-story-headline")
+        if headline:
+            title = clean_text(headline.get_text(" "))
+
+    author = _chicago_byline_authors(soup)
+
+    # Date: only the visible .sno-story-date carries it; anchor on that element
+    # (not free-text regex) to avoid the masthead/sidebar dates elsewhere on the
+    # page. extract_chicago falls back to the sitemap <lastmod> when it's absent.
+    date_el = soup.select_one(".sno-story-date")
+    pub = find_long_date(date_el.get_text(" "), prefer_time_prefixed=True) if date_el else ""
+
+    # og:section is the most-specific category (e.g. "News", "Feature"); the SNO
+    # nav is effectively single-level here, so subsection stays empty.
+    section = _meta_content(soup, "article:section")
+
+    return {
+        "text": text,
+        "title": title,
+        "author": author,
+        "publication_date": pub,
+        "subtitle": _meta_content(soup, "og:description"),
+        "section": section,
+        "subsection": "",
+    }
+
+
+def extract_chicago(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
+    """Yield Chicago Maroon Article records (WP sitemap + SNO full-text fetch).
+
+    Per-year backfill: discovery oversamples candidates, and we keep fetching a
+    year's candidates until ``per_year`` produce real body text, so unparseable
+    pages don't leave gaps. Publication date comes from the page's .sno-story-date,
+    falling back to the sitemap <lastmod> when the page has none.
+    """
+    institution = "The Chicago Maroon"
+    max_articles = config.get("max_articles", 100)
+    per_year = int(config.get("per_year", 2))
+    skip_urls = _skip_urls(config)
+    count = 0
+    per_year_ok: dict[int, int] = defaultdict(int)
+    for meta in _discover_chicago(config, fetcher):
+        url = meta.get("url", "")
+        if not url:
+            continue
+        if url in skip_urls:
+            logger.debug("Skipping already-scraped Chicago Maroon URL: %s", url)
+            continue
+        if count >= max_articles:
+            break
+        year = meta.get("year")
+        if year is not None and per_year_ok[year] >= per_year:
+            continue
+        page = _extract_text_chicago(url, fetcher)
+        text = page.get("text", "")
+        if not text:
+            logger.warning("Skipping Chicago Maroon article with empty body: %s", url)
+            continue
+        # Real page date preferred; sitemap <lastmod> is the documented fallback.
+        raw_date = page.get("publication_date") or meta.get("lastmod", "")
+        section = page.get("section", "") or meta.get("section", "")
+        if year is not None:
+            per_year_ok[year] += 1
+        yield Article(
+            institution=institution,
+            title=page.get("title", "") or meta.get("title", ""),
+            subtitle=page.get("subtitle", ""),
+            author=clean_text(page.get("author", "") or meta.get("author", "")),
+            publication_date=normalize_date(raw_date, url),
+            section=section,
+            subsection=page.get("subsection", ""),
+            url=url,
+            text=text,
+            scraped_at=datetime.now(timezone.utc).isoformat(),
+        )
+        count += 1
+
+
+# ----------------------------------------------------------------------
 # Registry: site key -> extraction generator
 # ----------------------------------------------------------------------
 
@@ -1615,4 +1951,5 @@ SITE_EXTRACTORS = {
     "duke": extract_duke,
     "yale": extract_yale,
     "northwestern": extract_northwestern,
+    "chicago": extract_chicago,
 }

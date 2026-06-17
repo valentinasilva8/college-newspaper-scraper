@@ -70,6 +70,30 @@ sites:
       delay_max: 3.0
       max_concurrency: 1
 
+  chicago:
+    name: "The Chicago Maroon (University of Chicago)"
+    base_url: "https://chicagomaroon.com"
+    # SNO/FLEX theme on WordPress (same theme family as Northwestern, confirmed
+    # via the .sno-story-date class). WordPress-core sitemap (wp-sitemap-posts-*)
+    # carries <lastmod>; article URLs are /<id>/<section>/<slug> with NO date in
+    # the path, so we bucket by sitemap <lastmod> year and read the real date from
+    # the page (.sno-story-date), falling back to <lastmod> only when absent.
+    method: "sitemap"
+    discovery_mode: "sitemap"
+    sitemap_index: "https://chicagomaroon.com/sitemap.xml"
+    year_start: 2016        # current WP archive effectively starts ~2016
+    year_end: 2026
+    per_year: 2             # ~11 years x 2 = ~22 candidates
+    max_articles: 30
+    selectors:
+      # SNO body container (reused from Northwestern's FLEX Pro theme).
+      article_body: "#sno-story-body-content"
+    rate_limit:
+      # robots.txt requests Crawl-delay: 6, honored via delay_min.
+      delay_min: 6.0
+      delay_max: 8.0
+      max_concurrency: 1
+
   northwestern:
     name: "The Daily Northwestern (Northwestern University)"
     base_url: "https://dailynorthwestern.com"

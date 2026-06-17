@@ -1,15 +1,16 @@
 # College Newspaper Scraper (Pilot)
 
 A modular, config-driven pipeline for building a small research corpus of
-college newspaper articles. The pilot targets three publications:
+college newspaper articles. The pilot targets four publications:
 
 - **Duke** — The Chronicle
 - **Yale** — Yale Daily News
 - **Northwestern** — The Daily Northwestern
+- **UChicago** — The Chicago Maroon
 
 Each site was audited before any extraction logic was written: does it expose
 RSS, what does its `robots.txt` allow, is the body static HTML or JS-rendered?
-Those answers shaped three deliberately different access strategies. See
+Those answers shaped four deliberately different access strategies. See
 [`recon/RECON.md`](recon/RECON.md) for the full landscape audit.
 
 ## Results (latest run)
@@ -19,6 +20,7 @@ Those answers shaped three deliberately different access strategies. See
 | Northwestern | Sitemap + HTML (stratified) | 62 | 2000–2026 | yes | empty (by design) | yes* | yes | yes (ISO) | yes |
 | Duke | HTML + browser UA (stratified) | 133 | 2015–2026 | yes | yes | yes | yes | yes (ISO) | yes |
 | Yale | Playwright + sitemap | 114 | 2024–2026 | yes | yes | yes | yes | yes (ISO) | yes |
+| UChicago | Sitemap + HTML (stratified) | 22 | 2008–2026 | yes | yes | yes | yes | yes (ISO) | yes |
 
 Northwestern coverage is even — **2 articles for every year 2000–2025** (plus the
 10 most-recent for 2026) — with no empty body text and only 2 rows missing a
@@ -54,7 +56,13 @@ date instead of the article's publication date was caught this way and fixed. On
 **Northwestern**, comparing the output's year histogram to the live archive
 revealed an 8-year gap (2015–2023) where a different CMS theme left the body
 container empty; the selector chain was extended so coverage is now even across
-all years. Across the corpus, all dates are normalized to ISO 8601 — unparseable
+all years. On the **Chicago Maroon**, its robots.txt matched Northwestern's, which
+led to identifying the same SNO theme (confirmed by the `.sno-story-date` class) and
+reusing that body/date code — but it exposes *no* machine-readable publish date, so
+the on-page date is anchored on `.sno-story-date` (avoiding the masthead/sidebar
+dates), and a separate bug where the page `<h1>` was the site masthead rather than
+the headline was caught by reading the output and fixed by preferring `og:title`.
+Across the corpus, all dates are normalized to ISO 8601 — unparseable
 ones (and ambiguous cases where more than one date appears on a page) preserved as
 `UNPARSED:<raw>` rather than silently dropped — and there are zero duplicate URLs.
 The detailed case-by-case log is in [Accuracy fixes](#accuracy-fixes) below.
@@ -91,6 +99,14 @@ The audit produced one finding per site that defined its strategy:
   The rebuilt site (Jan 2026) has no deep historical archive; discovery uses
   `articles-sitemap.xml` for breadth while section labels come from per-section
   landing pages and on-page kickers when present.
+- **Chicago Maroon** runs the **same SNO theme as Northwestern on WordPress**, so
+  it reuses that body extractor and Yale's long-date parser. Its WordPress-core
+  sitemap (`wp-sitemap-posts-post-*.xml`) carries `<lastmod>`, but article URLs
+  (`/<id>/<section>/<slug>`) embed **no date** and the page exposes no
+  machine-readable publish date. Discovery therefore **buckets by `<lastmod>` year**
+  as a proxy, stores the true on-page `.sno-story-date`, and falls back to
+  `<lastmod>` only when the page date is missing. `Crawl-delay: 6` via config;
+  discovery cached under `logs/cache/`.
 
 ## Architecture
 
@@ -145,7 +161,8 @@ shape `{text, author, publication_date, subtitle, section, subsection}`;
 |------|----------------------|-----|
 | Yale | Yes | `og:description` is a genuine editor deck (matches the on-page `<h2>`) |
 | Duke | Yes | `og:description` carries the article deck |
-| Northwestern | **No — left empty** | SNO/FLEX theme sets `og:description` to an auto-generated body excerpt (~first 380 chars), not a distinct deck. Storing that excerpt as a subtitle would be inaccurate. |
+| Chicago Maroon | Yes | `og:description` is a genuine editor deck (verified by spot-check against live articles) |
+| Northwestern | **No — left empty** | Northwestern's SNO install sets `og:description` to an auto-generated body excerpt (~first 380 chars), not a distinct deck. Storing that excerpt as a subtitle would be inaccurate. Do not assume this applies to other SNO installs — verify per-install. |
 
 The column exists on every CSV so the schema stays uniform; Northwestern rows
 simply leave it blank. This is a deliberate accuracy choice, not a missing
@@ -308,24 +325,57 @@ document what went wrong, how it was caught, and what was fixed.
     discovery **oversample + backfill per year** so a few unparseable pages can't
     re-open the gap. Result: an even 2 articles/year across 2000–2025.
 
+13. **Chicago Maroon title was the site masthead, not the headline.** The first
+    run stored `title = "Chicago Maroon"` on every row. **Caught:** reading the
+    output CSV. **Cause:** the page `<h1>` is the site logo on this theme.
+    **Fix:** prefer `og:title` (the real headline), falling back to the SNO
+    headline element only if absent.
+
+15. **Chicago Maroon `subtitle` empty despite a genuine editor deck.** The
+    first implementation left `subtitle` empty with a comment asserting that
+    Chicago Maroon's `og:description` was the same auto-generated body excerpt as
+    Northwestern's. **Caught:** spot-checking CSV output against live article
+    pages — the `og:description` content matched the on-page editor deck
+    character-for-character, not a body excerpt. **Root cause:** the Northwestern
+    SNO assumption was carried over to Chicago without independent verification.
+    **Fix:** populate `subtitle` from `_meta_content(soup, "og:description")` in
+    `_extract_text_chicago`. The Pre-Build Field Audit Protocol in
+    `recon/RECON.md` now requires per-install verification of `og:description`
+    before assuming any theme-family default.
+
+14. **Chicago Maroon has no machine-readable publish date.** No
+    `article:published_time`, no `<time>`, no JSON-LD date — only the visible
+    `.sno-story-date` ("August 4, 2016"), with the site masthead/sidebar dates
+    also on the page. **Fix:** anchor the date on the `.sno-story-date` element
+    (not a free-text regex) and reuse Yale's `find_long_date`. For discovery,
+    where no date is available at all, bucket by the sitemap `<lastmod>` year as a
+    proxy and fall back to `<lastmod>` only if the page date is missing. This is
+    why the Maroon's diachronic spread is approximate (migrated content can carry
+    a `<lastmod>` far from its true publish date) while the *stored* date remains
+    the true on-page date.
+
 ### Archive expansion (diachronic sampling)
 
-To support studying campus culture over time, Northwestern and Duke use
-**date-stratified sampling**: roughly `per_year` articles per calendar year in a
-configured range, spread evenly across each year's candidates (not first-N).
-Yale cannot be stratified historically — the rebuilt site exposes dateless slugs
-in its sitemap and dates require Playwright — so Yale widens **recent** coverage
-via `articles-sitemap.xml` instead.
+To support studying campus culture over time, Northwestern, Duke, and the Chicago
+Maroon use **date-stratified sampling**: roughly `per_year` articles per calendar
+year in a configured range, spread evenly across each year's candidates (not
+first-N). Yale cannot be stratified historically — the rebuilt site exposes
+dateless slugs in its sitemap and dates require Playwright — so Yale widens
+**recent** coverage via `articles-sitemap.xml` instead.
 
 | Site | Discovery | Year range (first run) | `per_year` |
 |------|-----------|------------------------|------------|
 | Northwestern | Yoast `post-sitemap*.xml` → filter `/YYYY/MM/DD/...` paths | 2000–2026 | 2 |
 | Duke | Deep `/section/news` pagination → slug `-YYYYMMDD` | 2015–2026 | 3 |
 | Yale | `articles-sitemap.xml` + section-page labels | recent only | n/a |
+| UChicago | WP `wp-sitemap-posts-post-*.xml` → bucket by `<lastmod>` year | 2016–2026 | 2 |
 
 Tradeoffs: the one-time Northwestern sitemap scan is slow (~74 files at
 `Crawl-delay: 6`) but is cached afterward; Duke discovery is slow at
-`Crawl-delay: 10`; Yale has no recoverable deep archive on the current site.
+`Crawl-delay: 10`; Yale has no recoverable deep archive on the current site; the
+Chicago Maroon's year stratification is **approximate** because it buckets on
+sitemap `<lastmod>` (the only date available at discovery time), though each
+stored row carries its true on-page date.
 
 ### Verification results
 
@@ -339,6 +389,9 @@ Tradeoffs: the one-time Northwestern sitemap scan is slow (~74 files at
   URLs, all dates ISO; subsection empty only where the kicker is single-level.
 - Yale (114 rows): 2024–2026 (recent only), 0 empty section/text, 2 UNPARSED
   dates (photo galleries with no byline timestamp).
+- UChicago (22 rows): 2008–2026, 0 empty title/author/section/text/subtitle,
+  0 UNPARSED dates; multi-author bylines parsed with roles stripped. Year spread
+  is approximate (lastmod-bucketed); stored dates are the true on-page dates.
 
 Combined corpus: **0 duplicate URLs, 0 blank URLs** across all sites.
 
@@ -349,10 +402,15 @@ pages (Yale). Filtering by section/subsection is a natural next step.
 
 Known boundaries of the pilot:
 
-- **Temporal depth.** Northwestern (even 2/year, 2000–2026) and Duke (2015–2026)
-  use date-stratified sampling; Yale is recent-only on the rebuilt site. Raise
-  `per_year` in `config/sites.yaml` for a denser sample; runs are incremental and
-  top up sparse years rather than re-fetching existing rows.
+- **Temporal depth.** Northwestern (even 2/year, 2000–2026), Duke (2015–2026), and
+  the Chicago Maroon (2008–2026, lastmod-bucketed) use date-stratified sampling;
+  Yale is recent-only on the rebuilt site. Raise `per_year` in `config/sites.yaml`
+  for a denser sample; runs are incremental and top up sparse years rather than
+  re-fetching existing rows.
+- **Chicago Maroon year stratification is approximate.** It exposes no
+  machine-readable publish date, so discovery buckets by sitemap `<lastmod>` (a
+  proxy that diverges from the true date for migrated content). Each stored row
+  still carries its true on-page `.sno-story-date`.
 - **Yale has no recoverable historical archive.** The Jan 2026 rebuild exposes
   ~1,000 dateless slugs in `articles-sitemap.xml`; publication dates require
   Playwright rendering per article.
