@@ -140,3 +140,4 @@ The server never builds from an unmerged branch.
 | Rows stop growing | Look at `logs/failed_<site>.csv`. A burst of `network_error` usually means the site or the egress path is the problem, not the code |
 | Disk filling | `status_report.py` shows free space. Corpus lives in S3 too; prune rotated logs first |
 | Wrong data after a merge | Revert the commit on GitHub, re-run `deploy.sh`, restart. Checkpoints keep prior rows |
+| `pip` tries to compile a package and fails on a missing `cc` | A pinned version has no wheel for this Python. Prefer moving the package to `requirements-dev.txt` if the server does not need it; only install `build-essential` if it genuinely does |

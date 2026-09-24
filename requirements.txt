@@ -1,5 +1,7 @@
+# Runtime dependencies for scraping. Installed on the server.
+# Workbook/tracker tooling lives in requirements-dev.txt so the server does not
+# need a C toolchain to build scientific packages.
 # Pinned to versions installed during scaffolding (Python 3.13).
-# Direct dependencies for the college newspaper scraping pilot.
 
 requests==2.34.2
 beautifulsoup4==4.15.0
@@ -8,6 +10,4 @@ lxml==6.1.1
 PyYAML==6.0.3
 playwright==1.60.0
 python-dateutil==2.9.0.post0
-pandas==2.2.3
-openpyxl==3.1.5
 pytest==9.1.1

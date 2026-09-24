@@ -10,6 +10,8 @@ URLs, and writes:
   - ``docs/TARGET_LIST_REPORT.md`` — human-readable inventory report
 
 Never auto-fixes or deletes suspicious rows.
+
+Requires the local-only tooling: ``pip install -r requirements-dev.txt``.
 """
 
 from __future__ import annotations

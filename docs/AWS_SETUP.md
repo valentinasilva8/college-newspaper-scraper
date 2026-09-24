@@ -126,9 +126,8 @@ or grant the IAM permissions listed at the top of this document.
 
 1. EC2 console → big orange **Launch instance** button.
 2. **Name:** `newspaper-scraper`
-3. **Application and OS Images:** click **Ubuntu**, then confirm the dropdown
-   reads **Ubuntu Server 24.04 LTS (HVM), SSD Volume Type**, architecture
-   **64-bit (x86)**.
+3. **Application and OS Images:** click **Ubuntu**, then pick an **LTS** release
+   (24.04 LTS or 26.04 LTS), architecture **64-bit (x86)**.
 4. **Instance type:** change from `t2.micro` to **`t3.large`**.
 5. **Key pair (login):** select `newspaper-scraper-key`.
 6. **Network settings** → click **Edit**:
