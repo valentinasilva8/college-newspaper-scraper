@@ -22,6 +22,7 @@ defaults:
 sites:
   duke:
     name: "The Chronicle (Duke University)"
+    mode: sample
     base_url: "https://www.dukechronicle.com"
     # SNWorks CMS, server-rendered. No RSS endpoint. WAF (awselb) returns 403
     # for the honest research UA, so the Duke module uses a browser UA (see
@@ -49,6 +50,7 @@ sites:
 
   yale:
     name: "Yale Daily News (Yale University)"
+    mode: sample
     base_url: "https://yaledailynews.com"
     # Custom CMS behind a Vercel bot-detection checkpoint that requires JS, so
     # we render with Playwright (headless Chromium) and fall back to a browser
@@ -72,6 +74,7 @@ sites:
 
   chicago:
     name: "The Chicago Maroon (University of Chicago)"
+    mode: sample            # switch to full (or pass --mode full) for corpus runs
     base_url: "https://chicagomaroon.com"
     # SNO/FLEX theme on WordPress (same theme family as Northwestern, confirmed
     # via the .sno-story-date class). WordPress-core sitemap (wp-sitemap-posts-*)
@@ -96,6 +99,7 @@ sites:
 
   northwestern:
     name: "The Daily Northwestern (Northwestern University)"
+    mode: sample
     base_url: "https://dailynorthwestern.com"
     method: "sitemap"
     discovery_mode: "sitemap"

@@ -5,3 +5,7 @@ __pycache__/
 .DS_Store
 playwright-browsers/
 CLAUDE.md
+
+# Full corpora stay on local disk only — never push article CSVs to GitHub.
+output/*.csv
+!output/.gitkeep

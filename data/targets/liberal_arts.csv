@@ -1,0 +1,103 @@
+tab,source_row,university_name,ranking_raw,newspaper_raw,url,domain,done,notes
+Liberal Arts,2,Williams College,#1,https://williamsrecord.com/,https://williamsrecord.com/,williamsrecord.com,,
+Liberal Arts,3,Amherst College,#2,https://amherststudent.com/,https://amherststudent.com/,amherststudent.com,,
+Liberal Arts,4,United States Naval Academy,#3,https://cadetnewspaper.com/,https://cadetnewspaper.com/,cadetnewspaper.com,,
+Liberal Arts,5,Swarthmore College,#4,https://swarthmorephoenix.com/,https://swarthmorephoenix.com/,swarthmorephoenix.com,,
+Liberal Arts,6,Bowdoin College,#5,https://bowdoinorient.com/,https://bowdoinorient.com/,bowdoinorient.com,,
+Liberal Arts,7,United States Air Force Academy,#5,N/A,,,,newspaper:N/A
+Liberal Arts,8,Claremont McKenna College,#7,https://tsl.news/,https://tsl.news/,tsl.news,,
+Liberal Arts,9,Pomona College,#7,https://tsl.news/,https://tsl.news/,tsl.news,,
+Liberal Arts,10,Wellesley College,#7,https://thewellesleynews.com/,https://thewellesleynews.com/,thewellesleynews.com,,
+Liberal Arts,11,Carleton College,#10,https://thecarletonian.com/,https://thecarletonian.com/,thecarletonian.com,,
+Liberal Arts,12,Harvey Mudd College,#10,https://tsl.news/,https://tsl.news/,tsl.news,,
+Liberal Arts,13,United States Military Academy at West Point,#10,N/A,,,,newspaper:N/A
+Liberal Arts,14,Barnard College,#13,https://www.thebarnardbulletin.com/campus-news,https://www.thebarnardbulletin.com/campus-news,thebarnardbulletin.com,,
+Liberal Arts,15,Davidson College,#13,https://thedavidsonian.news/,https://thedavidsonian.news/,thedavidsonian.news,,
+Liberal Arts,16,Grinnell College,#13,https://thesandb.com/,https://thesandb.com/,thesandb.com,,
+Liberal Arts,17,Hamilton College,#13,https://hcspectator.com/,https://hcspectator.com/,hcspectator.com,,
+Liberal Arts,18,Middlebury College,#13,https://www.middleburycampus.com/,https://www.middleburycampus.com/,middleburycampus.com,,
+Liberal Arts,19,Smith College,#13,https://thesophian.com/,https://thesophian.com/,thesophian.com,,
+Liberal Arts,20,Vassar College,#13,https://miscellanynews.org/,https://miscellanynews.org/,miscellanynews.org,,
+Liberal Arts,21,Wesleyan University,#13,https://wesleyanargus.com/,https://wesleyanargus.com/,wesleyanargus.com,,
+Liberal Arts,22,Washington and Lee Univeristy,#13,https://ringtumphi.net/,https://ringtumphi.net/,ringtumphi.net,,
+Liberal Arts,23,Colgate Univeristy,#22,https://thecolgatemaroonnews.com/,https://thecolgatemaroonnews.com/,thecolgatemaroonnews.com,,
+Liberal Arts,24,Univeristy of Richmond,#22,https://www.thecollegianur.com/,https://www.thecollegianur.com/,thecollegianur.com,,
+Liberal Arts,25,Bates College,#24,https://thebatesstudent.com/,https://thebatesstudent.com/,thebatesstudent.com,,
+Liberal Arts,26,Colby College,#24,https://colbyecho.news/,https://colbyecho.news/,colbyecho.news,,
+Liberal Arts,27,Haverford College,#24,https://bicollegenews.com/about/,https://bicollegenews.com/about/,bicollegenews.com,,
+Liberal Arts,28,College of the Holy Cross,#27,https://hcspire.com/,https://hcspire.com/,hcspire.com,,
+Liberal Arts,29,Macalester College,#28,https://themacweekly.com/,https://themacweekly.com/,themacweekly.com,,
+Liberal Arts,30,Mount Holyoke College,#29,https://www.mountholyokenews.com/#home-section,https://www.mountholyokenews.com/,mountholyokenews.com,,
+Liberal Arts,31,Bryn Mawr College,#30,https://bicollegenews.com/about/,https://bicollegenews.com/about/,bicollegenews.com,,
+Liberal Arts,32,Bucknell University,#30,https://bucknellian.net/,https://bucknellian.net/,bucknellian.net,,
+Liberal Arts,33,Colorado College,#30,https://thecatalystnews.com/,https://thecatalystnews.com/,thecatalystnews.com,,
+Liberal Arts,34,Lafayette College,#30,https://lafayettestudentnews.com/,https://lafayettestudentnews.com/,lafayettestudentnews.com,,
+Liberal Arts,35,Denison University,#34,https://denisonian.com/,https://denisonian.com/,denisonian.com,,
+Liberal Arts,36,Franklin & Marshell College,#35,https://www.the-college-reporter.com/,https://www.the-college-reporter.com/,the-college-reporter.com,,
+Liberal Arts,37,Occidental College,#35,https://theoccidentalnews.com/,https://theoccidentalnews.com/,theoccidentalnews.com,,
+Liberal Arts,38,Pitzer College,#37,https://tsl.news/,https://tsl.news/,tsl.news,,
+Liberal Arts,39,Scripps College,#37,https://tsl.news/,https://tsl.news/,tsl.news,,
+Liberal Arts,40,Skidmore College,#37,https://skidmorenews.com/,https://skidmorenews.com/,skidmorenews.com,,
+Liberal Arts,41,Soka Univeristy of America,#37,https://libguides.soka.edu/pearl/home,https://libguides.soka.edu/pearl/home,libguides.soka.edu,,
+Liberal Arts,42,Spelman College,#37,https://spelmanblueprint.com/,https://spelmanblueprint.com/,spelmanblueprint.com,,
+Liberal Arts,43,Trinity College,#37,https://trinitytripod.com/,https://trinitytripod.com/,trinitytripod.com,,
+Liberal Arts,44,Trinity University,#37,https://trinitonian.com/,https://trinitonian.com/,trinitonian.com,,
+Liberal Arts,45,Union College,#44,https://concordiensis.com/,https://concordiensis.com/,concordiensis.com,,
+Liberal Arts,46,Berea College,#45,https://pinnacle.berea.edu/,https://pinnacle.berea.edu/,pinnacle.berea.edu,,
+Liberal Arts,47,Dickinson College,#45,https://thedickinsonian.com/,https://thedickinsonian.com/,thedickinsonian.com,,
+Liberal Arts,48,Furman Univeristy,#45,https://thepaladin.news/,https://thepaladin.news/,thepaladin.news,,
+Liberal Arts,49,Kenyon College,#45,https://kenyoncollegian.com/,https://kenyoncollegian.com/,kenyoncollegian.com,,
+Liberal Arts,50,The Univeristy of the South,#45,https://thesewaneepurple.org/,https://thesewaneepurple.org/,thesewaneepurple.org,,
+Liberal Arts,51,Connecticut College,#50,https://thecollegevoice.org/,https://thecollegevoice.org/,thecollegevoice.org,,
+Liberal Arts,52,Hillsdale College,#50,https://hillsdalecollegian.com/,https://hillsdalecollegian.com/,hillsdalecollegian.com,,
+Liberal Arts,53,St. Olaf College,#50,nan,,,,non_url:nan
+Liberal Arts,54,Wabash College,#50,nan,,,,non_url:nan
+Liberal Arts,55,Wheaton College,#50,nan,,,,non_url:nan
+Liberal Arts,56,Centre College,#55,nan,,,,non_url:nan
+Liberal Arts,57,Rhodes College,#55,nan,,,,non_url:nan
+Liberal Arts,58,Thomas Aquinas College,#55,nan,,,,non_url:nan
+Liberal Arts,59,DePauw University,#58,nan,,,,non_url:nan
+Liberal Arts,60,Gettysburg College,#58,nan,,,,non_url:nan
+Liberal Arts,61,Oberlin College,#58,nan,,,,non_url:nan
+Liberal Arts,62,St. Lawrence University,#58,nan,,,,non_url:nan
+Liberal Arts,63,Whitman College,#58,nan,,,,non_url:nan
+Liberal Arts,64,Principia College,#63,nan,,,,non_url:nan
+Liberal Arts,65,Reed College,#63,nan,,,,non_url:nan
+Liberal Arts,66,Lawrence University,#65,nan,,,,non_url:nan
+Liberal Arts,67,Virginia Military Institute,#65,nan,,,,non_url:nan
+Liberal Arts,68,Agnes Scott College,#67,nan,,,,non_url:nan
+Liberal Arts,69,Kalamazoo College,#67,nan,,,,non_url:nan
+Liberal Arts,70,Wofford College,#67,nan,,,,non_url:nan
+Liberal Arts,71,Bard College,#70,nan,,,,non_url:nan
+Liberal Arts,72,Gustavus Adolphus College,#70,nan,,,,non_url:nan
+Liberal Arts,73,Muhlenberg College,#70,nan,,,,non_url:nan
+Liberal Arts,74,College of St. Benedict,#73,nan,,,,non_url:nan
+Liberal Arts,75,Hobart and William Smith Colleges,#73,nan,,,,non_url:nan
+Liberal Arts,76,Lake Forest College,#75,nan,,,,non_url:nan
+Liberal Arts,77,Allegheny College,#76,nan,,,,non_url:nan
+Liberal Arts,78,The College of Wooster,#76,nan,,,,non_url:nan
+Liberal Arts,79,Earlham College,#76,nan,,,,non_url:nan
+Liberal Arts,80,Knox College,#76,nan,,,,non_url:nan
+Liberal Arts,81,Wheaton College,#76,nan,,,,non_url:nan
+Liberal Arts,82,Willamette University,#76,nan,,,,non_url:nan
+Liberal Arts,83,Saint Johns University,#82,nan,,,,non_url:nan
+Liberal Arts,84,Stonehill College,#82,nan,,,,non_url:nan
+Liberal Arts,85,Austin College,#84,nan,,,,non_url:nan
+Liberal Arts,86,Drew University,#84,nan,,,,non_url:nan
+Liberal Arts,87,Hope College,#84,nan,,,,non_url:nan
+Liberal Arts,88,Saint Mary's College,#84,nan,,,,non_url:nan
+Liberal Arts,89,Southwestern Univeristy,#84,nan,,,,non_url:nan
+Liberal Arts,90,St. John's College (MD),#84,nan,,,,non_url:nan
+Liberal Arts,91,Ursinus College,#84,nan,,,,non_url:nan
+Liberal Arts,92,Washington & Jefferson College,#84,nan,,,,non_url:nan
+Liberal Arts,93,Beloit College,#92,nan,,,,non_url:nan
+Liberal Arts,94,Juniata College,#92,nan,,,,non_url:nan
+Liberal Arts,95,Washington College,#92,nan,,,,non_url:nan
+Liberal Arts,96,Whittier College,#92,nan,,,,non_url:nan
+Liberal Arts,97,Augustana College,#96,nan,,,,non_url:nan
+Liberal Arts,98,Lewis & Clark College,#96,nan,,,,non_url:nan
+Liberal Arts,99,Lycoming College,#96,nan,,,,non_url:nan
+Liberal Arts,100,Morehouse College,#96,nan,,,,non_url:nan
+Liberal Arts,101,Randolph-Macon College,#96,nan,,,,non_url:nan
+Liberal Arts,102,Saint Anselm College,#96,nan,,,,non_url:nan
+Liberal Arts,103,St. Mary's College of Maryland,#96,nan,,,,non_url:nan

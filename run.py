@@ -3,6 +3,7 @@
 
 Usage:
     python run.py --site duke
+    python run.py --site chicago --mode full --max-fetch 200 --refresh-discovery
     python run.py --site all
 """
 
@@ -36,6 +37,32 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Also write output/combined.csv (off by default).",
     )
+    parser.add_argument(
+        "--mode",
+        choices=["sample", "full"],
+        default=None,
+        help="Override site mode (sample rewrite vs crash-safe full append).",
+    )
+    parser.add_argument(
+        "--refresh-discovery",
+        action="store_true",
+        help="Refresh the site's discovery cache before extracting.",
+    )
+    parser.add_argument(
+        "--max-fetch",
+        type=int,
+        default=None,
+        help="Cap candidate fetches in full mode (bounded tests).",
+    )
+    parser.add_argument(
+        "--lastmod-year",
+        type=int,
+        default=None,
+        help=(
+            "Full-mode only: select candidates whose sitemap lastmod falls in "
+            "this calendar year (test helper; never assigns publication year)."
+        ),
+    )
     return parser
 
 
@@ -46,6 +73,10 @@ def main(argv: list[str] | None = None) -> int:
         args.site,
         incremental=not args.overwrite,
         write_combined=args.combined,
+        mode=args.mode,
+        refresh_discovery=args.refresh_discovery,
+        max_fetch=args.max_fetch,
+        lastmod_year=args.lastmod_year,
     )
     return 0
 

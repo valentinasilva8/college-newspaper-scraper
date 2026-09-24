@@ -1,0 +1,121 @@
+# Agent Prompts
+
+Self-contained copy/paste prompts. Each prompt includes the constraints it
+needs; still keep `AGENTS.md` and `docs/AGENT_PLAYBOOK.md` open.
+
+---
+
+## Prompt 1 — Lead: crash safety + full-corpus mode
+
+```text
+You are the Lead agent for the college-newspaper-scraper repo.
+
+Goal: finish (or verify) crash-safe full-corpus mode on the CURRENT architecture
+without splitting extractor.py and without starting any long scrape.
+
+Requirements:
+1. mode: sample | full in config/sites.yaml (existing sites stay sample unless
+   overridden by CLI). Preserve sample-mode full CSV rewrite behavior.
+2. Frozen Article schema/order in src/schema.py — do not change it.
+3. Full mode writer/pipeline:
+   - Serialize batches of 50 in memory
+   - Append + flush + fsync
+   - Atomic checkpoint of last committed CSV byte offset under
+     logs/checkpoints/<site>.json
+   - On restart: truncate only an uncommitted tail to that offset; resume by
+     skipping URLs that already have non-empty text
+   - Write header only for a new file; reject wrong column order
+   - Preflight-block existing empty-text rows (no silent duplicate URLs)
+   - logs/failed_<site>.csv with url,year,reason
+   - Progress every 100 articles with rate
+   - Per-domain lock so two processes cannot scrape the same host
+4. Chicago full rules when mode=full:
+   - Emit every discovered URL (no lastmod filter for the full corpus)
+   - On-page publication date authoritative; do NOT assign year from lastmod
+   - Exclude pre-2000 only AFTER the on-page date is parsed
+   - Subtitle behavior unchanged
+5. Unit/fixture tests for: schema order, header-once, 50-row checkpoint,
+   interrupted append + rollback, resume/no refetch, duplicate prevention,
+   failure logging, sample-mode compatibility, domain lock.
+6. Run offline tests only. Show the shared-code diff summary.
+7. Handoff: do NOT merge, commit, push, refresh discovery, or fetch articles.
+   Stop after diff + test results and list the exact command for a bounded
+   Chicago test that a human must approve first.
+
+Read AGENTS.md and docs/AGENT_PLAYBOOK.md before editing.
+```
+
+---
+
+## Prompt 2 — Recon: first 15 eligible unique domains
+
+```text
+You are the Recon agent for the college-newspaper-scraper repo.
+
+Goal: discovery-only notes for the first 15 eligible UNIQUE domains in workbook
+order from data/targets.csv / data/targets_raw.xlsx:
+
+1. Princeton (dailyprincetonian.com)
+2. Harvard (thecrimson.com)
+3. Stanford (stanforddaily.com)
+4. Johns Hopkins
+5. Penn
+6. Cornell
+7. Brown
+8. Dartmouth
+9. UC Berkeley (dailycal.org)
+10. Rice
+11. UCLA (dailybruin.com)
+12. Vanderbilt
+13. Carnegie Mellon — FLAG: likely library/archive rather than a student paper;
+    do NOT assume it is a valid scraper target
+14. Michigan (michigandaily.com)
+15. Notre Dame
+
+For each domain, document (Markdown under recon/ or docs/recon/):
+- Home URL and candidate sitemap/RSS/section discovery paths
+- robots.txt / crawl-delay notes (one polite request)
+- Suspected platform (WordPress/SNO, SNWorks, custom, Playwright-needed, etc.)
+- Whether the mapping looks like Instagram-only, library/catalog, official
+  university newsroom, wrong-school, or inaccessible
+- Suggested tracker status update (do not auto-delete rows)
+- Rough est_urls_2000plus / earliest_year only if cheaply evidenced; else leave blank
+
+Hard limits:
+- Discovery only — no article-body corpus scraping
+- Honest research UA unless a site is already on the approved browser-UA list
+  (Duke/Yale only today)
+- No proxies/CAPTCHA/paywall bypass
+- Do not edit config/sites.yaml or src/extractor.py
+- Do not commit/push
+
+Update data/targets.csv status/notes fields carefully if you touch the tracker;
+never remove suspicious rows — flag them.
+```
+
+---
+
+## Prompt 3 — Lead (after Prompt 1 is merged): Duke discovery-only inventory
+
+```text
+You are the Lead agent. Prompt 1 (crash-safe full mode) is already merged.
+
+Goal: Duke Chronicle DISCOVERY-ONLY full inventory. No article-body fetches.
+
+Requirements:
+1. Walk all top-level sections used by The Chronicle (not only /section/news).
+2. Use the approved browser UA path already used for Duke (WAF blocks honest UA).
+3. Honor crawl delay 10–12 seconds between listing requests.
+4. Confirm termination behavior around deep pagination (document evidence near
+   the ~500-page region; do not invent a page cap).
+5. Dedupe URLs across overlapping parent/child sections.
+6. Write an exact per-year URL cache under logs/cache/ (same spirit as the
+   existing Duke cache format, but for the full inventory).
+7. Produce a short recon note: unique URL count, year histogram, sections
+   covered, any 403/empty-list failures.
+8. Do NOT fetch article pages. Do NOT start a full Duke corpus run.
+9. Do NOT commit/push unless the user asks.
+
+Read recon/FULL_CORPUS_AUDIT.md (Duke section), AGENTS.md, and
+docs/AGENT_PLAYBOOK.md before changing code.
+```

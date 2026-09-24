@@ -1799,13 +1799,33 @@ def _sample_chicago(
     return results
 
 
-def _discover_chicago(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
-    """Discovery: WordPress post sitemaps, bucketed by <lastmod> year."""
-    year_start = int(config.get("year_start", 2016))
-    year_end = int(config.get("year_end", datetime.now(timezone.utc).year))
-    per_year = int(config.get("per_year", 2))
-    refresh = config.get("refresh_discovery", False)
+def _all_chicago(
+    by_year: dict[int, list[list[str]]],
+) -> list[dict]:
+    """Every discovered URL (full mode). lastmod year is metadata only."""
+    results: list[dict] = []
+    for year in sorted(by_year):
+        # Stable order within each lastmod bucket; do not filter by lastmod year.
+        for loc, lastmod in sorted(by_year.get(year, []), key=lambda pair: pair[0]):
+            results.append(
+                {
+                    "url": loc,
+                    "title": "",
+                    "author": "",
+                    "publication_date": "",
+                    "section": _chicago_section_from_url(loc),
+                    "lastmod": lastmod,
+                    "year": year,  # sitemap lastmod year; not used for corpus year
+                }
+            )
+    return results
 
+
+def _load_or_fetch_chicago_by_year(
+    config: dict, fetcher: "Fetcher"
+) -> dict[int, list[list[str]]]:
+    """Return the Chicago (url, lastmod) map, refreshing when requested."""
+    refresh = config.get("refresh_discovery", False)
     by_year: dict[int, list[list[str]]] | None = None
     if not refresh:
         cached = _load_chicago_cache()
@@ -1819,12 +1839,46 @@ def _discover_chicago(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
                 len(by_year),
                 cached_at or "unknown",
             )
-
     if by_year is None:
         by_year = _fetch_chicago_by_year(config, fetcher)
         if by_year:
             _save_chicago_cache(by_year)
+    return by_year or {}
 
+
+def _discover_chicago(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
+    """Discovery: WordPress post sitemaps, bucketed by <lastmod> year.
+
+    Sample mode: stratified ``per_year`` over ``year_start``–``year_end``.
+    Full mode: every discovered URL (no lastmod-year filter).
+    """
+    mode = str(config.get("mode", "sample")).lower()
+    by_year = _load_or_fetch_chicago_by_year(config, fetcher)
+
+    if mode == "full":
+        results = _all_chicago(by_year)
+        # Optional lastmod window selects candidates only (bounded tests).
+        # Never assigns publication year from lastmod.
+        lm_year = config.get("candidate_lastmod_year")
+        if lm_year is not None:
+            lm_year_i = int(lm_year)
+            results = [m for m in results if m.get("year") == lm_year_i]
+            logger.info(
+                "Chicago Maroon full discovery: filtered to lastmod year %d -> "
+                "%d candidate URL(s)",
+                lm_year_i,
+                len(results),
+            )
+        else:
+            logger.info(
+                "Chicago Maroon full discovery: %d candidate URL(s) (no lastmod filter)",
+                len(results),
+            )
+        return results
+
+    year_start = int(config.get("year_start", 2016))
+    year_end = int(config.get("year_end", datetime.now(timezone.utc).year))
+    per_year = int(config.get("per_year", 2))
     results = _sample_chicago(
         by_year, year_start=year_start, year_end=year_end, per_year=per_year
     )
@@ -1843,10 +1897,14 @@ def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
         resp = fetcher.get(url)
     except requests.RequestException as exc:
         logger.warning("Chicago Maroon fetch failed for %s: %s", url, exc)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "network_error"
+        return out
     if resp is None:
         logger.warning("Chicago Maroon fetch skipped (robots.txt) for %s", url)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "robots_blocked"
+        return out
 
     soup = make_soup(resp.text)
     # SNO theme body container (same chain as Northwestern's two eras).
@@ -1858,7 +1916,9 @@ def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
     )
     if body is None:
         logger.warning("Chicago Maroon body container not found for %s", url)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "empty_body"
+        return out
     text = clean_text(" ".join(p.get_text(" ") for p in body.find_all("p")))
 
     # og:title is the reliable headline here; the page <h1> is the site masthead
@@ -1892,18 +1952,89 @@ def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
     }
 
 
+def _chicago_page_year(publication_date: str) -> int | None:
+    """Parsed calendar year from a normalized publication_date, or None."""
+    if not publication_date or publication_date.startswith("UNPARSED:"):
+        return None
+    return _year_from_iso(publication_date)
+
+
 def extract_chicago(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
     """Yield Chicago Maroon Article records (WP sitemap + SNO full-text fetch).
 
-    Per-year backfill: discovery oversamples candidates, and we keep fetching a
-    year's candidates until ``per_year`` produce real body text, so unparseable
-    pages don't leave gaps. Publication date comes from the page's .sno-story-date,
-    falling back to the sitemap <lastmod> when the page has none.
+    Sample mode: per-year backfill until ``per_year`` produce real body text.
+    Publication date prefers .sno-story-date, falling back to sitemap <lastmod>.
+
+    Full mode: every discovered URL; on-page date is authoritative (no lastmod
+    year assignment); rows with a parseable year before ``year_start`` (default
+    2000) are skipped after the page is fetched. ``max_fetch`` / ``max_articles``
+    caps how many candidates are fetched (bounded tests).
     """
     institution = "The Chicago Maroon"
+    mode = str(config.get("mode", "sample")).lower()
+    skip_urls = _skip_urls(config)
+    failure_sink = config.get("failure_sink")  # optional callable(url, year, reason)
+
+    if mode == "full":
+        # Corpus floor is always 2000 for full runs; sample year_start must not
+        # shrink the historical window.
+        year_floor = int(config.get("corpus_year_start", 2000))
+        # Full mode is uncapped unless the caller sets max_fetch (bounded tests).
+        # Do NOT fall back to sample-mode max_articles — that silently truncates
+        # a corpus run (Chicago's sample max_articles is 30).
+        max_fetch = config.get("max_fetch")
+        max_fetch_i = int(max_fetch) if max_fetch is not None else None
+        fetched = 0
+        for meta in _discover_chicago(config, fetcher):
+            url = meta.get("url", "")
+            if not url:
+                continue
+            if url in skip_urls:
+                logger.debug("Skipping already-scraped Chicago Maroon URL: %s", url)
+                continue
+            if max_fetch_i is not None and fetched >= max_fetch_i:
+                break
+            fetched += 1
+            page = _extract_text_chicago(url, fetcher)
+            text = page.get("text", "")
+            if not text:
+                reason = page.get("error") or "empty_body"
+                logger.warning("Chicago Maroon %s: %s", reason, url)
+                if callable(failure_sink):
+                    failure_sink(url, meta.get("year"), reason)
+                continue
+            # Full mode: on-page date only — never assign year from sitemap lastmod.
+            raw_date = page.get("publication_date", "")
+            pub = normalize_date(raw_date, url) if raw_date else ""
+            page_year = _chicago_page_year(pub)
+            if page_year is not None and page_year < year_floor:
+                reason = f"pre_{year_floor}"
+                logger.info(
+                    "Skipping Chicago Maroon pre-%d article (%s): %s",
+                    year_floor,
+                    pub,
+                    url,
+                )
+                if callable(failure_sink):
+                    failure_sink(url, page_year, reason)
+                continue
+            section = page.get("section", "") or meta.get("section", "")
+            yield Article(
+                institution=institution,
+                title=page.get("title", "") or meta.get("title", ""),
+                subtitle=page.get("subtitle", ""),
+                author=clean_text(page.get("author", "") or meta.get("author", "")),
+                publication_date=pub,
+                section=section,
+                subsection=page.get("subsection", ""),
+                url=url,
+                text=text,
+                scraped_at=datetime.now(timezone.utc).isoformat(),
+            )
+        return
+
     max_articles = config.get("max_articles", 100)
     per_year = int(config.get("per_year", 2))
-    skip_urls = _skip_urls(config)
     count = 0
     per_year_ok: dict[int, int] = defaultdict(int)
     for meta in _discover_chicago(config, fetcher):
