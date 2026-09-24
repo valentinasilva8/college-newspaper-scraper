@@ -1,0 +1,33 @@
+[Unit]
+# One instance per newspaper: newspaper-scraper@chicago, newspaper-scraper@duke, ...
+Description=College newspaper corpus scraper (%i)
+After=network-online.target
+Wants=network-online.target
+# A crash loop must never turn into a hammering loop against a publisher.
+StartLimitIntervalSec=3600
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=scraper
+Group=scraper
+WorkingDirectory=/opt/newspaper-scraper
+EnvironmentFile=-/etc/newspaper-scraper.env
+ExecStart=/opt/newspaper-scraper/.venv/bin/python run.py --site %i --mode full
+
+# Full mode is checkpointed: a restart resumes from the last committed batch
+# instead of refetching. Successful completion exits 0 and stays stopped.
+Restart=on-failure
+RestartSec=120
+
+StandardOutput=append:/opt/newspaper-scraper/logs/systemd_%i.log
+StandardError=append:/opt/newspaper-scraper/logs/systemd_%i.log
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/newspaper-scraper
+
+[Install]
+WantedBy=multi-user.target

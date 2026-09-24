@@ -1,0 +1,14 @@
+[Unit]
+Description=Nightly backup of newspaper corpus CSVs and checkpoints to S3
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=scraper
+Group=scraper
+WorkingDirectory=/opt/newspaper-scraper
+EnvironmentFile=-/etc/newspaper-scraper.env
+ExecStart=/usr/bin/env bash /opt/newspaper-scraper/deploy/backup.sh
+StandardOutput=append:/opt/newspaper-scraper/logs/backup.log
+StandardError=append:/opt/newspaper-scraper/logs/backup.log

@@ -1,0 +1,25 @@
+{
+  "_comment": [
+    "Known-good article URLs used only by scripts/access_probe.py to test whether",
+    "a server's IP can reach each publisher. These are a handful of already-scraped",
+    "URLs, not corpus data. Keep this list tiny."
+  ],
+  "sites": {
+    "chicago": [
+      "https://chicagomaroon.com/41818/news/uchicago-scientists-recognized-by-white-house-for-open-science-efforts/",
+      "https://chicagomaroon.com/41972/news/skilled-trades-workers-ratify-new-contract-with-university/"
+    ],
+    "northwestern": [
+      "https://dailynorthwestern.com/2026/06/15/ae/reel-thoughts-scary-movie-sells-itself-short-dilutes-trademark-humor/",
+      "https://dailynorthwestern.com/2026/06/13/top-stories/qa-sex-and-the-city-star-sarah-jessica-parker-talks-advocating-for-arts-upcoming-commencement-address/"
+    ],
+    "duke": [
+      "https://www.dukechronicle.com/article/duke-university-student-health-insurance-plan-aetna-blue-cross-blue-shield-coverage-abortion-providers-healthcare-network-20260614",
+      "https://www.dukechronicle.com/article/duke-university-student-affairs-major-restructuring-dean-of-students-mary-pat-mcmahon-clay-adams-libby-skiles-jeanna-mccullers-20260611"
+    ],
+    "yale": [
+      "https://yaledailynews.com/articles/proposal-could-bar-loan-borrowers-from-yale-music-visual-arts-programs",
+      "https://yaledailynews.com/articles/lincoln-center-president-mariko-silver-99-to-join-yale-corporation"
+    ]
+  }
+}

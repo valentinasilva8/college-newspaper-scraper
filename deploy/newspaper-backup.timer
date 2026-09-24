@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the newspaper corpus backup nightly
+
+[Timer]
+OnCalendar=*-*-* 04:30:00
+# Catch up after a reboot so a missed night still gets backed up.
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target
