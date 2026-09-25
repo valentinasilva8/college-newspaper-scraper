@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 import yaml
 
 from .checkpoint import DomainLock
-from .extractor import SITE_EXTRACTORS
+from .extractor import FULL_MODE_SITES, SITE_EXTRACTORS
 from .fetcher import Fetcher
 from .schema import Article
 from .writer import (
@@ -186,6 +186,11 @@ def run_site_full(
     """Crash-safe full-corpus run: append batches of 50 with checkpoints."""
     if site_key not in SITE_EXTRACTORS:
         raise KeyError(f"No extractor registered for site '{site_key}'")
+    if site_key not in FULL_MODE_SITES:
+        raise ValueError(
+            f"Site '{site_key}' has no full-mode extractor yet "
+            f"(supported: {', '.join(sorted(FULL_MODE_SITES))})"
+        )
 
     defaults = config.get("defaults", {})
     sites = config.get("sites", {})

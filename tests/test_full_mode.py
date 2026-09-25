@@ -280,3 +280,112 @@ def test_chicago_full_mode_ignores_sample_max_articles():
         ex._discover_chicago = orig_d
         ex._extract_text_chicago = orig_p
     assert len(articles) == 40
+
+
+class _NoFetch:
+    def get(self, url):  # pragma: no cover - extract step is patched
+        raise AssertionError("should not fetch in this unit test")
+
+
+def _nw_url(year: int, n: int) -> str:
+    return f"https://dailynorthwestern.com/{year}/03/04/campus/story-{n}/"
+
+
+def _nw_page(**overrides):
+    page = {
+        "text": "body",
+        "title": "T",
+        "author": "A",
+        "publication_date": "",
+        "subtitle": "",
+        "section": "Campus",
+        "subsection": "",
+    }
+    page.update(overrides)
+    return page
+
+
+def test_nw_full_discovery_emits_all_urls(monkeypatch):
+    import src.extractor as ex
+
+    by_year = {
+        1999: [_nw_url(1999, 1)],
+        2019: [_nw_url(2019, 2), _nw_url(2019, 3), _nw_url(2019, 2)],
+    }
+    assert [m["url"] for m in ex._all_nw(by_year)] == [
+        _nw_url(1999, 1),
+        _nw_url(2019, 2),
+        _nw_url(2019, 3),
+    ]
+
+    monkeypatch.setattr(ex, "_load_or_fetch_nw_by_year", lambda cfg, f: by_year)
+    full = ex._discover_northwestern({"mode": "full"}, _NoFetch())
+    assert len(full) == 3
+    bucket = ex._discover_northwestern(
+        {"mode": "full", "candidate_lastmod_year": 2019}, _NoFetch()
+    )
+    assert {m["year"] for m in bucket} == {2019}
+
+
+def test_nw_full_mode_uncapped_dates_and_failures(monkeypatch):
+    """Full mode ignores sample caps, dates from page then URL, logs skips."""
+    import src.extractor as ex
+
+    urls = [_nw_url(2020, i) for i in range(40)]
+    metas = [{"url": u, "year": 2020} for u in urls]
+    metas.append({"url": _nw_url(1999, 99), "year": 1999})
+    metas.append({"url": _nw_url(2021, 98), "year": 2021})
+    pages = {u: _nw_page() for u in urls}
+    pages[urls[0]] = _nw_page(publication_date="2021-05-06T14:00:00+00:00")
+    pages[_nw_url(1999, 99)] = _nw_page()
+    pages[_nw_url(2021, 98)] = _nw_page(text="", error="network_error")
+
+    monkeypatch.setattr(ex, "_discover_northwestern", lambda cfg, f: metas)
+    monkeypatch.setattr(ex, "_extract_text_northwestern", lambda url, f: pages[url])
+    failures = []
+    config = {
+        "mode": "full",
+        "max_articles": 60,  # sample cap; must not apply
+        "per_year": 2,  # sample quota; must not apply
+        "skip_urls": {urls[1]},
+        "failure_sink": lambda url, year, reason: failures.append((url, year, reason)),
+    }
+    articles = list(ex.extract_northwestern(config, _NoFetch()))
+
+    assert len(articles) == 39  # 40 in 2020, minus one already scraped
+    by_url = {a.url: a for a in articles}
+    assert by_url[urls[0]].publication_date == "2021-05-06"  # page date wins
+    assert by_url[urls[2]].publication_date == "2020-03-04"  # permalink fallback
+    assert (_nw_url(1999, 99), 1999, "pre_2000") in failures
+    assert (_nw_url(2021, 98), 2021, "network_error") in failures
+
+
+def test_nw_full_mode_max_fetch(monkeypatch):
+    import src.extractor as ex
+
+    metas = [{"url": _nw_url(2020, i), "year": 2020} for i in range(10)]
+    monkeypatch.setattr(ex, "_discover_northwestern", lambda cfg, f: metas)
+    monkeypatch.setattr(ex, "_extract_text_northwestern", lambda url, f: _nw_page())
+    articles = list(
+        ex.extract_northwestern({"mode": "full", "max_fetch": 4}, _NoFetch())
+    )
+    assert len(articles) == 4
+
+
+def test_nw_full_mode_rejects_rss_discovery():
+    from src.extractor import extract_northwestern
+
+    with pytest.raises(ValueError, match="discovery_mode: sitemap"):
+        list(
+            extract_northwestern(
+                {"mode": "full", "discovery_mode": "rss"}, _NoFetch()
+            )
+        )
+
+
+def test_full_mode_rejects_unsupported_site():
+    """Regression: --mode full on a sample-only site must not run a sample."""
+    from src.pipeline import run_site_full
+
+    with pytest.raises(ValueError, match="no full-mode extractor"):
+        run_site_full("duke", {"sites": {"duke": {}}}, set())

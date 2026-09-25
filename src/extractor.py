@@ -477,6 +477,24 @@ def _sample_nw_sitemap(
     return results
 
 
+def _all_nw(by_year: dict[int, list[str]]) -> list[dict]:
+    """Every discovered URL (full mode), oldest URL-path year first."""
+    results: list[dict] = []
+    for year in sorted(by_year):
+        for url in sorted(set(by_year[year])):
+            results.append(
+                {
+                    "url": url,
+                    "title": "",
+                    "author": "",
+                    "publication_date": _date_from_nw_url(url),
+                    "section": "",
+                    "year": year,  # URL-path year; candidate bucketing only
+                }
+            )
+    return results
+
+
 # ----------------------------------------------------------------------
 # Northwestern (The Daily Northwestern) -- RSS discovery + static HTML
 # ----------------------------------------------------------------------
@@ -511,14 +529,11 @@ def _discover_northwestern_rss(config: dict, fetcher: "Fetcher") -> list[dict]:
     return results
 
 
-def _discover_northwestern_sitemap(config: dict, fetcher: "Fetcher") -> list[dict]:
-    """Sitemap discovery with date-stratified per-year sampling."""
-    year_start = int(config.get("year_start", 2000))
-    year_end = int(config.get("year_end", datetime.now(timezone.utc).year))
-    per_year = int(config.get("per_year", 2))
-    max_articles = int(config.get("max_articles", 100))
+def _load_or_fetch_nw_by_year(
+    config: dict, fetcher: "Fetcher"
+) -> dict[int, list[str]]:
+    """Return the Northwestern year -> URL map, refreshing when requested."""
     refresh = config.get("refresh_discovery", False)
-
     by_year: dict[int, list[str]] | None = None
     if not refresh:
         cached = _load_nw_sitemap_cache()
@@ -537,7 +552,42 @@ def _discover_northwestern_sitemap(config: dict, fetcher: "Fetcher") -> list[dic
         by_year = _fetch_nw_sitemap_by_year(config, fetcher)
         if by_year:
             _save_nw_sitemap_cache(by_year)
+    return by_year or {}
 
+
+def _discover_northwestern_sitemap(config: dict, fetcher: "Fetcher") -> list[dict]:
+    """Sitemap discovery.
+
+    Sample mode: date-stratified ``per_year`` over ``year_start``–``year_end``.
+    Full mode: every discovered URL.
+    """
+    mode = str(config.get("mode", "sample")).lower()
+    by_year = _load_or_fetch_nw_by_year(config, fetcher)
+
+    if mode == "full":
+        results = _all_nw(by_year)
+        # Optional year bucket selects candidates only (bounded tests). For
+        # Northwestern the bucket is the URL-path year, not a sitemap lastmod.
+        bucket_year = config.get("candidate_lastmod_year")
+        if bucket_year is not None:
+            bucket_year_i = int(bucket_year)
+            results = [m for m in results if m.get("year") == bucket_year_i]
+            logger.info(
+                "Northwestern full discovery: filtered to URL year %d -> "
+                "%d candidate URL(s)",
+                bucket_year_i,
+                len(results),
+            )
+        else:
+            logger.info(
+                "Northwestern full discovery: %d candidate URL(s)", len(results)
+            )
+        return results
+
+    year_start = int(config.get("year_start", 2000))
+    year_end = int(config.get("year_end", datetime.now(timezone.utc).year))
+    per_year = int(config.get("per_year", 2))
+    max_articles = int(config.get("max_articles", 100))
     results = _sample_nw_sitemap(
         by_year,
         year_start=year_start,
@@ -555,10 +605,13 @@ def _discover_northwestern_sitemap(config: dict, fetcher: "Fetcher") -> list[dic
 
 
 def _discover_northwestern(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
-    """Discovery: Yoast sitemap (stratified) or RSS fallback."""
+    """Discovery: Yoast sitemap (stratified or full) or RSS fallback."""
     mode = config.get("discovery_mode", "sitemap")
     if mode == "sitemap":
         return _discover_northwestern_sitemap(config, fetcher)
+    if str(config.get("mode", "sample")).lower() == "full":
+        # RSS only carries recent items; a "full" run over it would be a sample.
+        raise ValueError("Northwestern full mode requires discovery_mode: sitemap")
     return _discover_northwestern_rss(config, fetcher)
 
 
@@ -569,11 +622,15 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
     except requests.RequestException as exc:
         # Non-200 after retries (raise_for_status) or connection failure.
         logger.warning("Northwestern fetch failed for %s: %s", url, exc)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "network_error"
+        return out
     if resp is None:
         # robots.txt disallowed the URL (Fetcher returns None).
         logger.warning("Northwestern fetch skipped (robots.txt) for %s", url)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "robots_blocked"
+        return out
 
     soup = make_soup(resp.text)
     # Body container varies by era of the SNO theme:
@@ -589,7 +646,9 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
         body = _largest_p_container(soup)
     if body is None:
         logger.warning("Northwestern body container not found for %s", url)
-        return _empty_page()
+        out = _empty_page()
+        out["error"] = "empty_body"
+        return out
     paragraphs = [p.get_text(" ") for p in body.find_all("p")]
     text = clean_text(" ".join(paragraphs))
 
@@ -642,14 +701,26 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
 def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
     """Yield Daily Northwestern Article records (sitemap/RSS + full-text fetch).
 
-    Discovery oversamples candidates per year; here we keep fetching a year's
-    candidates until ``per_year`` produce real body text, so a few unparseable
-    articles (e.g. legacy photo recaps) don't leave gaps in the year coverage.
+    Sample mode: discovery oversamples candidates per year; here we keep
+    fetching a year's candidates until ``per_year`` produce real body text, so a
+    few unparseable articles (e.g. legacy photo recaps) don't leave gaps in the
+    year coverage.
+
+    Full mode: every discovered URL. Date comes from ``article:published_time``
+    on the page, falling back to the ``/YYYY/MM/DD/`` permalink date (never a
+    sitemap lastmod). Rows with a parseable year before ``corpus_year_start``
+    (default 2000) are skipped after fetch. Only ``max_fetch`` caps fetches.
     """
     institution = "The Daily Northwestern"
+    mode = str(config.get("mode", "sample")).lower()
+    skip_urls = _skip_urls(config)
+
+    if mode == "full":
+        yield from _extract_northwestern_full(config, fetcher, institution, skip_urls)
+        return
+
     max_articles = config.get("max_articles", 100)
     per_year = int(config.get("per_year", 2))
-    skip_urls = _skip_urls(config)
     count = 0
     per_year_ok: dict[int, int] = defaultdict(int)
     # Seed per-year counts from already-collected URLs so an incremental re-run
@@ -693,6 +764,61 @@ def extract_northwestern(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
             scraped_at=datetime.now(timezone.utc).isoformat(),
         )
         count += 1
+
+
+def _extract_northwestern_full(
+    config: dict,
+    fetcher: "Fetcher",
+    institution: str,
+    skip_urls: set[str],
+) -> Iterator[Article]:
+    """Full-corpus Northwestern extraction (see ``extract_northwestern``)."""
+    failure_sink = config.get("failure_sink")  # optional callable(url, year, reason)
+    year_floor = int(config.get("corpus_year_start", 2000))
+    # Never fall back to sample-mode max_articles; that would truncate the corpus.
+    max_fetch = config.get("max_fetch")
+    max_fetch_i = int(max_fetch) if max_fetch is not None else None
+    fetched = 0
+    for meta in _discover_northwestern(config, fetcher):
+        url = meta.get("url", "")
+        if not url:
+            continue
+        if url in skip_urls:
+            logger.debug("Skipping already-scraped Northwestern URL: %s", url)
+            continue
+        if max_fetch_i is not None and fetched >= max_fetch_i:
+            break
+        fetched += 1
+        page = _extract_text_northwestern(url, fetcher)
+        text = page.get("text", "")
+        if not text:
+            reason = page.get("error") or "empty_body"
+            logger.warning("Northwestern %s: %s", reason, url)
+            if callable(failure_sink):
+                failure_sink(url, meta.get("year"), reason)
+            continue
+        raw_date = page.get("publication_date") or _date_from_nw_url(url)
+        pub = normalize_date(raw_date, url) if raw_date else ""
+        page_year = _page_year(pub)
+        if page_year is not None and page_year < year_floor:
+            logger.info(
+                "Skipping Northwestern pre-%d article (%s): %s", year_floor, pub, url
+            )
+            if callable(failure_sink):
+                failure_sink(url, page_year, f"pre_{year_floor}")
+            continue
+        yield Article(
+            institution=institution,
+            title=page.get("title", "") or meta.get("title", ""),
+            subtitle="",
+            author=clean_text(page.get("author", "") or meta.get("author", "")),
+            publication_date=pub,
+            section=page.get("section", "") or meta.get("section", ""),
+            subsection=page.get("subsection", ""),
+            url=url,
+            text=text,
+            scraped_at=datetime.now(timezone.utc).isoformat(),
+        )
 
 
 # ----------------------------------------------------------------------
@@ -1952,7 +2078,7 @@ def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
     }
 
 
-def _chicago_page_year(publication_date: str) -> int | None:
+def _page_year(publication_date: str) -> int | None:
     """Parsed calendar year from a normalized publication_date, or None."""
     if not publication_date or publication_date.startswith("UNPARSED:"):
         return None
@@ -2006,7 +2132,7 @@ def extract_chicago(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
             # Full mode: on-page date only — never assign year from sitemap lastmod.
             raw_date = page.get("publication_date", "")
             pub = normalize_date(raw_date, url) if raw_date else ""
-            page_year = _chicago_page_year(pub)
+            page_year = _page_year(pub)
             if page_year is not None and page_year < year_floor:
                 reason = f"pre_{year_floor}"
                 logger.info(
@@ -2084,3 +2210,7 @@ SITE_EXTRACTORS = {
     "northwestern": extract_northwestern,
     "chicago": extract_chicago,
 }
+
+# Sites whose extractor implements mode: full. Any other site would silently run
+# its sample selection through the full-mode writer.
+FULL_MODE_SITES = frozenset({"chicago", "northwestern"})
