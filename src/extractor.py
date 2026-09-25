@@ -154,6 +154,14 @@ def _empty_page() -> dict:
     }
 
 
+def _fetch_error_reason(exc: requests.RequestException) -> str:
+    """Failure-log reason: ``http_<status>`` when the server answered."""
+    resp = getattr(exc, "response", None)
+    if resp is not None and getattr(resp, "status_code", None):
+        return f"http_{resp.status_code}"
+    return "network_error"
+
+
 def split_kicker(text: str) -> tuple[str, str]:
     """Split a "Section | Subsection" kicker into ``(section, subsection)``.
 
@@ -623,7 +631,7 @@ def _extract_text_northwestern(url: str, fetcher: "Fetcher") -> dict:
         # Non-200 after retries (raise_for_status) or connection failure.
         logger.warning("Northwestern fetch failed for %s: %s", url, exc)
         out = _empty_page()
-        out["error"] = "network_error"
+        out["error"] = _fetch_error_reason(exc)
         return out
     if resp is None:
         # robots.txt disallowed the URL (Fetcher returns None).
@@ -2024,7 +2032,7 @@ def _extract_text_chicago(url: str, fetcher: "Fetcher") -> dict:
     except requests.RequestException as exc:
         logger.warning("Chicago Maroon fetch failed for %s: %s", url, exc)
         out = _empty_page()
-        out["error"] = "network_error"
+        out["error"] = _fetch_error_reason(exc)
         return out
     if resp is None:
         logger.warning("Chicago Maroon fetch skipped (robots.txt) for %s", url)

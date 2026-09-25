@@ -113,8 +113,8 @@ sites:
       # SNO/FLEX Pro theme: full article body container (verified during recon).
       article_body: "#sno-story-body-content"
     rate_limit:
-      # robots.txt requests Crawl-delay: 6, so we wait at least 6s between
-      # requests to honor it (config-only; shared Fetcher is unchanged).
-      delay_min: 6.0
-      delay_max: 8.0
+      # robots.txt requests Crawl-delay: 6, but Cloudflare started returning
+      # 403 to the server after ~9 h at 6-8 s (2026-09-25), so stay well above it.
+      delay_min: 10.0
+      delay_max: 14.0
       max_concurrency: 1

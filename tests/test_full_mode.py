@@ -383,6 +383,126 @@ def test_nw_full_mode_rejects_rss_discovery():
         )
 
 
+class _Resp:
+    def __init__(self, status: int, headers: dict | None = None):
+        self.status_code = status
+        self.headers = headers or {}
+        self.text = ""
+
+    def raise_for_status(self):
+        import requests
+
+        if self.status_code >= 400:
+            raise requests.HTTPError(f"{self.status_code} Error", response=self)
+
+
+class _Session:
+    def __init__(self, statuses):
+        self.statuses = list(statuses)
+
+    def get(self, url, timeout=None):
+        return _Resp(self.statuses.pop(0))
+
+    def close(self):
+        pass
+
+
+def _blocking_fetcher(monkeypatch, statuses, **kwargs):
+    import src.fetcher as fetcher_mod
+
+    sleeps: list[float] = []
+    monkeypatch.setattr(fetcher_mod.time, "sleep", sleeps.append)
+    f = fetcher_mod.Fetcher(delay_min=0, delay_max=0, **kwargs)
+    f.session = _Session(statuses)
+    f._robots_cache["https://example.com"] = None
+    return f, sleeps
+
+
+def test_fetcher_cools_down_then_gives_up(monkeypatch):
+    import requests
+
+    from src.fetcher import SiteBlockedError
+
+    f, sleeps = _blocking_fetcher(
+        monkeypatch, [403] * 10, block_threshold=3, block_cooldowns=(60.0, 120.0)
+    )
+    url = "https://example.com/a"
+    for _ in range(2):  # below threshold: plain per-URL failures
+        with pytest.raises(requests.HTTPError):
+            f.get(url)
+    assert [s for s in sleeps if s] == []
+    with pytest.raises(requests.HTTPError):
+        f.get(url)  # 3rd refusal -> first cooldown
+    with pytest.raises(requests.HTTPError):
+        f.get(url)  # refused probe -> second cooldown immediately
+    assert [s for s in sleeps if s] == [60.0, 120.0]
+    with pytest.raises(SiteBlockedError):
+        f.get(url)  # cooldowns exhausted
+    assert not issubclass(SiteBlockedError, requests.RequestException)
+
+
+def test_fetcher_success_resets_block_budget(monkeypatch):
+    import requests
+
+    f, sleeps = _blocking_fetcher(
+        monkeypatch,
+        [403, 403, 200, 403, 403, 200],
+        block_threshold=3,
+        block_cooldowns=(60.0,),
+    )
+    url = "https://example.com/a"
+    for status in [403, 403, 200, 403, 403, 200]:
+        if status == 200:
+            assert f.get(url).status_code == 200
+        else:
+            with pytest.raises(requests.HTTPError):
+                f.get(url)
+    assert [s for s in sleeps if s] == []
+
+
+def test_fetcher_honors_retry_after(monkeypatch):
+    import requests
+    import src.fetcher as fetcher_mod
+
+    f, sleeps = _blocking_fetcher(
+        monkeypatch, [], block_threshold=1, block_cooldowns=(60.0,)
+    )
+    f.session.get = lambda url, timeout=None: _Resp(429, {"Retry-After": "600"})
+    with pytest.raises(requests.HTTPError):
+        f.get("https://example.com/a")
+    assert [s for s in sleeps if s] == [600.0]
+    assert fetcher_mod.BLOCK_STATUSES >= {403, 429}
+
+
+def test_blocked_run_commits_partial_batch(isolated_dirs, monkeypatch):
+    """A block mid-batch must save rows already fetched, then propagate."""
+    from src import pipeline
+    from src.fetcher import SiteBlockedError
+
+    def blocked_extractor(cfg, fetcher):
+        yield _article(1)
+        yield _article(2)
+        yield _article(3)
+        raise SiteBlockedError("example.com kept returning HTTP 403")
+
+    monkeypatch.setitem(pipeline.SITE_EXTRACTORS, "chicago", blocked_extractor)
+    config = {"sites": {"chicago": {"base_url": "https://chicagomaroon.com"}}}
+    with pytest.raises(SiteBlockedError):
+        pipeline.run_site_full("chicago", config, set())
+    rows = writer.read_site_csv("chicago")
+    assert [a.url.rsplit("/", 1)[-1] for a in rows] == ["1", "2", "3"]
+    assert load_checkpoint("chicago").rows_committed == 3
+
+
+def test_http_status_recorded_as_failure_reason():
+    import requests
+
+    from src.extractor import _fetch_error_reason
+
+    assert _fetch_error_reason(requests.HTTPError("x", response=_Resp(403))) == "http_403"
+    assert _fetch_error_reason(requests.ConnectionError("reset")) == "network_error"
+
+
 def test_full_mode_rejects_unsupported_site():
     """Regression: --mode full on a sample-only site must not run a sample."""
     from src.pipeline import run_site_full

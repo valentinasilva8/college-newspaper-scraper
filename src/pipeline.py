@@ -21,7 +21,7 @@ import yaml
 
 from .checkpoint import DomainLock
 from .extractor import FULL_MODE_SITES, SITE_EXTRACTORS
-from .fetcher import Fetcher
+from .fetcher import Fetcher, SiteBlockedError
 from .schema import Article
 from .writer import (
     BATCH_SIZE,
@@ -82,10 +82,18 @@ def _merge_site_config(defaults: dict, site_cfg: dict) -> dict:
 
 def _build_fetcher(site_config: dict) -> Fetcher:
     rl = site_config.get("rate_limit", {}) or {}
+    block_kwargs: dict[str, Any] = {}
+    if rl.get("block_threshold") is not None:
+        block_kwargs["block_threshold"] = int(rl["block_threshold"])
+    if rl.get("block_cooldowns_min") is not None:
+        block_kwargs["block_cooldowns"] = tuple(
+            float(m) * 60 for m in rl["block_cooldowns_min"]
+        )
     return Fetcher(
         delay_min=rl.get("delay_min", 1.0),
         delay_max=rl.get("delay_max", 3.0),
         max_concurrency=rl.get("max_concurrency", 1),
+        **block_kwargs,
     )
 
 
@@ -258,6 +266,13 @@ def run_site_full(
                     )
             if batch:
                 checkpoint = append_article_batch(site_key, batch, checkpoint)
+                batch = []
+        except (SiteBlockedError, KeyboardInterrupt):
+            # Rows in hand are valid; commit them before stopping so a blocked
+            # or interrupted run does not refetch up to BATCH_SIZE-1 articles.
+            if batch:
+                checkpoint = append_article_batch(site_key, batch, checkpoint)
+            raise
         finally:
             fetcher.close()
 

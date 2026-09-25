@@ -9,6 +9,10 @@ Responsibilities:
   behavior for the 404 and fetch-error cases.
 - Sends an honest research User-Agent on every request (and uses the
   same string when evaluating robots.txt rules).
+- Backs off when a site starts refusing us (403/429): after
+  ``block_threshold`` consecutive refusals it sleeps through escalating
+  cooldowns, probing once after each, and raises ``SiteBlockedError`` when
+  every cooldown is used up. A refusing site is never pushed through.
 """
 
 from __future__ import annotations
@@ -33,6 +37,27 @@ USER_AGENT = (
     "(academic research; contact: valentinatsilva@proton.me)"
 )
 
+# Responses that mean "the site is refusing us", as opposed to one bad URL.
+BLOCK_STATUSES = frozenset({403, 429})
+# 15 min, 30 min, 1 h, 2 h: ~3.75 h of patience before giving up on a site.
+DEFAULT_BLOCK_COOLDOWNS = (900.0, 1800.0, 3600.0, 7200.0)
+
+
+class SiteBlockedError(RuntimeError):
+    """The site kept refusing requests after every cooldown.
+
+    Deliberately not a ``requests.RequestException``: extractors catch those
+    per URL and move on, which is exactly what must not happen here.
+    """
+
+
+def _retry_after_seconds(resp: requests.Response) -> float:
+    value = (resp.headers or {}).get("Retry-After", "")
+    try:
+        return max(float(value), 0.0)
+    except (TypeError, ValueError):
+        return 0.0
+
 
 class Fetcher:
     """Rate-limited, robots-aware HTTP client shared by every extractor."""
@@ -46,11 +71,17 @@ class Fetcher:
         backoff_factor: float = 1.0,
         timeout: float = 15.0,
         user_agent: str = USER_AGENT,
+        block_threshold: int = 5,
+        block_cooldowns: tuple[float, ...] = DEFAULT_BLOCK_COOLDOWNS,
     ) -> None:
         self.delay_min = delay_min
         self.delay_max = delay_max
         self.timeout = timeout
         self.user_agent = user_agent
+        self.block_threshold = max(int(block_threshold), 1)
+        self.block_cooldowns = tuple(float(s) for s in block_cooldowns)
+        self._consecutive_blocks = 0
+        self._cooldowns_used = 0
 
         # NOTE: max_concurrency defaults to 1 ON PURPOSE. For the pilot we
         # send one request at a time per domain -- this is intentional
@@ -141,7 +172,8 @@ class Fetcher:
         """Fetch ``url`` politely, honoring robots.txt and concurrency limit.
 
         Returns the ``Response`` on success, or ``None`` if robots.txt
-        disallows the URL.
+        disallows the URL. Raises ``SiteBlockedError`` once the site has kept
+        refusing us through every cooldown.
         """
         if not self.can_fetch(url):
             logger.warning("robots.txt disallows fetching %s -- skipping.", url)
@@ -151,8 +183,44 @@ class Fetcher:
             self._sleep_politely()
             logger.debug("GET %s", url)
             resp = self.session.get(url, timeout=self.timeout)
-            resp.raise_for_status()
-            return resp
+
+        if resp.status_code in BLOCK_STATUSES:
+            self._note_block(url, resp)
+        elif resp.status_code < 400:
+            self._consecutive_blocks = 0
+            self._cooldowns_used = 0
+        resp.raise_for_status()
+        return resp
+
+    def _note_block(self, url: str, resp: requests.Response) -> None:
+        """Count a refusal; sleep through a cooldown or give up on the site."""
+        self._consecutive_blocks += 1
+        if self._consecutive_blocks < self.block_threshold:
+            return
+        host = urlparse(url).netloc
+        if self._cooldowns_used >= len(self.block_cooldowns):
+            raise SiteBlockedError(
+                f"{host} kept returning HTTP {resp.status_code} after "
+                f"{self._cooldowns_used} cooldown(s); stopping this site."
+            )
+        wait = max(
+            self.block_cooldowns[self._cooldowns_used], _retry_after_seconds(resp)
+        )
+        self._cooldowns_used += 1
+        logger.warning(
+            "%s returned HTTP %d on %d consecutive request(s); cooling down "
+            "%.0f min (cooldown %d/%d) before one probe request.",
+            host,
+            resp.status_code,
+            self._consecutive_blocks,
+            wait / 60,
+            self._cooldowns_used,
+            len(self.block_cooldowns),
+        )
+        time.sleep(wait)
+        # A single refused probe should trigger the next cooldown, not
+        # another full run of block_threshold requests.
+        self._consecutive_blocks = self.block_threshold - 1
 
     def close(self) -> None:
         self.session.close()

@@ -14,6 +14,11 @@ import sys
 
 from src import pipeline
 from src.extractor import SITE_EXTRACTORS
+from src.fetcher import SiteBlockedError
+
+# Must match RestartPreventExitStatus= in deploy/newspaper-scraper@.service, so a
+# site that is refusing us is not re-hammered by systemd's automatic restart.
+EXIT_SITE_BLOCKED = 75
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -69,15 +74,19 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     pipeline.setup_logging()
-    pipeline.run(
-        args.site,
-        incremental=not args.overwrite,
-        write_combined=args.combined,
-        mode=args.mode,
-        refresh_discovery=args.refresh_discovery,
-        max_fetch=args.max_fetch,
-        lastmod_year=args.lastmod_year,
-    )
+    try:
+        pipeline.run(
+            args.site,
+            incremental=not args.overwrite,
+            write_combined=args.combined,
+            mode=args.mode,
+            refresh_discovery=args.refresh_discovery,
+            max_fetch=args.max_fetch,
+            lastmod_year=args.lastmod_year,
+        )
+    except SiteBlockedError as exc:
+        pipeline.logger.error("SITE BLOCKED: %s Progress is saved.", exc)
+        return EXIT_SITE_BLOCKED
     return 0
 
 

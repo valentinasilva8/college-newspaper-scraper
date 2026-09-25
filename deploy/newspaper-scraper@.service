@@ -19,6 +19,9 @@ ExecStart=/opt/newspaper-scraper/.venv/bin/python run.py --site %i --mode full
 # instead of refetching. Successful completion exits 0 and stays stopped.
 Restart=on-failure
 RestartSec=120
+# run.py exits 75 when a site keeps refusing us after every cooldown. Stay
+# stopped: restarting would resume requests against a site that said no.
+RestartPreventExitStatus=75
 
 StandardOutput=append:/opt/newspaper-scraper/logs/systemd_%i.log
 StandardError=append:/opt/newspaper-scraper/logs/systemd_%i.log
