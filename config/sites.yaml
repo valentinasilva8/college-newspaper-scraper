@@ -118,3 +118,45 @@ sites:
       delay_min: 10.0
       delay_max: 14.0
       max_concurrency: 1
+
+  # --------------------------------------------------------------------
+  # SNO Sites papers: one shared extractor (src/sno.py), config only.
+  # Each needs base_url + institution; see src/sno.py for optional keys.
+  # All sit behind Cloudflare like Northwestern and publish Crawl-delay: 6,
+  # so they start at Northwestern's post-block pace of 10-14 s.
+  # --------------------------------------------------------------------
+
+  smu:
+    name: "The Daily Campus (Southern Methodist University)"
+    platform: sno
+    institution: "The Daily Campus"
+    base_url: "https://smudailycampus.com"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  tcu:
+    name: "TCU 360 (Texas Christian University)"
+    platform: sno
+    institution: "TCU 360"
+    base_url: "https://tcu360.com"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  biola:
+    name: "The Chimes (Biola University)"
+    platform: sno
+    institution: "The Chimes"
+    base_url: "https://chimesnewspaper.com"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  union:
+    name: "Concordiensis (Union College)"
+    platform: sno
+    institution: "Concordiensis"
+    base_url: "https://concordiensis.com"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  stolaf:
+    name: "Manitou Messenger (St. Olaf College)"
+    platform: sno
+    institution: "Manitou Messenger"
+    base_url: "https://olafmessenger.com"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

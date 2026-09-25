@@ -151,3 +151,29 @@ CMS exposes a genuine editor deck:
   article), not a distinct subtitle field. Storing it would mislabel body text as
   an editor-written deck. Do not assume this holds for other SNO installs — verify
   per-install (see Pre-Build Field Audit Protocol below).
+
+---
+
+## SNO Sites papers (shared extractor, `platform: sno`)
+
+Recon 2026-09-25 from the Mac, honest research UA. All five sit behind
+Cloudflare (like Northwestern) and publish `Crawl-delay: 6`; configured at
+10–14 s after Northwestern's server IP was blocked at 6–8 s.
+
+| Key | Paper | Sitemap | ~URLs | Date lives in | Notes |
+|---|---|---|---|---|---|
+| `smu` | The Daily Campus | WP core, 14 subs | ~26.6k | `.sno-story-date` | |
+| `tcu` | TCU 360 | WP core, 14 subs | ~26k | `.sno-story-date` ("Published Mar 26, 2026") | Section only in JSON-LD `articleSection`. Full-screen feature template has no HTML body → logged `empty_body` |
+| `biola` | The Chimes | Yoast, 12 subs | 11,389 | byline "• March 28, 2025"; `article:published_time` | `.time-wrapper` is the **masthead's current date** — never read it. 2007 archive has no author (byline holds only the date). `og:title` carries " - The Chimes" |
+| `union` | Concordiensis | WP core, 1 sub | 1,626 | `.sno-story-date` / classic `.storydate` | Some pieces have no byline |
+| `stolaf` | Manitou Messenger | WP core, 3 subs | ~5.2k | byline "• March 13, 2025" | |
+
+`subtitle` comes only from an explicit SNO subtitle/deck element, never
+`og:description` (same reasoning as Northwestern above).
+
+Not SNO / not yet supported from the Christian-colleges tab: Point Loma
+(WordPress core sitemap, non-SNO theme), Baylor, Wheaton, Hope, Lipscomb
+(WordPress, no standard post sitemap), Harding (HTTP 401, login), College of
+the Ozarks (Instagram only), Cedarville and Cal Baptist (PDF archives). The
+workbook lists `oudaily.com` for Oklahoma City University; that is the
+University of Oklahoma's paper.

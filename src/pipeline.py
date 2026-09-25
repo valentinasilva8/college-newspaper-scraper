@@ -22,6 +22,7 @@ import yaml
 from .checkpoint import DomainLock
 from .extractor import FULL_MODE_SITES, SITE_EXTRACTORS
 from .fetcher import Fetcher, SiteBlockedError
+from .sno import extract_sno, is_sno_site, sno_site_keys
 from .schema import Article
 from .writer import (
     BATCH_SIZE,
@@ -97,6 +98,21 @@ def _build_fetcher(site_config: dict) -> Fetcher:
     )
 
 
+def _resolve_extractor(site_key: str, site_cfg: dict):
+    """Per-site extractor, or the shared platform extractor (``platform: sno``)."""
+    if is_sno_site(site_cfg):
+        return extract_sno
+    if site_key not in SITE_EXTRACTORS:
+        raise KeyError(f"No extractor registered for site '{site_key}'")
+    return SITE_EXTRACTORS[site_key]
+
+
+def site_keys_from_config(config: dict[str, Any]) -> list[str]:
+    """Every runnable site: hand-written extractors plus SNO config entries."""
+    sno_keys = sno_site_keys(config.get("sites") or {})
+    return list(SITE_EXTRACTORS) + [k for k in sno_keys if k not in SITE_EXTRACTORS]
+
+
 def _domain_from_config(site_config: dict) -> str:
     base = site_config.get("base_url") or site_config.get("sitemap_index") or ""
     host = urlparse(str(base)).netloc.lower()
@@ -118,12 +134,11 @@ def run_site(
     ``output/<site>.csv`` are preserved and their URLs are passed to the
     extractor via ``skip_urls`` so phase-2 fetches are not repeated.
     """
-    if site_key not in SITE_EXTRACTORS:
-        raise KeyError(f"No extractor registered for site '{site_key}'")
-
     defaults = config.get("defaults", {})
     sites = config.get("sites", {})
     site_cfg = _merge_site_config(defaults, sites.get(site_key, {}))
+    site_cfg["site_key"] = site_key
+    extractor = _resolve_extractor(site_key, site_cfg)
     # Sample mode is the default path; full mode uses run_site_full.
     site_cfg.setdefault("mode", "sample")
     if str(site_cfg.get("mode", "sample")).lower() == "full":
@@ -145,7 +160,6 @@ def run_site(
     for article in existing:
         seen_urls.add(article.url)
 
-    extractor = SITE_EXTRACTORS[site_key]
     fetcher = _build_fetcher(site_cfg)
 
     logger.info(
@@ -192,17 +206,16 @@ def run_site_full(
     max_fetch: int | None = None,
 ) -> list[Article]:
     """Crash-safe full-corpus run: append batches of 50 with checkpoints."""
-    if site_key not in SITE_EXTRACTORS:
-        raise KeyError(f"No extractor registered for site '{site_key}'")
-    if site_key not in FULL_MODE_SITES:
-        raise ValueError(
-            f"Site '{site_key}' has no full-mode extractor yet "
-            f"(supported: {', '.join(sorted(FULL_MODE_SITES))})"
-        )
-
     defaults = config.get("defaults", {})
     sites = config.get("sites", {})
     site_cfg = _merge_site_config(defaults, sites.get(site_key, {}))
+    site_cfg["site_key"] = site_key
+    extractor = _resolve_extractor(site_key, site_cfg)
+    if site_key not in FULL_MODE_SITES and not is_sno_site(site_cfg):
+        raise ValueError(
+            f"Site '{site_key}' has no full-mode extractor yet "
+            f"(supported: {', '.join(sorted(FULL_MODE_SITES))} and platform: sno)"
+        )
     site_cfg["mode"] = "full"
     site_cfg["refresh_discovery"] = bool(refresh_discovery)
     if max_fetch is not None:
@@ -225,7 +238,6 @@ def run_site_full(
 
         site_cfg["failure_sink"] = _failure_sink
 
-        extractor = SITE_EXTRACTORS[site_key]
         fetcher = _build_fetcher(site_cfg)
         batch: list[Article] = []
         new_count = 0
@@ -317,7 +329,7 @@ def run(
     config["sites"] = sites
 
     if site == "all":
-        site_keys = list(SITE_EXTRACTORS.keys())
+        site_keys = site_keys_from_config(config)
     else:
         site_keys = [site]
 

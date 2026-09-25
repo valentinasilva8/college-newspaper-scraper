@@ -13,7 +13,6 @@ import argparse
 import sys
 
 from src import pipeline
-from src.extractor import SITE_EXTRACTORS
 from src.fetcher import SiteBlockedError
 
 # Must match RestartPreventExitStatus= in deploy/newspaper-scraper@.service, so a
@@ -22,7 +21,7 @@ EXIT_SITE_BLOCKED = 75
 
 
 def build_parser() -> argparse.ArgumentParser:
-    choices = sorted(SITE_EXTRACTORS.keys()) + ["all"]
+    choices = sorted(pipeline.site_keys_from_config(pipeline.load_config())) + ["all"]
     parser = argparse.ArgumentParser(
         description="Scrape a college newspaper corpus (pilot).",
     )

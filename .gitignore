@@ -6,6 +6,9 @@ __pycache__/
 playwright-browsers/
 CLAUDE.md
 
+# Saved publisher pages from recon; copyrighted article HTML, not ours to publish.
+recon/sno_samples/
+
 # Full corpora stay on local disk only — never push article CSVs to GitHub.
 output/*.csv
 !output/.gitkeep

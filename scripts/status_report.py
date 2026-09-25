@@ -56,13 +56,13 @@ def discovered_total(site: str) -> int | None:
         except (OSError, ValueError):
             continue
         by_year = data.get("by_year")
-        if isinstance(by_year, dict):
-            urls = {
-                url
-                for entries in by_year.values()
-                for entry in entries
-                if (url := _entry_url(entry))
-            }
+        entries = (
+            [entry for bucket in by_year.values() for entry in bucket]
+            if isinstance(by_year, dict)
+            else data.get("urls")  # flat list written by src/sno.py
+        )
+        if isinstance(entries, list):
+            urls = {url for entry in entries if (url := _entry_url(entry))}
             if urls:
                 return len(urls)
     return None
