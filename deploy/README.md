@@ -105,7 +105,7 @@ systemctl list-units 'newspaper-scraper@*'
 ```bash
 sudo systemctl enable --now newspaper-backup.timer
 systemctl list-timers newspaper-backup.timer
-sudo -u scraper bash /opt/newspaper-scraper/deploy/backup.sh   # run one now
+sudo systemctl start newspaper-backup.service   # run one now; output in logs/backup.log
 ```
 
 ## 7. Checking progress from anywhere

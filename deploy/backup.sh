@@ -3,7 +3,7 @@
 #
 # Corpus data never goes to GitHub. This bucket is the authoritative copy.
 #
-#   sudo -u scraper bash /opt/newspaper-scraper/deploy/backup.sh
+#   sudo systemctl start newspaper-backup.service
 #
 # Requires BACKUP_BUCKET in /etc/newspaper-scraper.env and an instance role
 # (preferred) or AWS credentials available to the scraper user.
@@ -11,8 +11,12 @@
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/opt/newspaper-scraper}"
+# The env file is root-only (mode 600). Under systemd, EnvironmentFile= already
+# injected it, so only source it when this user can actually read it.
 # shellcheck disable=SC1091
-[[ -f /etc/newspaper-scraper.env ]] && source /etc/newspaper-scraper.env
+if [[ -r /etc/newspaper-scraper.env ]]; then
+  source /etc/newspaper-scraper.env
+fi
 
 if [[ -z "${BACKUP_BUCKET:-}" || "$BACKUP_BUCKET" == *CHANGE-ME* ]]; then
   echo "BACKUP_BUCKET is not set in /etc/newspaper-scraper.env" >&2
