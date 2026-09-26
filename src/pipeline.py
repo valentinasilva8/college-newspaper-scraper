@@ -22,8 +22,8 @@ import yaml
 from .checkpoint import DomainLock
 from .extractor import FULL_MODE_SITES, SITE_EXTRACTORS
 from .fetcher import Fetcher, SiteBlockedError
-from .sno import extract_sno, is_sno_site, sno_site_keys
 from .schema import Article
+from .wordpress import extract_wordpress, is_wordpress_site, wordpress_site_keys
 from .writer import (
     BATCH_SIZE,
     append_article_batch,
@@ -99,18 +99,18 @@ def _build_fetcher(site_config: dict) -> Fetcher:
 
 
 def _resolve_extractor(site_key: str, site_cfg: dict):
-    """Per-site extractor, or the shared platform extractor (``platform: sno``)."""
-    if is_sno_site(site_cfg):
-        return extract_sno
+    """Per-site extractor, or the shared WordPress extractor (``platform: sno|wordpress``)."""
+    if is_wordpress_site(site_cfg):
+        return extract_wordpress
     if site_key not in SITE_EXTRACTORS:
         raise KeyError(f"No extractor registered for site '{site_key}'")
     return SITE_EXTRACTORS[site_key]
 
 
 def site_keys_from_config(config: dict[str, Any]) -> list[str]:
-    """Every runnable site: hand-written extractors plus SNO config entries."""
-    sno_keys = sno_site_keys(config.get("sites") or {})
-    return list(SITE_EXTRACTORS) + [k for k in sno_keys if k not in SITE_EXTRACTORS]
+    """Every runnable site: hand-written extractors plus WordPress config entries."""
+    wp_keys = wordpress_site_keys(config.get("sites") or {})
+    return list(SITE_EXTRACTORS) + [k for k in wp_keys if k not in SITE_EXTRACTORS]
 
 
 def _domain_from_config(site_config: dict) -> str:
@@ -211,10 +211,10 @@ def run_site_full(
     site_cfg = _merge_site_config(defaults, sites.get(site_key, {}))
     site_cfg["site_key"] = site_key
     extractor = _resolve_extractor(site_key, site_cfg)
-    if site_key not in FULL_MODE_SITES and not is_sno_site(site_cfg):
+    if site_key not in FULL_MODE_SITES and not is_wordpress_site(site_cfg):
         raise ValueError(
             f"Site '{site_key}' has no full-mode extractor yet "
-            f"(supported: {', '.join(sorted(FULL_MODE_SITES))} and platform: sno)"
+            f"(supported: {', '.join(sorted(FULL_MODE_SITES))} and platform: sno|wordpress)"
         )
     site_cfg["mode"] = "full"
     site_cfg["refresh_discovery"] = bool(refresh_discovery)

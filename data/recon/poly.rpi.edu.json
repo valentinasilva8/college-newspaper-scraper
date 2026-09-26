@@ -1,0 +1,24 @@
+{
+  "domain": "poly.rpi.edu",
+  "base_url": "https://poly.rpi.edu",
+  "reconned_at": "2026-09-25T22:40:14.684365+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "unknown",
+  "sitemap_url": "https://poly.rpi.edu/sitemap.xml",
+  "sitemap_kind": "single",
+  "post_sitemaps": 0,
+  "est_urls": 12068,
+  "access_profile": "open"
+}

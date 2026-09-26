@@ -1,0 +1,23 @@
+{
+  "domain": "cornellsun.com",
+  "base_url": "https://www.cornellsun.com",
+  "reconned_at": "2026-09-25T21:02:17.211855+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "snworks",
+  "sitemap_url": "https://www.cornellsun.com/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 3,
+  "access_profile": "open"
+}

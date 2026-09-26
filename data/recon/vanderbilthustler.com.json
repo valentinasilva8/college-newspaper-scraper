@@ -1,0 +1,67 @@
+{
+  "domain": "vanderbilthustler.com",
+  "base_url": "https://vanderbilthustler.com",
+  "reconned_at": "2026-09-25T21:03:16.575732+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://vanderbilthustler.com/2016/04/27/bowden-back-where-he-belongs-the-bullpen/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2016-04-27",
+      "text_chars": 3875,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://vanderbilthustler.com/2017/11/28/vanderbilt-alumni-create-babysitting-app-wyndy/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2017-11-28",
+      "text_chars": 3332,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://vanderbilthustler.com/2026/09/25/film-room-vanderbilts-dangerous-duo/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 3463,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://vanderbilthustler.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 6,
+  "est_urls": 10310,
+  "earliest_year": 2016,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

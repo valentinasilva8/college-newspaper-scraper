@@ -1,0 +1,21 @@
+{
+  "domain": "thesewaneepurple.org",
+  "base_url": "https://thesewaneepurple.org",
+  "reconned_at": "2026-09-25T23:10:04.909147+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://thesewaneepurple.org/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 3,
+  "access_profile": "open"
+}

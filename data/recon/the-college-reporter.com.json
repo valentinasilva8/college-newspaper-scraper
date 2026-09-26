@@ -1,0 +1,67 @@
+{
+  "domain": "the-college-reporter.com",
+  "base_url": "https://www.the-college-reporter.com",
+  "reconned_at": "2026-09-25T23:06:15.244798+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.the-college-reporter.com/ethan-hawke-carries-the-weight-in-new-historical-film/2026/09/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 3186,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.the-college-reporter.com/hallmarked-holidays/2024/01/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2024-01-02",
+      "text_chars": 4398,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.the-college-reporter.com/323/2012/02/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2012-02-15",
+      "text_chars": 5622,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.the-college-reporter.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 4,
+  "est_urls": 3583,
+  "earliest_year": 2012,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "open"
+}

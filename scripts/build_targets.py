@@ -8,8 +8,16 @@ URLs, and writes:
   - ``data/targets/<tab_slug>.csv`` — one file per workbook tab
   - ``data/targets.csv`` — one row per normalized domain (+ no-domain rows)
   - ``docs/TARGET_LIST_REPORT.md`` — human-readable inventory report
+  - ``docs/RECON_SUMMARY.md`` — recon facts by adapter family (when any exist)
 
-Never auto-fixes or deletes suspicious rows.
+Two optional inputs are merged into the tracker:
+
+  - ``data/target_overrides.csv`` — hand decisions (category fixes, access
+    profile, wave, exclusion reason), keyed by domain or ``<tab>:<row>``
+  - ``data/recon/<domain>.json`` — facts written by ``scripts/recon_site.py``
+
+The workbook itself is never auto-fixed; corrections live in the overrides
+file so the next sheet export does not silently undo them.
 
 Requires the local-only tooling: ``pip install -r requirements-dev.txt``.
 """
@@ -18,33 +26,41 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import urlparse
 
 import openpyxl
 import pandas as pd
+import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_XLSX = PROJECT_ROOT / "data" / "targets_raw.xlsx"
 TARGETS_DIR = PROJECT_ROOT / "data" / "targets"
 TRACKER_PATH = PROJECT_ROOT / "data" / "targets.csv"
 REPORT_PATH = PROJECT_ROOT / "docs" / "TARGET_LIST_REPORT.md"
+RECON_SUMMARY_PATH = PROJECT_ROOT / "docs" / "RECON_SUMMARY.md"
+CONFIG_PATH = PROJECT_ROOT / "config" / "sites.yaml"
+OVERRIDES_PATH = PROJECT_ROOT / "data" / "target_overrides.csv"
+RECON_DIR = PROJECT_ROOT / "data" / "recon"
 
 URL_RE = re.compile(r"https?://[^\s<>\"')\]]+", re.I)
 DOMAIN_RE = re.compile(r"^(?:www\.)?([a-z0-9.-]+\.[a-z]{2,})", re.I)
 
-# Built sites already in config/sites.yaml (outputs may or may not exist).
-BUILT_SITE_KEYS = {
-    "dukechronicle.com": "duke",
-    "yaledailynews.com": "yale",
-    "chicagomaroon.com": "chicago",
-    "dailynorthwestern.com": "northwestern",
-}
-
 # Workbook "done" markers — seed status, but do NOT claim output files exist.
 WORKBOOK_DONE_NOTE = "workbook_done_marker"
+
+ACCESS_PROFILES = ("open", "cloudflare", "waf_browser_ua", "datacenter_blocked", "excluded")
+
+# Recon fields copied verbatim into the tracker.
+RECON_FIELDS = ("cdn", "crawl_delay", "sitemap_kind", "est_urls", "earliest_year")
+
+# Seconds per article when a site has no configured delay yet: Northwestern's
+# post-block pace for Cloudflare sites, else the crawl delay with a 6 s floor.
+CLOUDFLARE_DELAY = 12.0
+MIN_PLANNED_DELAY = 6.0
 
 TAB_FIELDS = [
     "tab",
@@ -61,10 +77,18 @@ TAB_FIELDS = [
 TRACKER_FIELDS = [
     "site_key",
     "domain",
+    "category_labels",
     "platform",
+    "access_profile",
+    "cdn",
+    "crawl_delay",
+    "sitemap_kind",
     "status",
-    "est_urls_2000plus",
+    "est_urls",
     "earliest_year",
+    "est_days",
+    "wave",
+    "exclusion_reason",
     "shared_with",
     "universities",
     "tabs",
@@ -191,9 +215,137 @@ def guess_platform(url: str, domain: str) -> str:
     return "unknown"
 
 
+def load_configured_sites(path: Path = CONFIG_PATH) -> dict[str, dict]:
+    """``{domain: {"site_key", "platform", "delay"}}`` for sites in sites.yaml."""
+    if not path.is_file():
+        return {}
+    config = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    default_rate = (config.get("defaults") or {}).get("rate_limit") or {}
+    out: dict[str, dict] = {}
+    for key, cfg in (config.get("sites") or {}).items():
+        domain = normalize_domain(str((cfg or {}).get("base_url", "")))
+        if not domain:
+            continue
+        rate = {**default_rate, **(cfg.get("rate_limit") or {})}
+        lo = float(rate.get("delay_min", 1.0))
+        hi = float(rate.get("delay_max", lo))
+        out[domain] = {
+            "site_key": key,
+            "platform": str(cfg.get("platform", "")),
+            "delay": (lo + hi) / 2,
+        }
+    return out
+
+
+def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
+    """``{key: row}`` where key is a domain or ``<tab>:<source_row>``."""
+    if not path.is_file():
+        return {}
+    with path.open(newline="", encoding="utf-8") as fh:
+        rows = [r for r in csv.DictReader(fh) if (r.get("key") or "").strip()]
+    out: dict[str, dict] = {}
+    for row in rows:
+        key = row["key"].strip()
+        if key in out:
+            raise ValueError(f"Duplicate key {key!r} in {path.name}")
+        profile = (row.get("access_profile") or "").strip()
+        if profile and profile not in ACCESS_PROFILES:
+            raise ValueError(f"{path.name}: unknown access_profile {profile!r} for {key}")
+        out[key] = {k: (v or "").strip() for k, v in row.items()}
+    return out
+
+
+def load_recon(recon_dir: Path = RECON_DIR) -> dict[str, dict]:
+    if not recon_dir.is_dir():
+        return {}
+    out: dict[str, dict] = {}
+    for path in sorted(recon_dir.glob("*.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("domain"):
+            out[data["domain"]] = data
+    return out
+
+
+def planned_delay(configured: dict | None, recon: dict | None) -> float | None:
+    """Average seconds per article the site will be scraped at."""
+    if configured:
+        return configured["delay"]
+    if not recon:
+        return None
+    if recon.get("cdn") == "cloudflare":
+        return CLOUDFLARE_DELAY
+    try:
+        crawl = float(recon.get("crawl_delay") or 0)
+    except (TypeError, ValueError):
+        crawl = 0.0
+    return max(crawl, MIN_PLANNED_DELAY)
+
+
+def est_days(est_urls: object, delay: float | None) -> str:
+    """Lower bound: URLs x delay, ignoring fetch time and retries."""
+    try:
+        urls = int(est_urls)
+    except (TypeError, ValueError):
+        return ""
+    if delay is None or urls <= 0:
+        return ""
+    return f"{urls * delay / 86400:.1f}"
+
+
+def enrich(
+    row: dict,
+    configured: dict | None,
+    recon: dict | None,
+    override: dict | None,
+) -> dict:
+    """Apply sites.yaml, recon facts and hand overrides to one tracker row."""
+    override = override or {}
+    recon = recon or {}
+    if configured:
+        row["site_key"] = configured["site_key"]
+    row["category_labels"] = override.get("category_labels") or row["tabs"]
+    row["platform"] = (
+        (configured or {}).get("platform") or recon.get("platform") or row["platform"]
+    )
+    for field in RECON_FIELDS:
+        value = recon.get(field)
+        row[field] = "" if value is None else str(value)
+    row["access_profile"] = override.get("access_profile") or recon.get("access_profile", "")
+    row["wave"] = override.get("wave", "")
+    row["exclusion_reason"] = override.get("exclusion_reason", "")
+    if row["exclusion_reason"]:
+        row["access_profile"] = "excluded"
+    row["est_days"] = est_days(row["est_urls"], planned_delay(configured, recon))
+    if override.get("notes"):
+        row["notes"] = "; ".join(n for n in (row["notes"], override["notes"]) if n)
+
+    if row["exclusion_reason"]:
+        row["status"] = "excluded"
+    elif configured:
+        row["status"] = "configured"
+    elif recon and row["status"] == "pending_recon":
+        row["status"] = "recon_done"
+    return row
+
+
+def duplicate_names(tab_rows: dict[str, list[dict]]) -> list[str]:
+    """Report lines for a university name repeated within one tab."""
+    lines: list[str] = []
+    for tab_name, rows in tab_rows.items():
+        counts = Counter(r["university_name"] for r in rows if r["university_name"])
+        for name, n in counts.items():
+            if n < 2:
+                continue
+            where = ", ".join(
+                f"row {r['source_row']} -> {r['domain'] or '(no URL)'}"
+                for r in rows
+                if r["university_name"] == name
+            )
+            lines.append(f"- [{tab_name}] {name!r} appears {n} times: {where}")
+    return lines
+
+
 def seed_status(domain: str, workbook_done: bool) -> str:
-    if domain in BUILT_SITE_KEYS:
-        return "built_sample"
     if workbook_done:
         return "workbook_done_no_local_output"
     if not domain:
@@ -277,7 +429,12 @@ def write_tab_csvs(tab_rows: dict[str, list[dict]]) -> list[Path]:
     return paths
 
 
-def build_tracker(tab_rows: dict[str, list[dict]]) -> list[dict]:
+def build_tracker(
+    tab_rows: dict[str, list[dict]],
+    configured: dict[str, dict] | None = None,
+    recon: dict[str, dict] | None = None,
+    overrides: dict[str, dict] | None = None,
+) -> list[dict]:
     """One row per normalized domain; retain each no-domain row separately."""
     by_domain: dict[str, list[dict]] = defaultdict(list)
     no_domain: list[dict] = []
@@ -308,15 +465,12 @@ def build_tracker(tab_rows: dict[str, list[dict]]) -> list[dict]:
         if workbook_done:
             notes.append(WORKBOOK_DONE_NOTE)
         sample_url = next((r["url"] for r in group if r["url"]), "")
-        site_key = BUILT_SITE_KEYS.get(domain, "")
         tracker.append(
             {
-                "site_key": site_key,
+                "site_key": "",
                 "domain": domain,
                 "platform": guess_platform(sample_url, domain),
                 "status": seed_status(domain, workbook_done),
-                "est_urls_2000plus": "",
-                "earliest_year": "",
                 "shared_with": " | ".join(shared),
                 "universities": " | ".join(universities),
                 "tabs": " | ".join(tabs),
@@ -335,8 +489,6 @@ def build_tracker(tab_rows: dict[str, list[dict]]) -> list[dict]:
                 "domain": "",
                 "platform": guess_platform(row.get("url", ""), ""),
                 "status": seed_status("", workbook_done),
-                "est_urls_2000plus": "",
-                "earliest_year": "",
                 "shared_with": "",
                 "universities": row.get("university_name", ""),
                 "tabs": row.get("tab", ""),
@@ -346,6 +498,16 @@ def build_tracker(tab_rows: dict[str, list[dict]]) -> list[dict]:
                 "workbook_done": "yes" if workbook_done else "",
             }
         )
+
+    configured = configured or {}
+    recon = recon or {}
+    overrides = overrides or {}
+    for row in tracker:
+        key = row["domain"] or row["source_rows"]
+        enrich(row, configured.get(row["domain"]), recon.get(row["domain"]), overrides.get(key))
+    unknown = sorted(set(overrides) - {r["domain"] or r["source_rows"] for r in tracker})
+    if unknown:
+        raise ValueError(f"target_overrides.csv keys match no tracker row: {unknown}")
     return tracker
 
 
@@ -367,10 +529,15 @@ def write_report(tab_rows: dict[str, list[dict]], tracker: list[dict]) -> Path:
     no_domain = [r for r in tracker if not r["domain"]]
     shared = [r for r in domains if r["shared_with"]]
     workbook_done = [r for r in tracker if r.get("workbook_done") == "yes"]
-    built = [r for r in tracker if r["status"] == "built_sample"]
+    configured = [r for r in tracker if r["site_key"]]
+    resolved = [
+        r for r in tracker if r["exclusion_reason"] or r["category_labels"] != r["tabs"]
+    ]
 
     suspicious: list[str] = []
     for r in tracker:
+        if r in resolved:
+            continue
         plat = r.get("platform", "")
         uni = r.get("universities", "")
         url = r.get("sample_url", "")
@@ -421,8 +588,8 @@ def write_report(tab_rows: dict[str, list[dict]], tracker: list[dict]) -> Path:
         f"- Domains shared by multiple universities: {len(shared)}",
         f"- Workbook `done` markers: {len(workbook_done)} "
         "(seeded as `workbook_done_no_local_output` unless a built site_key exists)",
-        f"- Built sample sites in this repo: {len(built)} "
-        f"({', '.join(r['site_key'] for r in built)})",
+        f"- Sites configured in `config/sites.yaml`: {len(configured)} "
+        f"({', '.join(r['site_key'] for r in configured)})",
         "",
         "## Per-tab counts",
         "",
@@ -432,6 +599,47 @@ def write_report(tab_rows: dict[str, list[dict]], tracker: list[dict]) -> Path:
     for tab_name, rows in tab_rows.items():
         wu = sum(1 for r in rows if r["url"])
         lines.append(f"| {tab_name} | {len(rows)} | {wu} | {len(rows) - wu} |")
+
+    lines.extend(
+        [
+            "",
+            "## Progress by category",
+            "",
+            "Counts use `category_labels` (sheet tabs after overrides); a paper",
+            "listed in two categories counts in both.",
+            "",
+            "| Category | Domains | Excluded | Recon done | Configured | In a wave |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for tab_name in tab_rows:
+        in_cat = [
+            r for r in domains if tab_name in r["category_labels"].split(" | ")
+        ]
+        lines.append(
+            f"| {tab_name} | {len(in_cat)} "
+            f"| {sum(1 for r in in_cat if r['exclusion_reason'])} "
+            f"| {sum(1 for r in in_cat if r['cdn'] or r['sitemap_kind'])} "
+            f"| {sum(1 for r in in_cat if r['site_key'])} "
+            f"| {sum(1 for r in in_cat if r['wave'])} |"
+        )
+
+    lines.extend(["", "## Resolved by `data/target_overrides.csv`", ""])
+    if not resolved:
+        lines.append("_None._")
+    for r in resolved:
+        label = r["domain"] or r["source_rows"]
+        if r["exclusion_reason"]:
+            lines.append(f"- `{label}` — {r['universities']}: excluded ({r['exclusion_reason']})")
+        else:
+            lines.append(
+                f"- `{label}` — {r['universities']}: categories "
+                f"{r['tabs']!r} -> {r['category_labels']!r}"
+            )
+
+    dupes = duplicate_names(tab_rows)
+    lines.extend(["", "## Repeated university names within a tab", ""])
+    lines.extend(dupes or ["_None._"])
 
     lines.extend(
         [
@@ -477,9 +685,10 @@ def write_report(tab_rows: dict[str, list[dict]], tracker: list[dict]) -> Path:
     lines.extend(
         [
             "",
-            "## Built sites vs workbook `done`",
+            "## Configured sites vs workbook `done`",
             "",
-            "- Local sample outputs exist for: duke, yale, chicago, northwestern.",
+            "- Sites with a `config/sites.yaml` entry have status `configured`;",
+            "  that says nothing about how much output exists.",
             "- Workbook marks MIT (`thetech.com`) and Columbia (`columbiaspectator.com`) as",
             "  `done`, but **no MIT or Columbia output CSVs** are in this repository.",
             "  Tracker status for those domains is `workbook_done_no_local_output`.",
@@ -490,6 +699,49 @@ def write_report(tab_rows: dict[str, list[dict]], tracker: list[dict]) -> Path:
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return REPORT_PATH
+
+
+def write_recon_summary(tracker: list[dict], recon: dict[str, dict]) -> Path:
+    """One table row per reconned domain, grouped by suggested adapter family."""
+    rows = [r for r in tracker if r["domain"] in recon]
+    fill_cols = ("publication_date", "author", "text", "section", "title")
+    lines = [
+        "# Recon summary",
+        "",
+        "Generated by `scripts/build_targets.py` from `data/recon/*.json`",
+        "(written by `scripts/recon_site.py`, honest research UA, from the Mac's IP).",
+        "Access from the server still needs `scripts/access_probe.py`.",
+        "`est_days` is a lower bound: estimated URLs x planned delay.",
+        "Field fill is out of 3 sampled articles (oldest, middle, newest).",
+        "",
+        f"Domains reconned: {len(rows)}",
+    ]
+    for family in ("sno", "wordpress", "snworks", "blox", "unknown"):
+        group = [r for r in rows if (r["platform"] or "unknown") == family]
+        if not group:
+            continue
+        lines.extend(
+            [
+                "",
+                f"## {family} ({len(group)})",
+                "",
+                "| Domain | Categories | Access | CDN | Home | Crawl delay | Sitemap | Est. URLs | Est. days "
+                "| Earliest | Date | Author | Body | Section | Title |",
+                "| --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: | ---: | --- | --- | --- | --- | --- |",
+            ]
+        )
+        for r in sorted(group, key=lambda r: (r["category_labels"], r["domain"])):
+            data = recon[r["domain"]]
+            fill = data.get("field_fill") or {}
+            lines.append(
+                f"| {r['domain']} | {r['category_labels']} | {r['access_profile']} | {r['cdn']} "
+                f"| {data.get('home_status') or ''} | {r['crawl_delay']} | {r['sitemap_kind']} "
+                f"| {r['est_urls']} | {r['est_days']} | {r['earliest_year']} | "
+                + " | ".join(fill.get(c, "") for c in fill_cols)
+                + " |"
+            )
+    RECON_SUMMARY_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return RECON_SUMMARY_PATH
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -503,12 +755,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     tab_rows = read_workbook(args.xlsx)
     tab_paths = write_tab_csvs(tab_rows)
-    tracker = build_tracker(tab_rows)
+    recon = load_recon()
+    tracker = build_tracker(tab_rows, load_configured_sites(), recon, load_overrides())
     tracker_path = write_tracker(tracker)
     report_path = write_report(tab_rows, tracker)
     print(f"Wrote {len(tab_paths)} tab CSV(s) under {TARGETS_DIR}")
     print(f"Wrote tracker -> {tracker_path} ({len(tracker)} rows)")
     print(f"Wrote report  -> {report_path}")
+    if recon:
+        print(f"Wrote recon   -> {write_recon_summary(tracker, recon)} ({len(recon)} domains)")
     return 0
 
 

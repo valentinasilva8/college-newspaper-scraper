@@ -1,0 +1,19 @@
+key,category_labels,access_profile,wave,exclusion_reason,notes
+chicagomaroon.com,,,0,,Full run on the Mac (tmux chicago-full)
+dailynorthwestern.com,,,0,,Full run on the server (newspaper-scraper@northwestern)
+smudailycampus.com,,,1,,
+tcu360.com,,,1,,
+chimesnewspaper.com,,,1,,
+olafmessenger.com,Christian Colleges | Liberal Arts,,1,,Liberal Arts row 53 lists St. Olaf College without a URL
+Liberal Arts:53,,,,duplicate_row,St. Olaf College; scraped once as olafmessenger.com
+concordiensis.com,Liberal Arts,,1,,"Christian row 11 ""Union Univeristy"" links this paper, but Concordiensis is Union College (NY); Union University (TN) still needs its own paper URL"
+dukechronicle.com,,waf_browser_ua,,,AWS ELB WAF refuses the honest UA; browser UA approved for Duke only
+yaledailynews.com,,datacenter_blocked,,,Vercel checkpoint; returns 429 to the AWS server; run from the Mac only
+anchor.hope.edu,Christian Colleges | Liberal Arts,,,,Liberal Arts row 87 lists Hope College without a URL
+Liberal Arts:87,,,,duplicate_row,Hope College; scraped once as anchor.hope.edu
+oudaily.com,,,,wrong_school,OU Daily is the University of Oklahoma's paper; Oklahoma City University needs its own
+instagram.com,,,,instagram_only,College of the Ozarks' The Outlook publishes on Instagram only
+Christian Colleges:8,,,,discontinued,The Moody Standard stopped publishing in 2019
+thelink.harding.edu,,,,login_required,The Bison returns HTTP 401
+calbaptist.edu,,,,pdf_archive,Library scans; needs the archive/OCR pipeline
+digitalcommons.cedarville.edu,,,,pdf_archive,Digital Commons issue PDFs; needs the archive/OCR pipeline

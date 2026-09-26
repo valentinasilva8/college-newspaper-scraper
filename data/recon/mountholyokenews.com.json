@@ -1,0 +1,24 @@
+{
+  "domain": "mountholyokenews.com",
+  "base_url": "https://www.mountholyokenews.com",
+  "reconned_at": "2026-09-25T23:04:17.806105+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Squarespace",
+  "cdn": "none",
+  "platform": "unknown",
+  "sitemap_url": "http://www.mountholyokenews.com/sitemap.xml",
+  "sitemap_kind": "single",
+  "post_sitemaps": 0,
+  "est_urls": 10538,
+  "access_profile": "open"
+}

@@ -1,0 +1,17 @@
+{
+  "domain": "dailytargum.com",
+  "base_url": "https://dailytargum.com",
+  "reconned_at": "2026-09-25T21:12:08.951558+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "http_403: https://dailytargum.com/"
+  ],
+  "articles": [],
+  "robots_status": 403,
+  "crawl_delay": null,
+  "home_status": 403,
+  "server": "awselb/2.0",
+  "cdn": "aws_elb",
+  "access_profile": "waf_browser_ua"
+}

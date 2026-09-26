@@ -1,0 +1,67 @@
+{
+  "domain": "themiamihurricane.com",
+  "base_url": "https://themiamihurricane.com",
+  "reconned_at": "2026-09-25T22:41:06.323750+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://themiamihurricane.com/news/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2014-11-25",
+      "text_chars": 4870,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://themiamihurricane.com/2026/03/12/hurricanes-sweep-season-series-against-ucf-win-9-5-in-orlando/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-03-13",
+      "text_chars": 2645,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://themiamihurricane.com/2001/11/13/sports-briefs/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2001-11-13",
+      "text_chars": 71,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Sucuri/Cloudproxy",
+  "cdn": "sucuri",
+  "platform": "wordpress",
+  "sitemap_url": "https://themiamihurricane.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 26,
+  "est_urls": 25629,
+  "earliest_year": 2001,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "2/3"
+  },
+  "access_profile": "open"
+}

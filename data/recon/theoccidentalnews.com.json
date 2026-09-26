@@ -1,0 +1,67 @@
+{
+  "domain": "theoccidentalnews.com",
+  "base_url": "https://www.theoccidentalnews.com",
+  "reconned_at": "2026-09-25T23:06:20.406480+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.theoccidentalnews.com/blog",
+      "status": 200,
+      "error": "",
+      "publication_date": "2016-09-16",
+      "text_chars": 5058,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://www.theoccidentalnews.com/news/2014/10/08/edm-duo-odesza-to-headline-fall-concert/2871140",
+      "status": 200,
+      "error": "",
+      "publication_date": "2014-10-08",
+      "text_chars": 1182,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.theoccidentalnews.com/community/2026/09/23/free-kuya-jonathan-campaign-presses-consulate-for-support-in-eagle-rock/2918367",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-23",
+      "text_chars": 7299,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Sucuri/Cloudproxy",
+  "cdn": "sucuri",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.theoccidentalnews.com/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 11,
+  "est_urls": 10066,
+  "earliest_year": 2014,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "3/3",
+    "section": "2/3"
+  },
+  "access_profile": "open"
+}

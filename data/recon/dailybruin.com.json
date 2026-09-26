@@ -1,0 +1,24 @@
+{
+  "domain": "dailybruin.com",
+  "base_url": "https://dailybruin.com",
+  "reconned_at": "2026-09-25T21:03:14.334163+00:00",
+  "user_agent": "honest_research",
+  "requests": 5,
+  "notes": [
+    "http_404: https://dailybruin.com/sitemap.xml",
+    "http_404: https://dailybruin.com/sitemap_index.xml",
+    "http_404: https://dailybruin.com/wp-sitemap.xml"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_kind": "none",
+  "post_sitemaps": 0,
+  "access_profile": "cloudflare"
+}

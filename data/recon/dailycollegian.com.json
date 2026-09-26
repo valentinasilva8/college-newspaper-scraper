@@ -1,0 +1,67 @@
+{
+  "domain": "dailycollegian.com",
+  "base_url": "https://dailycollegian.com",
+  "reconned_at": "2026-09-25T22:40:34.243747+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://dailycollegian.com/2009/01/inaug3/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://dailycollegian.com/2009/10/college-life-and-the-threat-of-eating-disorders/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2009-10-21",
+      "text_chars": 5787,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://dailycollegian.com/2026/09/umass-to-open-conference-play-with-cross-country-trip-to-sacramento-state/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 4847,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://dailycollegian.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 27,
+  "est_urls": 52160,
+  "earliest_year": 2009,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

@@ -1,0 +1,21 @@
+{
+  "domain": "anchor.hope.edu",
+  "base_url": "https://anchor.hope.edu",
+  "reconned_at": "2026-09-25T23:11:36.439235+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://anchor.hope.edu/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 0,
+  "access_profile": "cloudflare"
+}

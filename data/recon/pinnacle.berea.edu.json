@@ -1,0 +1,67 @@
+{
+  "domain": "pinnacle.berea.edu",
+  "base_url": "https://pinnacle.berea.edu",
+  "reconned_at": "2026-09-25T23:08:48.177765+00:00",
+  "user_agent": "honest_research",
+  "requests": 7,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://pinnacle.berea.edu/2013/03/07/4/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2013-03-07",
+      "text_chars": 1648,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://pinnacle.berea.edu/2020/01/26/the-berea-spirit-of-service-in-australias-time-of-need-during-the-bushfires/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2020-01-26",
+      "text_chars": 3370,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://pinnacle.berea.edu/2023/04/28/day-of-silence-demonstration-creates-community-on-campus/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2023-04-28",
+      "text_chars": 4497,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://pinnacle.berea.edu/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 1,
+  "est_urls": 879,
+  "earliest_year": 2013,
+  "field_fill": {
+    "text": "3/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "0/3"
+  },
+  "access_profile": "cloudflare"
+}

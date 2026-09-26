@@ -1,0 +1,23 @@
+{
+  "domain": "thedp.com",
+  "base_url": "https://www.thedp.com",
+  "reconned_at": "2026-09-25T21:01:55.066193+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "snworks",
+  "sitemap_url": "https://www.thedp.com/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 164,
+  "access_profile": "open"
+}

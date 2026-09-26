@@ -1,0 +1,21 @@
+{
+  "domain": "dailytarheel.com",
+  "base_url": "https://dailytarheel.com",
+  "reconned_at": "2026-09-25T21:05:41.419106+00:00",
+  "user_agent": "honest_research",
+  "requests": 4,
+  "notes": [
+    "http_403: https://dailytarheel.com/sitemap.xml",
+    "stopped: dailytarheel.com kept returning HTTP 403 after 0 cooldown(s); stopping this site."
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "access_profile": "cloudflare"
+}

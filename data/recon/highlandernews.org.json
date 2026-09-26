@@ -1,0 +1,67 @@
+{
+  "domain": "highlandernews.org",
+  "base_url": "https://www.highlandernews.org",
+  "reconned_at": "2026-09-25T22:44:22.479184+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.highlandernews.org/87/a-glorious-end-to-an-absurd-nba-lockout/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2012-01-09",
+      "text_chars": 4432,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.highlandernews.org/4967/local-electoral-forum-focuses-on-higher-education/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2012-10-23",
+      "text_chars": 4933,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.highlandernews.org/97163/assassins-creed-black-flag-resynced-passes-with-flying-colors/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-08-03",
+      "text_chars": 4871,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.highlandernews.org/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 11,
+  "est_urls": 10136,
+  "earliest_year": 2012,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

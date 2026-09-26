@@ -1,0 +1,15 @@
+{
+  "domain": "digitalcollections.library.cmu.edu",
+  "base_url": "https://digitalcollections.library.cmu.edu",
+  "reconned_at": "2026-09-25T21:03:44.199034+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "SSLError: https://digitalcollections.library.cmu.edu/"
+  ],
+  "articles": [],
+  "robots_status": "SSLError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

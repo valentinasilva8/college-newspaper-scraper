@@ -1,0 +1,67 @@
+{
+  "domain": "bowdoinorient.com",
+  "base_url": "https://bowdoinorient.com",
+  "reconned_at": "2026-09-25T22:57:22.710253+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://bowdoinorient.com/2017/03/03/hate-to-love-it-a-self-evaluation-of-pop-culture-taste/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2017-03-03",
+      "text_chars": 4522,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://bowdoinorient.com/2018/10/26/antonio-and-aurora-two-expressions-one-identity/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2018-10-26",
+      "text_chars": 6068,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://bowdoinorient.com/2026/09/25/film-screening-explores-latin-american-black-resistance/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 4554,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://bowdoinorient.com/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 3,
+  "est_urls": 5957,
+  "earliest_year": 2017,
+  "field_fill": {
+    "text": "3/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "0/3"
+  },
+  "access_profile": "cloudflare"
+}

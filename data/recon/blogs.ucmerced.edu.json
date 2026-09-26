@@ -1,0 +1,15 @@
+{
+  "domain": "blogs.ucmerced.edu",
+  "base_url": "https://blogs.ucmerced.edu",
+  "reconned_at": "2026-09-25T21:54:09.870314+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://blogs.ucmerced.edu/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

@@ -1,0 +1,67 @@
+{
+  "domain": "cuindependent.com",
+  "base_url": "https://www.cuindependent.com",
+  "reconned_at": "2026-09-25T22:53:49.710535+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.cuindependent.com/powerful-lesbian-singers-who-shaped-music-in-their-style/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-07-01",
+      "text_chars": 7606,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.cuindependent.com/how-to-prepare-mentally-and-physically-for-your-first-iud-insertion/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-11-26",
+      "text_chars": 2462,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.cuindependent.com/the-reassurance-of-having-secure-windows-and-doors/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 3445,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "BunnyCDN-NY1-1313",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.cuindependent.com/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 3,
+  "est_urls": 2141,
+  "earliest_year": 2025,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "open"
+}

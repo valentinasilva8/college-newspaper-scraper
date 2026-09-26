@@ -1,0 +1,65 @@
+{
+  "domain": "gwhatchet.com",
+  "base_url": "https://gwhatchet.com",
+  "reconned_at": "2026-09-25T21:54:16.911683+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://gwhatchet.com/2014/04/28/a-new-era-begins-the-hatchet-has-a-new-home/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2014-04-28",
+      "text_chars": 2215,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://gwhatchet.com/2008/05/10/gw-baseball-drops-two-oconnor-on-the-mound-for-nats/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2008-05-10",
+      "text_chars": 1076,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://gwhatchet.com/2026/09/25/former-cia-officer-turned-whistleblower-john-kiriakou-reflects-on-career-in-intelligence/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 5532,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://gwhatchet.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 31,
+  "est_urls": 60745,
+  "earliest_year": 2008,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

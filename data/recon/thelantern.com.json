@@ -1,0 +1,21 @@
+{
+  "domain": "thelantern.com",
+  "base_url": "https://www.thelantern.com",
+  "reconned_at": "2026-09-25T21:11:18.155524+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.thelantern.com/wp-sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 1499,
+  "access_profile": "cloudflare"
+}

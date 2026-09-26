@@ -1,0 +1,67 @@
+{
+  "domain": "dailyillini.com",
+  "base_url": "https://dailyillini.com",
+  "reconned_at": "2026-09-25T21:10:13.748836+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://dailyillini.com/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 664,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://dailyillini.com/uncategorized/2007/10/23/parade-bans-chief-symbol-from-floats/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2007-10-23",
+      "text_chars": 2509,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://dailyillini.com/buzz-stories/music/music-festivals/pygmalion/2026/09/25/belair-lip-bombs-close-tour-pygmalion/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 4019,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://dailyillini.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 101,
+  "est_urls": 100435,
+  "earliest_year": 2007,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

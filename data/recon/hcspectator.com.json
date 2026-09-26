@@ -1,0 +1,67 @@
+{
+  "domain": "hcspectator.com",
+  "base_url": "https://hcspectator.com",
+  "reconned_at": "2026-09-25T23:00:48.814962+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://hcspectator.com/616/news/amy-zhai-22-and-seven-others-to-be-fulbright-scholars/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2022-04-21",
+      "text_chars": 3955,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://hcspectator.com/1616/news/blue-ribbon-committee-seeks-to-address-greek-life-concerns/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2018-09-27",
+      "text_chars": 4305,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://hcspectator.com/10257/sports/nfl-week-1-recap-winning-and-losing-teams-players-and-fantasy-football-owners-extetxtetxettetxettextetxxte-textetetx/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-17",
+      "text_chars": 4769,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://hcspectator.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 2,
+  "est_urls": 2869,
+  "earliest_year": 2018,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

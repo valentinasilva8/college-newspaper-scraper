@@ -1,0 +1,67 @@
+{
+  "domain": "thehilltoponline.com",
+  "base_url": "https://thehilltoponline.com",
+  "reconned_at": "2026-09-25T22:47:58.505294+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thehilltoponline.com/2026/09/23/young-thug-connects-with-howards-next-generation-of-music-professionals/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-23",
+      "text_chars": 5380,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thehilltoponline.com/2025/05/05/the-news-politics-reflects-on-her-hilltop-service/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-05-05",
+      "text_chars": 2397,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thehilltoponline.com/2016/05/07/obama-at-howard-universitys-148th-commencement/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2016-05-07",
+      "text_chars": 5144,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 30.0,
+  "home_status": 200,
+  "server": "nginx/1.31.6",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://thehilltoponline.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 3,
+  "est_urls": 2993,
+  "earliest_year": 2016,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "open"
+}

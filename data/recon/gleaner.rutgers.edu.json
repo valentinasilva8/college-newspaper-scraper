@@ -1,0 +1,67 @@
+{
+  "domain": "gleaner.rutgers.edu",
+  "base_url": "https://gleaner.rutgers.edu",
+  "reconned_at": "2026-09-25T22:52:59.583701+00:00",
+  "user_agent": "honest_research",
+  "requests": 7,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://gleaner.rutgers.edu/2019/12/05/test/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2019-12-05",
+      "text_chars": 2851,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://gleaner.rutgers.edu/2024/04/26/striking-out-the-recent-past-and-near-future-of-labor-unions-at-rutgers-camden/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2024-04-26",
+      "text_chars": 8105,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://gleaner.rutgers.edu/2026/05/20/fresh-faces-of-ruc-baseball-anthony-gogolski-embraces-the-college-game/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-05-20",
+      "text_chars": 1711,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://gleaner.rutgers.edu/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 1,
+  "est_urls": 379,
+  "earliest_year": 2019,
+  "field_fill": {
+    "text": "3/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

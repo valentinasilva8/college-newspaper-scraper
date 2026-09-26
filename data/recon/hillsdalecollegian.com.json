@@ -1,0 +1,67 @@
+{
+  "domain": "hillsdalecollegian.com",
+  "base_url": "https://hillsdalecollegian.com",
+  "reconned_at": "2026-09-25T23:10:34.664639+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://hillsdalecollegian.com/2022/04/biden-administrations-auto-regulations-out-of-touch-with-reality/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2022-04-14",
+      "text_chars": 4068,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://hillsdalecollegian.com/2021/11/dont-virtue-signal-your-busyness/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2021-11-18",
+      "text_chars": 1547,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://hillsdalecollegian.com/2026/09/ruins-cathedrals-and-mountains-students-earn-credits-in-italy/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 4292,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://hillsdalecollegian.com/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 16,
+  "est_urls": 15692,
+  "earliest_year": 2021,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "open"
+}

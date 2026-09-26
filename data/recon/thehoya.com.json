@@ -1,0 +1,67 @@
+{
+  "domain": "thehoya.com",
+  "base_url": "https://thehoya.com",
+  "reconned_at": "2026-09-25T21:04:53.742157+00:00",
+  "user_agent": "honest_research",
+  "requests": 6,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thehoya.com/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 873,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thehoya.com/science/latest-cohort-of-gu-fellows-complete-summer-research-projects/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-10",
+      "text_chars": 4583,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thehoya.com/news/news-top/financial-aid-lawsuit-against-gu-to-proceed-as-class-action-case/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-06-04",
+      "text_chars": 3282,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thehoya.com/sitemap.xml",
+  "sitemap_kind": "single",
+  "post_sitemaps": 0,
+  "est_urls": 294,
+  "earliest_year": 2026,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

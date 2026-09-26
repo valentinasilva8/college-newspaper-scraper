@@ -1,0 +1,24 @@
+{
+  "domain": "thestute.com",
+  "base_url": "https://thestute.com",
+  "reconned_at": "2026-09-25T22:45:23.149103+00:00",
+  "user_agent": "honest_research",
+  "requests": 5,
+  "notes": [
+    "http_404: https://thestute.com/wp-sitemap.xml",
+    "http_404: https://thestute.com/sitemap.xml",
+    "http_404: https://thestute.com/sitemap_index.xml"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_kind": "none",
+  "post_sitemaps": 0,
+  "access_profile": "open"
+}

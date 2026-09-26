@@ -59,7 +59,7 @@ def discovered_total(site: str) -> int | None:
         entries = (
             [entry for bucket in by_year.values() for entry in bucket]
             if isinstance(by_year, dict)
-            else data.get("urls")  # flat list written by src/sno.py
+            else data.get("urls")  # flat list written by src/wordpress.py
         )
         if isinstance(entries, list):
             urls = {url for entry in entries if (url := _entry_url(entry))}

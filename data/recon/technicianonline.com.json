@@ -1,0 +1,67 @@
+{
+  "domain": "technicianonline.com",
+  "base_url": "https://technicianonline.com",
+  "reconned_at": "2026-09-25T22:40:05.724414+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://technicianonline.com/69647/sports/wolfpack-stopped-at-first-round/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2013-03-24",
+      "text_chars": 3492,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://technicianonline.com/70647/news/nobel-prize-winner-lectures-about-latest-polymer-research/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2013-11-11",
+      "text_chars": 3217,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://technicianonline.com/163541/opinion/satire-the-only-way-to-be-happy-is-to-have-less-money/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 4517,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://technicianonline.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 21,
+  "est_urls": 41019,
+  "earliest_year": 2013,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

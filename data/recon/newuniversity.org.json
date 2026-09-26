@@ -1,0 +1,67 @@
+{
+  "domain": "newuniversity.org",
+  "base_url": "https://newuniversity.org",
+  "reconned_at": "2026-09-25T21:09:06.342795+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://newuniversity.org/2003/09/22/the_rundown_rocks_theaters120/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://newuniversity.org/2004/03/01/letter_kills_positive_and138/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://newuniversity.org/2026/09/25/songs-for-your-summer-2026-alt-rock-and-electropop-playlist/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 5730,
+      "has_text": true,
+      "has_title": false,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://newuniversity.org/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 18,
+  "est_urls": 17445,
+  "earliest_year": 2026,
+  "field_fill": {
+    "text": "1/3",
+    "title": "0/3",
+    "author": "1/3",
+    "publication_date": "1/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

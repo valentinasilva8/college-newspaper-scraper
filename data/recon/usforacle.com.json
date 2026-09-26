@@ -1,0 +1,67 @@
+{
+  "domain": "usforacle.com",
+  "base_url": "https://www.usforacle.com",
+  "reconned_at": "2026-09-25T22:51:07.570493+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.usforacle.com/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://www.usforacle.com/2018/10/17/milton-llinas-the-man-who-silently-impacted-a-whole-university/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2018-10-17",
+      "text_chars": 3978,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.usforacle.com/2026/09/24/opinion-college-student-expenses-are-far-more-than-they-should-be/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 5688,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx/1.22.1",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.usforacle.com/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 33,
+  "est_urls": 32308,
+  "earliest_year": 2018,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "open"
+}

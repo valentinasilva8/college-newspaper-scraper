@@ -1,7 +1,8 @@
 # Per-site scraping configuration for the college newspaper corpus pilot.
 #
-# Adding a new institution = add an entry under `sites:` here and one
-# `extract_<key>` function in src/extractor.py. Nothing else.
+# Adding a WordPress paper (SNO or a generic theme) = one entry here with
+# `platform: sno` or `platform: wordpress`; see src/wordpress.py. Any other
+# platform still needs an `extract_<key>` function in src/extractor.py.
 #
 # Values under `defaults:` apply to every site unless the site overrides them.
 
@@ -120,8 +121,8 @@ sites:
       max_concurrency: 1
 
   # --------------------------------------------------------------------
-  # SNO Sites papers: one shared extractor (src/sno.py), config only.
-  # Each needs base_url + institution; see src/sno.py for optional keys.
+  # SNO Sites papers: one shared extractor (src/wordpress.py), config only.
+  # Each needs base_url + institution; see src/wordpress.py for optional keys.
   # All sit behind Cloudflare like Northwestern and publish Crawl-delay: 6,
   # so they start at Northwestern's post-block pace of 10-14 s.
   # --------------------------------------------------------------------

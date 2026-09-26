@@ -1,0 +1,66 @@
+{
+  "domain": "thewellesleynews.com",
+  "base_url": "https://thewellesleynews.com",
+  "reconned_at": "2026-09-25T22:58:54.334724+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thewellesleynews.com/47/news-investigation/2013-wilson-lecturer-stresses-the-economic-importance-of-investing-in-children/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 3725,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": true
+    },
+    {
+      "url": "https://thewellesleynews.com/4469/features/wellesley-students-support-bernie-sanders-at-boston-rally/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 4323,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": false,
+      "has_section": true
+    },
+    {
+      "url": "https://thewellesleynews.com/23856/opinions/the-environmental-hypocrisy-at-wellesley/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 4164,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": false,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thewellesleynews.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 3,
+  "est_urls": 4814,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "0/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

@@ -1,0 +1,67 @@
+{
+  "domain": "njitvector.com",
+  "base_url": "https://njitvector.com",
+  "reconned_at": "2026-09-25T22:45:18.249967+00:00",
+  "user_agent": "honest_research",
+  "requests": 7,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://njitvector.com/15041/campus-life/the-death-of-the-snow-day-is-a-damn-shame/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2021-02-10",
+      "text_chars": 3083,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://njitvector.com/17422/features/the-unrecognized-importance-of-njits-groundskeepers/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2024-02-24",
+      "text_chars": 3285,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://njitvector.com/21592/features/developing-campus-ethos-on-sustainability-through-ecohighlanders-and-green-teams/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-05-01",
+      "text_chars": 5666,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://njitvector.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 1,
+  "est_urls": 336,
+  "earliest_year": 2021,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

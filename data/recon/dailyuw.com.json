@@ -1,0 +1,15 @@
+{
+  "domain": "dailyuw.com",
+  "base_url": "https://www.dailyuw.com",
+  "reconned_at": "2026-09-25T21:20:25.192667+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://www.dailyuw.com/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

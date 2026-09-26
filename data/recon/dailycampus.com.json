@@ -1,0 +1,21 @@
+{
+  "domain": "dailycampus.com",
+  "base_url": "https://dailycampus.com",
+  "reconned_at": "2026-09-25T22:42:08.930249+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://dailycampus.com/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 2,
+  "access_profile": "open"
+}

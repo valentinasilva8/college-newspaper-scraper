@@ -1,0 +1,67 @@
+{
+  "domain": "stanforddaily.com",
+  "base_url": "https://stanforddaily.com",
+  "reconned_at": "2026-09-25T21:01:27.929998+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://stanforddaily.com/2026/09/24/cbs-misuses-photo-students-ai/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 1586,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://stanforddaily.com/2025/01/15/daily-diminutive-021-jan-16-2025/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-01-15",
+      "text_chars": 91,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://stanforddaily.com/2009/11/23/w-soccer-card-advances-to-elite-eight/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2009-11-23",
+      "text_chars": 4856,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://stanforddaily.com/sitemap_index.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 196,
+  "est_urls": 39111,
+  "earliest_year": 2009,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

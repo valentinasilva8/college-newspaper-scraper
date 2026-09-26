@@ -1,0 +1,67 @@
+{
+  "domain": "trinitonian.com",
+  "base_url": "https://trinitonian.com",
+  "reconned_at": "2026-09-25T23:07:52.442872+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://trinitonian.com/2026/09/16/trinity-administration-is-spining-around-fsl/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-16",
+      "text_chars": 7986,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://trinitonian.com/2025/11/20/what-the-trinitonian-has-taught-me/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-11-20",
+      "text_chars": 3205,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://trinitonian.com/2025/01/30/previously-on-sga-funding-for-business-department-denied/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2025-01-31",
+      "text_chars": 3650,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://trinitonian.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 9,
+  "est_urls": 8018,
+  "earliest_year": 2025,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

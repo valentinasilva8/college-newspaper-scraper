@@ -1,0 +1,67 @@
+{
+  "domain": "thesandb.com",
+  "base_url": "https://thesandb.com",
+  "reconned_at": "2026-09-25T23:00:09.026078+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thesandb.com/3/news/letter-sparks-administration-faculty-debate/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2008-12-18",
+      "text_chars": 5814,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thesandb.com/4461/community/thirsty-iowa-families-celebrate-a-german-tradition/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2010-10-08",
+      "text_chars": 3220,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thesandb.com/56538/sports/grinnell-womens-cross-country-gets-second-place-on-home-meet/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 3099,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thesandb.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 5,
+  "est_urls": 9196,
+  "earliest_year": 2008,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "1/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

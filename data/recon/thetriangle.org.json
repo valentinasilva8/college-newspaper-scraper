@@ -1,0 +1,21 @@
+{
+  "domain": "thetriangle.org",
+  "base_url": "https://www.thetriangle.org",
+  "reconned_at": "2026-09-25T22:45:03.386115+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.thetriangle.org/sitemap-index.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 16,
+  "access_profile": "cloudflare"
+}

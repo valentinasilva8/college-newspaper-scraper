@@ -1,0 +1,67 @@
+{
+  "domain": "wesleyanargus.com",
+  "base_url": "https://wesleyanargus.com",
+  "reconned_at": "2026-09-25T23:01:50.169115+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://wesleyanargus.com/2004/09/21/off-campus-housing-to-be-virtually-eliminated/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2004-09-21",
+      "text_chars": 4609,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://wesleyanargus.com/2005/04/05/mens-lax-falls-to-18th-in-nation/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2005-04-05",
+      "text_chars": 3689,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://wesleyanargus.com/2026/09/25/second-chance-prom-debuts-in-beckham-hall-with-cpe/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 7300,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx/1.24.0 (Ubuntu)",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://wesleyanargus.com/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 11,
+  "est_urls": 21917,
+  "earliest_year": 2004,
+  "field_fill": {
+    "text": "3/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

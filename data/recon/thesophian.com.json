@@ -1,0 +1,66 @@
+{
+  "domain": "thesophian.com",
+  "base_url": "https://thesophian.com",
+  "reconned_at": "2026-09-25T23:01:28.078855+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thesophian.com/qa-stages-protest-in-support-of-admitting-trans-women/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 3093,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thesophian.com/2017-12-8-doctor-fired-in-pakistan-because-of-sharmeen-obaid-chinoys-tweet/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 2777,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thesophian.com/remembering-taylor-mobley-when-i-think-of-taylor-i-think-of-joy/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 4308,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://thesophian.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 2,
+  "est_urls": 2112,
+  "field_fill": {
+    "text": "3/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "0/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

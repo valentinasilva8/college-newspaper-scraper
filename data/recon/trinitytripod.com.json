@@ -1,0 +1,66 @@
+{
+  "domain": "trinitytripod.com",
+  "base_url": "https://trinitytripod.com",
+  "reconned_at": "2026-09-25T23:07:51.933358+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://trinitytripod.com/features/mugatunes-brings-new-quality-playlists-to-students/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://trinitytripod.com/opinion/kentucky-school-shooting-highlights-a-larger-issue/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://trinitytripod.com/sports/mens-soccer-beats-hamilton-first-nescac-win-since-2023/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 1164,
+      "has_text": true,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "BitNinja-WafPro",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://trinitytripod.com/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 2,
+  "est_urls": 3976,
+  "field_fill": {
+    "text": "1/3",
+    "title": "0/3",
+    "author": "0/3",
+    "publication_date": "0/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

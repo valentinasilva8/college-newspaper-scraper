@@ -1,10 +1,10 @@
-"""Offline tests for the shared SNO Sites extractor (src/sno.py)."""
+"""Offline tests for the WordPress extractor (src/wordpress.py) and its SNO profile."""
 
 from __future__ import annotations
 
 import pytest
 
-from src import sno
+from src import sno, wordpress
 from src.extractor import make_soup, normalize_date
 
 
@@ -77,7 +77,7 @@ def test_extract_text_sno_fields():
         " , Staff Writer • May 2, 2024</span>"
         f'<div id="sno-story-body-content">{PARAS}</div>'
     )
-    page = sno._extract_text_sno(url, _HtmlFetcher({url: html}), "Test")
+    page = wordpress.fetch_page(url, _HtmlFetcher({url: html}), "Test", "sno")
     assert page["title"] == "Headline"
     assert page["author"] == "Jane Doe"
     assert page["section"] == "News"
@@ -107,9 +107,9 @@ def test_extract_text_sno_jsonld_section_and_empty_body():
         '<script type="application/ld+json">{"articleSection":["Community","Features"]}</script>'
         f'<div id="sno-story-body-content">{PARAS}</div>'
     )
-    assert sno._extract_text_sno(url, _HtmlFetcher({url: html}), "T")["section"] == "Community"
+    assert wordpress.fetch_page(url, _HtmlFetcher({url: html}), "T", "sno")["section"] == "Community"
     fullscreen = _page('<div class="storyfullscreen"><p></p></div>')
-    empty = sno._extract_text_sno(url, _HtmlFetcher({url: fullscreen}), "T")
+    empty = wordpress.fetch_page(url, _HtmlFetcher({url: fullscreen}), "T", "sno")
     assert empty["text"] == "" and empty["error"] == "empty_body"
 
 
@@ -119,10 +119,10 @@ def test_discover_full_orders_by_bucket_and_filters(monkeypatch):
         ["https://example.com/5/news/a/", "2018-06-01T00:00:00+00:00"],
         ["https://tcu360.com/2019/05/01/c/", ""],
     ]
-    monkeypatch.setattr(sno, "_load_or_fetch_urls", lambda cfg, f: pairs)
-    metas = sno._discover_sno({"mode": "full", "site_key": "t"}, None)
+    monkeypatch.setattr(wordpress, "_load_or_fetch_urls", lambda cfg, f: pairs)
+    metas = wordpress._discover({"mode": "full", "site_key": "t"}, None)
     assert [m["year"] for m in metas] == [2018, 2019, 2020]
-    only = sno._discover_sno({"mode": "full", "site_key": "t", "candidate_lastmod_year": 2019}, None)
+    only = wordpress._discover({"mode": "full", "site_key": "t", "candidate_lastmod_year": 2019}, None)
     assert [m["url"] for m in only] == ["https://tcu360.com/2019/05/01/c/"]
 
 
@@ -132,8 +132,8 @@ def test_extract_sno_full_mode(monkeypatch):
     pages = {m["url"]: {"text": "body", "publication_date": "May 2, 2020"} for m in metas}
     pages["https://example.com/old/"] = {"text": "body", "publication_date": "May 2, 1998"}
     pages["https://example.com/3/news/x/"] = {"text": "", "error": "http_403"}
-    monkeypatch.setattr(sno, "_discover_sno", lambda cfg, f: metas)
-    monkeypatch.setattr(sno, "_extract_text_sno", lambda url, f, label: dict(pages[url]))
+    monkeypatch.setattr(wordpress, "_discover", lambda cfg, f: metas)
+    monkeypatch.setattr(wordpress, "fetch_page", lambda url, f, label, *a: dict(pages[url]))
     failures = []
     config = {
         "mode": "full",
@@ -142,13 +142,13 @@ def test_extract_sno_full_mode(monkeypatch):
         "skip_urls": {"https://example.com/0/news/x/"},
         "failure_sink": lambda u, y, r: failures.append((u, r)),
     }
-    rows = list(sno.extract_sno(config, None))
+    rows = list(wordpress.extract_wordpress(config, None))
     assert [r.url.split("/")[3] for r in rows] == ["1", "2", "4", "5"]
     assert all(r.institution == "Test Paper" and r.publication_date == "2020-05-02" for r in rows)
     assert ("https://example.com/old/", "pre_2000") in failures
     assert ("https://example.com/3/news/x/", "http_403") in failures
 
-    capped = list(sno.extract_sno(dict(config, max_fetch=2, failure_sink=None), None))
+    capped = list(wordpress.extract_wordpress(dict(config, max_fetch=2, failure_sink=None), None))
     assert len(capped) == 1  # two fetches: the pre-2000 skip and one row
 
 
@@ -158,7 +158,7 @@ def test_pipeline_resolves_sno_sites():
     config = {"sites": {"tcu": {"platform": "sno"}, "duke": {}}}
     keys = pipeline.site_keys_from_config(config)
     assert "tcu" in keys and "northwestern" in keys
-    assert pipeline._resolve_extractor("tcu", {"platform": "sno"}) is sno.extract_sno
+    assert pipeline._resolve_extractor("tcu", {"platform": "sno"}) is wordpress.extract_wordpress
     with pytest.raises(KeyError):
         pipeline._resolve_extractor("nope", {})
 
@@ -167,9 +167,64 @@ def test_repo_config_sno_sites_are_complete():
     from src import pipeline
 
     sites = pipeline.load_config()["sites"]
-    keys = sno.sno_site_keys(sites)
+    keys = wordpress.wordpress_site_keys(sites)
     assert {"smu", "tcu", "biola", "union", "stolaf"} <= set(keys)
     for key in keys:
         cfg = sites[key]
         assert cfg.get("base_url") and cfg.get("institution"), key
         assert cfg["rate_limit"]["delay_min"] >= 6, key  # published Crawl-delay
+
+
+# ----------------------------------------------------------------------
+# Generic WordPress profile and per-site overrides
+# ----------------------------------------------------------------------
+
+WP_GENERIC = _page(
+    '<meta property="og:title" content="Council votes - The Point Weekly">'
+    '<script type="application/ld+json">{"@graph":[{"@type":"NewsArticle",'
+    '"author":{"@type":"Person","name":"Sam Rivera"},'
+    '"datePublished":"2016-09-29T08:00:00-07:00"}]}</script>'
+    '<article><header><span class="cat-links"><a href="/category/news/" rel="category tag">News</a></span>'
+    '<time class="entry-date published" datetime="2016-09-29T08:00:00-07:00">Sept 29</time></header>'
+    '<div class="entry-content"><p>One.</p><p>Two.</p></div>'
+    '<aside><p>a</p><p>b</p><p>c</p><p>d</p></aside></article>'
+)
+
+
+def test_wp_generic_profile_fields():
+    url = "https://lomabeat.com/9468/"
+    page = wordpress.fetch_page(url, _HtmlFetcher({url: WP_GENERIC}), "The Point Weekly", "wp_generic")
+    assert page["text"] == "One. Two."  # .entry-content beats the denser aside
+    assert page["title"] == "Council votes"
+    assert page["author"] == "Sam Rivera"  # JSON-LD fallback
+    assert page["section"] == "News"
+    assert page["subtitle"] == ""  # never og:description
+    assert normalize_date(page["publication_date"], url) == "2016-09-29"
+
+
+def test_wp_generic_prefers_byline_links_and_rejects_dates():
+    soup = make_soup(_page('<span class="byline">By <a rel="author" href="/a/">Ana Diaz</a></span>'))
+    assert wordpress._generic_author(soup) == "Ana Diaz"
+    soup = make_soup(_page('<span class="byline">March 3, 2011</span>'))
+    assert wordpress._generic_author(soup) == ""
+
+
+def test_selector_overrides_win_when_they_match():
+    url = "https://example.com/x/"
+    html = WP_GENERIC.replace(
+        "</article>", '<p class="kicker">Opinion</p><span class="writer">Lee Park</span></article>'
+    )
+    selectors = {"section": ".kicker", "author": ".writer", "subtitle": ".missing"}
+    page = wordpress.fetch_page(url, _HtmlFetcher({url: html}), "T", "wp_generic", selectors)
+    assert (page["section"], page["author"], page["subtitle"]) == ("Opinion", "Lee Park", "")
+
+
+def test_page_profile_defaults_and_validation():
+    assert wordpress.page_profile({"platform": "sno"}) == "sno"
+    assert wordpress.page_profile({"platform": "wordpress"}) == "wp_generic"
+    assert wordpress.page_profile({"platform": "wordpress", "page_profile": "sno"}) == "sno"
+    with pytest.raises(ValueError):
+        wordpress.page_profile({"platform": "wordpress", "page_profile": "newspack"})
+    from src import pipeline
+
+    assert pipeline._resolve_extractor("x", {"platform": "wordpress"}) is wordpress.extract_wordpress

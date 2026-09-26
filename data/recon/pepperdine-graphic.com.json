@@ -1,0 +1,42 @@
+{
+  "domain": "pepperdine-graphic.com",
+  "base_url": "https://pepperdine-graphic.com",
+  "reconned_at": "2026-09-25T22:45:54.809778+00:00",
+  "user_agent": "honest_research",
+  "requests": 4,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://pepperdine-graphic.com/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://pepperdine-graphic.com/sitemap.xml",
+  "sitemap_kind": "single",
+  "post_sitemaps": 0,
+  "est_urls": 1,
+  "field_fill": {
+    "text": "0/1",
+    "title": "0/1",
+    "author": "0/1",
+    "publication_date": "0/1",
+    "section": "0/1"
+  },
+  "access_profile": "open"
+}

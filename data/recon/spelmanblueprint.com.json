@@ -1,0 +1,15 @@
+{
+  "domain": "spelmanblueprint.com",
+  "base_url": "https://spelmanblueprint.com",
+  "reconned_at": "2026-09-25T23:07:44.391200+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://spelmanblueprint.com/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

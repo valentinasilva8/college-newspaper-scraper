@@ -1,0 +1,67 @@
+{
+  "domain": "thedickinsonian.com",
+  "base_url": "https://thedickinsonian.com",
+  "reconned_at": "2026-09-25T23:08:49.988358+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thedickinsonian.com/audio/2012/07/19/sample-podcast-headline-2/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thedickinsonian.com/news/2015/10/29/mob-offers-meet-and-greet-with-hoodie-allen/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2015-10-29",
+      "text_chars": 2432,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thedickinsonian.com/news/2026/09/20/dickinson-core-values-unite-community/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-20",
+      "text_chars": 3345,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thedickinsonian.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 3,
+  "est_urls": 4862,
+  "earliest_year": 2015,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

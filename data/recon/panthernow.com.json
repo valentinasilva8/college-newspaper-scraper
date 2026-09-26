@@ -1,0 +1,67 @@
+{
+  "domain": "panthernow.com",
+  "base_url": "https://panthernow.com",
+  "reconned_at": "2026-09-25T22:51:45.781052+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://panthernow.com/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://panthernow.com/2004/09/09/smith-returns-strong-from-tendon-injury/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2004-09-09",
+      "text_chars": 2781,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://panthernow.com/2026/09/18/rinse-and-repeat-marvel-rivals-season-10/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-18",
+      "text_chars": 6121,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 60.0,
+  "home_status": 200,
+  "server": "Apache",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://panthernow.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 25,
+  "est_urls": 24730,
+  "earliest_year": 2004,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "1/3"
+  },
+  "access_profile": "open"
+}

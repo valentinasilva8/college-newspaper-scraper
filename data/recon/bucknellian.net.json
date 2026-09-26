@@ -1,0 +1,67 @@
+{
+  "domain": "bucknellian.net",
+  "base_url": "https://bucknellian.net",
+  "reconned_at": "2026-09-25T23:04:32.166393+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://bucknellian.net/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 4155,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://bucknellian.net/7122/news/poetry-reading/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2011-03-03",
+      "text_chars": 3838,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://bucknellian.net/141980/opinion/the-importance-of-being-well-rounded/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 3468,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://bucknellian.net/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 12,
+  "est_urls": 11585,
+  "earliest_year": 2011,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "1/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

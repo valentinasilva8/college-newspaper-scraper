@@ -1,0 +1,67 @@
+{
+  "domain": "sbstatesman.com",
+  "base_url": "https://sbstatesman.com",
+  "reconned_at": "2026-09-25T22:28:12.751844+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://sbstatesman.com/1/news/cras-dictum-maecenas-ut-turpis/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2009-04-27",
+      "text_chars": 3807,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://sbstatesman.com/1746/opinions/crisis-in-the-deep-blue-the-state-of-earths-largest-natural-resource/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2007-10-04",
+      "text_chars": 5339,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://sbstatesman.com/145433/arts/a-commuters-guide-to-enjoying-college-life/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-21",
+      "text_chars": 5554,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://sbstatesman.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 7,
+  "est_urls": 13648,
+  "earliest_year": 2007,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

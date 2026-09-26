@@ -1,0 +1,24 @@
+{
+  "domain": "thecrimson.com",
+  "base_url": "https://www.thecrimson.com",
+  "reconned_at": "2026-09-25T21:01:10.930729+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "unknown",
+  "sitemap_url": "https://www.thecrimson.com/sitemap.xml",
+  "sitemap_kind": "single",
+  "post_sitemaps": 0,
+  "est_urls": 137,
+  "access_profile": "cloudflare"
+}

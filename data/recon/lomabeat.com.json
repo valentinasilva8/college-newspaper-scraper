@@ -1,0 +1,67 @@
+{
+  "domain": "lomabeat.com",
+  "base_url": "https://lomabeat.com",
+  "reconned_at": "2026-09-25T20:59:23.171476+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://lomabeat.com/review-typhoons-lyrics-breath-life-at-the-loft/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2013-10-28",
+      "text_chars": 3316,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://lomabeat.com/9468/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2016-09-29",
+      "text_chars": 3800,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    },
+    {
+      "url": "https://lomabeat.com/letter-from-the-editor-in-chief-3/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-15",
+      "text_chars": 3167,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://lomabeat.com/wp-sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 3,
+  "est_urls": 4035,
+  "earliest_year": 2013,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "0/3",
+    "publication_date": "3/3",
+    "section": "0/3"
+  },
+  "access_profile": "open"
+}

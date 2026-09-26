@@ -1,0 +1,15 @@
+{
+  "domain": "fsunews.com",
+  "base_url": "https://www.fsunews.com",
+  "reconned_at": "2026-09-25T21:38:14.747822+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://www.fsunews.com/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

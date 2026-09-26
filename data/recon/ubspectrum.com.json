@@ -1,0 +1,23 @@
+{
+  "domain": "ubspectrum.com",
+  "base_url": "https://www.ubspectrum.com",
+  "reconned_at": "2026-09-25T22:44:16.069158+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "snworks",
+  "sitemap_url": "https://www.ubspectrum.com/sitemap.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 12,
+  "access_profile": "open"
+}

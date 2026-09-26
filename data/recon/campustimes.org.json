@@ -1,0 +1,15 @@
+{
+  "domain": "campustimes.org",
+  "base_url": "http://campustimes.org",
+  "reconned_at": "2026-09-25T21:38:08.437556+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: http://campustimes.org/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

@@ -1,0 +1,67 @@
+{
+  "domain": "bcheights.com",
+  "base_url": "https://bcheights.com",
+  "reconned_at": "2026-09-25T21:09:20.369944+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://bcheights.com/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 943,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://bcheights.com/103559/news/abroad-diaries-adjusting-to-fall-in-vienna-and-a-semester-in-europe/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2015-10-04",
+      "text_chars": 5377,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://bcheights.com/232442/news/bc-launches-bridge-program-to-connect-humanities-sciences-and-management/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 4440,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://bcheights.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 21,
+  "est_urls": 20636,
+  "earliest_year": 2015,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

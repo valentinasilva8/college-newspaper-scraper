@@ -1,0 +1,24 @@
+{
+  "domain": "dailyfreepress.com",
+  "base_url": "https://dailyfreepress.com",
+  "reconned_at": "2026-09-25T21:12:07.225161+00:00",
+  "user_agent": "honest_research",
+  "requests": 5,
+  "notes": [
+    "ConnectionError: https://dailyfreepress.com/sitemap.xml",
+    "ConnectionError: https://dailyfreepress.com/sitemap_index.xml",
+    "ConnectionError: https://dailyfreepress.com/wp-sitemap.xml"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_kind": "none",
+  "post_sitemaps": 0,
+  "access_profile": "cloudflare"
+}

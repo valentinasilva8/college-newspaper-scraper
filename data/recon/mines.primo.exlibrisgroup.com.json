@@ -1,0 +1,23 @@
+{
+  "domain": "mines.primo.exlibrisgroup.com",
+  "base_url": "https://mines.primo.exlibrisgroup.com",
+  "reconned_at": "2026-09-25T22:44:39.458534+00:00",
+  "user_agent": "honest_research",
+  "requests": 3,
+  "notes": [
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 200,
+  "server": "",
+  "cdn": "none",
+  "platform": "unknown",
+  "sitemap_url": "https://mines.primo.exlibrisgroup.com/view/scholar/siteindex.xml",
+  "sitemap_kind": "other",
+  "post_sitemaps": 0,
+  "access_profile": "open"
+}

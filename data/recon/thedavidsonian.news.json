@@ -1,0 +1,67 @@
+{
+  "domain": "thedavidsonian.news",
+  "base_url": "https://thedavidsonian.news",
+  "reconned_at": "2026-09-25T23:00:04.685266+00:00",
+  "user_agent": "honest_research",
+  "requests": 7,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thedavidsonian.news/615/news/the-statement-of-purpose-raises-questions-about-davidsons-religious-ties/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2024-11-20",
+      "text_chars": 6633,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thedavidsonian.news/1661/yowl/rusk-amid-ai-backlash-announces-carbon-offset-party/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 1152,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": true
+    },
+    {
+      "url": "https://thedavidsonian.news/2790/arts-and-entertainment/welcoming-sarah-cornejo-16-as-assistant-professor-of-art/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-16",
+      "text_chars": 5248,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thedavidsonian.news/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 1,
+  "est_urls": 511,
+  "earliest_year": 2024,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

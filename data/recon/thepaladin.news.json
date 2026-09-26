@@ -1,0 +1,67 @@
+{
+  "domain": "thepaladin.news",
+  "base_url": "https://thepaladin.news",
+  "reconned_at": "2026-09-25T23:09:40.756154+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thepaladin.news/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 242,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thepaladin.news/14048/news/conversations-with-retiring-faculty-members/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2014-04-16",
+      "text_chars": 4422,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thepaladin.news/17854/news/finnish-president-and-national-security-agency-director-return-to-furman-in-tocqueville-center-multi-clp-event/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 4386,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thepaladin.news/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 3,
+  "est_urls": 2818,
+  "earliest_year": 2014,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

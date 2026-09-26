@@ -1,0 +1,67 @@
+{
+  "domain": "thecarletonian.com",
+  "base_url": "https://thecarletonian.com",
+  "reconned_at": "2026-09-25T22:59:12.539232+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thecarletonian.com/83/news/carleton-considers-designers-science-center-atrium-light-fixture/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2019-01-24",
+      "text_chars": 3820,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thecarletonian.com/1762/viewpoint/post-quake-haiti-needs-our-help-and-support/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2010-01-15",
+      "text_chars": 3642,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thecarletonian.com/21026/arb-notes/a-small-adventure/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-06-02",
+      "text_chars": 2129,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thecarletonian.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 4,
+  "est_urls": 7913,
+  "earliest_year": 2010,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

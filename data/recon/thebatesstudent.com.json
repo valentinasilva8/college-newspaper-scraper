@@ -1,0 +1,67 @@
+{
+  "domain": "thebatesstudent.com",
+  "base_url": "https://thebatesstudent.com",
+  "reconned_at": "2026-09-25T23:03:23.225995+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thebatesstudent.com/1743/news/welcome-home-president-spencer/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2012-10-31",
+      "text_chars": 4340,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thebatesstudent.com/20659/forum/winter-in-a-plague-bates-community-must-manage-expectations/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2020-10-21",
+      "text_chars": 3211,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thebatesstudent.com/29002/news/bates-launches-free-campus-streaming-service-to-build-community-resources/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 2843,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thebatesstudent.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 2,
+  "est_urls": 2293,
+  "earliest_year": 2012,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "3/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

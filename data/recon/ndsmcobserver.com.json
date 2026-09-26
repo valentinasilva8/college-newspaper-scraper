@@ -1,0 +1,17 @@
+{
+  "domain": "ndsmcobserver.com",
+  "base_url": "https://www.ndsmcobserver.com",
+  "reconned_at": "2026-09-25T21:04:12.060828+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "http_403: https://www.ndsmcobserver.com/"
+  ],
+  "articles": [],
+  "robots_status": 403,
+  "crawl_delay": null,
+  "home_status": 403,
+  "server": "awselb/2.0",
+  "cdn": "aws_elb",
+  "access_profile": "waf_browser_ua"
+}

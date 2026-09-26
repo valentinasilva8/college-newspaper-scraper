@@ -13,7 +13,7 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 - No-domain tracker rows: 54
 - Domains shared by multiple universities: 26
 - Workbook `done` markers: 2 (seeded as `workbook_done_no_local_output` unless a built site_key exists)
-- Built sample sites in this repo: 4 (yale, chicago, duke, northwestern)
+- Sites configured in `config/sites.yaml`: 9 (yale, chicago, duke, northwestern, smu, tcu, union, stolaf, biola)
 
 ## Per-tab counts
 
@@ -23,6 +23,36 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 | Liberal Arts | 102 | 49 | 53 |
 | Public Universities | 20 | 20 | 0 |
 | Christian Colleges | 16 | 15 | 1 |
+
+## Progress by category
+
+Counts use `category_labels` (sheet tabs after overrides); a paper
+listed in two categories counts in both.
+
+| Category | Domains | Excluded | Recon done | Configured | In a wave |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| National Universities | 100 | 0 | 79 | 6 | 4 |
+| Liberal Arts | 46 | 0 | 43 | 2 | 2 |
+| Public Universities | 20 | 0 | 16 | 0 | 0 |
+| Christian Colleges | 14 | 5 | 5 | 4 | 4 |
+
+## Resolved by `data/target_overrides.csv`
+
+- `concordiensis.com` — Union College | Union Univeristy: categories 'Christian Colleges | Liberal Arts' -> 'Liberal Arts'
+- `instagram.com` — College of the Ozarks: excluded (instagram_only)
+- `olafmessenger.com` — St. Olaf College: categories 'Christian Colleges' -> 'Christian Colleges | Liberal Arts'
+- `oudaily.com` — Oklahoma City Univeristy: excluded (wrong_school)
+- `thelink.harding.edu` — Harding Univeristy: excluded (login_required)
+- `anchor.hope.edu` — Hope College: categories 'Christian Colleges' -> 'Christian Colleges | Liberal Arts'
+- `calbaptist.edu` — California Baptist University: excluded (pdf_archive)
+- `digitalcommons.cedarville.edu` — Cedarville University: excluded (pdf_archive)
+- `Liberal Arts:53` — St. Olaf College: excluded (duplicate_row)
+- `Liberal Arts:87` — Hope College: excluded (duplicate_row)
+- `Christian Colleges:8` — Moody Bible Institute: excluded (discontinued)
+
+## Repeated university names within a tab
+
+- [Liberal Arts] 'Wheaton College' appears 2 times: row 55 -> (no URL), row 81 -> (no URL)
 
 ## Shared newspapers (same domain, multiple universities)
 
@@ -121,34 +151,18 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 ## Suspicious / review mappings
 
 - `digitalcollections.library.cmu.edu` — Carnegie Mellon Univeristy: https://digitalcollections.library.cmu.edu/cmu-collection/tartan [library_archive]
-- `studlife.com` — Washington Univeristy in St. Louis: https://www.studlife.com/news [possible_university_newsroom]
-- `nyunews.com` — New York University: https://nyunews.com/ [possible_university_newsroom]
 - `dbknews.com` — University of Maryland, College Park | University of Maryland, College Park: https://dbknews.com/ [possible_university_newsroom]
 - `news.uga.edu` — University of Georgia | University of Georgia: https://news.uga.edu/ [possible_university_newsroom]
 - `fsunews.com` — Florida State University: https://www.fsunews.com/ [possible_university_newsroom]
 - `flathatnews.com` — William & Mary: https://flathatnews.com/ [possible_university_newsroom]
-- `statenews.com` — Michigan State University: http://statenews.com/ [possible_university_newsroom]
-- `pittnews.com` — University of Pittsburgh: https://pittnews.com/ [possible_university_newsroom]
-- `idsnews.com` — Indiana University, Bloomington: https://www.idsnews.com/ [possible_university_newsroom]
-- `highlandernews.org` — University of California, Riverside: https://www.highlandernews.org/ [possible_university_newsroom]
 - `today.uic.edu` — University of Illinois Chicago: https://today.uic.edu/ [possible_university_newsroom]
-- `wpi.edu` — Worcester Polytechnic Institute: https://www.wpi.edu/news [possible_university_newsroom]
-- `thewellesleynews.com` — Wellesley College: https://thewellesleynews.com/ [possible_university_newsroom]
 - `miscellanynews.org` — Vassar College: https://miscellanynews.org/ [possible_university_newsroom]
 - `bicollegenews.com` — Haverford College | Bryn Mawr College: https://bicollegenews.com/about/ [possible_university_newsroom]
-- `mountholyokenews.com` — Mount Holyoke College: https://www.mountholyokenews.com/ [possible_university_newsroom]
-- `thecatalystnews.com` — Colorado College: https://thecatalystnews.com/ [possible_university_newsroom]
-- `lafayettestudentnews.com` — Lafayette College: https://lafayettestudentnews.com/ [possible_university_newsroom]
-- `theoccidentalnews.com` — Occidental College: https://theoccidentalnews.com/ [possible_university_newsroom]
-- `skidmorenews.com` — Skidmore College: https://skidmorenews.com/ [possible_university_newsroom]
-- `concordiensis.com` — Union College | Union Univeristy: possible wrong-school mapping (Concordiensis / Union)
-- `instagram.com` — College of the Ozarks: https://www.instagram.com/the.outlook.cofo/ [instagram]
-- `oudaily.com` — Oklahoma City Univeristy: possible wrong-school mapping (OU Daily vs Oklahoma City University)
-- `calbaptist.edu` — California Baptist University: https://calbaptist.edu/academics/library/collections/archives/banner [library_archive]
 
-## Built sites vs workbook `done`
+## Configured sites vs workbook `done`
 
-- Local sample outputs exist for: duke, yale, chicago, northwestern.
+- Sites with a `config/sites.yaml` entry have status `configured`;
+  that says nothing about how much output exists.
 - Workbook marks MIT (`thetech.com`) and Columbia (`columbiaspectator.com`) as
   `done`, but **no MIT or Columbia output CSVs** are in this repository.
   Tracker status for those domains is `workbook_done_no_local_output`.

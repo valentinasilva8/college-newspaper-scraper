@@ -1,0 +1,19 @@
+{
+  "domain": "libguides.soka.edu",
+  "base_url": "https://libguides.soka.edu",
+  "reconned_at": "2026-09-25T23:07:32.859709+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "http_429: https://libguides.soka.edu/"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": 429,
+  "server": "nginx",
+  "cdn": "none",
+  "access_profile": "waf_browser_ua"
+}

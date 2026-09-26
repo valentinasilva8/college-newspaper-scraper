@@ -1,0 +1,67 @@
+{
+  "domain": "denisonian.com",
+  "base_url": "https://denisonian.com",
+  "reconned_at": "2026-09-25T23:05:25.589696+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://denisonian.com/2026/09/features/wildlife-conservation-club-connects-students-to-nature-2/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 5083,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://denisonian.com/2024/01/sports/ada-taute-27-at-forefront-of-womens-basketball-success/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2024-02-01",
+      "text_chars": 4031,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://denisonian.com/2013/03/sports/welcome-to-denison-university-sports-on-denisonian-com/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx/1.29.8",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://denisonian.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 4,
+  "est_urls": 3697,
+  "earliest_year": 2024,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "open"
+}

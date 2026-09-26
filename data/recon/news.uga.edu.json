@@ -1,0 +1,15 @@
+{
+  "domain": "news.uga.edu",
+  "base_url": "https://news.uga.edu",
+  "reconned_at": "2026-09-25T21:20:46.338749+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://news.uga.edu/"
+  ],
+  "articles": [],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": null,
+  "access_profile": ""
+}

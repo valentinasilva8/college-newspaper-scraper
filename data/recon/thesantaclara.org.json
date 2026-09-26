@@ -1,0 +1,25 @@
+{
+  "domain": "thesantaclara.org",
+  "base_url": "https://www.thesantaclaraarchives.org",
+  "reconned_at": "2026-09-25T21:56:05.224877+00:00",
+  "user_agent": "honest_research",
+  "requests": 5,
+  "notes": [
+    "ConnectionError: https://www.thesantaclaraarchives.org/sitemap.xml",
+    "http_404: https://www.thesantaclaraarchives.org/sitemap_index.xml",
+    "http_404: https://www.thesantaclaraarchives.org/wp-sitemap.xml",
+    "no page adapter yet; field audit skipped"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "Squarespace",
+  "cdn": "none",
+  "platform": "unknown",
+  "sitemap_kind": "none",
+  "post_sitemaps": 0,
+  "access_profile": "open"
+}

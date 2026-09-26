@@ -1,0 +1,67 @@
+{
+  "domain": "ucsdguardian.org",
+  "base_url": "https://ucsdguardian.org",
+  "reconned_at": "2026-09-25T21:06:54.861676+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://ucsdguardian.org/2013/08/07/ucsd-crew-team-put-on-probation-after-ncaa-investigation/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2013-08-07",
+      "text_chars": 4929,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://ucsdguardian.org/2012/04/23/currents-7-2/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2012-04-23",
+      "text_chars": 2048,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://ucsdguardian.org/2026/09/17/the-ucsd-guardians-2026-nfl-season-predictions/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-17",
+      "text_chars": 8310,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://ucsdguardian.org/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 12,
+  "est_urls": 22587,
+  "earliest_year": 2012,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "1/3",
+    "publication_date": "3/3",
+    "section": "3/3"
+  },
+  "access_profile": "cloudflare"
+}

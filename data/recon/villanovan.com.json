@@ -1,0 +1,65 @@
+{
+  "domain": "villanovan.com",
+  "base_url": "https://villanovan.com",
+  "reconned_at": "2026-09-25T21:54:16.120386+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://villanovan.com/2/news/public-safety-detains-suspect-trespassing-in-quad/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2022-01-10",
+      "text_chars": 5258,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://villanovan.com/2631/news/who-is-amy-coney-barrett/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2020-10-14",
+      "text_chars": 2927,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://villanovan.com/35045/uncategorized/letter-to-the-editors-villanova-please-bring-back-the-old-kop-shuttles/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    }
+  ],
+  "robots_status": "ConnectionError",
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://villanovan.com/sitemap.xml",
+  "sitemap_kind": "wp_core",
+  "post_sitemaps": 8,
+  "est_urls": 15606,
+  "earliest_year": 2020,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

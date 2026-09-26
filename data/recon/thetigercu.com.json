@@ -1,0 +1,67 @@
+{
+  "domain": "thetigercu.com",
+  "base_url": "https://thetigercu.com",
+  "reconned_at": "2026-09-25T22:43:29.491723+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://thetigercu.com/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 544,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://thetigercu.com/12982/news/tucker-hipps-transparency-act-instituted-in-clemson-greek-life/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2016-10-10",
+      "text_chars": 2404,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://thetigercu.com/31490/arts-culture/taylor-swift-delivers-an-encore-that-nobody-asked-for/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 3371,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 6.0,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://thetigercu.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 8,
+  "est_urls": 7447,
+  "earliest_year": 2016,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

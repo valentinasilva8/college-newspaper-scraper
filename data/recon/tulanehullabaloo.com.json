@@ -1,0 +1,67 @@
+{
+  "domain": "tulanehullabaloo.com",
+  "base_url": "https://tulanehullabaloo.com",
+  "reconned_at": "2026-09-25T22:42:00.981704+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://tulanehullabaloo.com/",
+      "status": 200,
+      "error": "",
+      "publication_date": "UNPARSED:",
+      "text_chars": 1506,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://tulanehullabaloo.com/14900/archives/no-headline-provided-4526/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2010-03-26",
+      "text_chars": 444,
+      "has_text": true,
+      "has_title": true,
+      "has_author": false,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://tulanehullabaloo.com/76169/news/queen-sofia-of-spain-visits-tulane-for-latin-american-library-exhibition-opening/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-24",
+      "text_chars": 1549,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "cloudflare",
+  "cdn": "cloudflare",
+  "platform": "sno",
+  "sitemap_url": "https://tulanehullabaloo.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 12,
+  "est_urls": 11289,
+  "earliest_year": 2010,
+  "field_fill": {
+    "text": "3/3",
+    "title": "3/3",
+    "author": "1/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "cloudflare"
+}

@@ -1,0 +1,17 @@
+{
+  "domain": "dbknews.com",
+  "base_url": "https://dbknews.com",
+  "reconned_at": "2026-09-25T21:12:15.943489+00:00",
+  "user_agent": "honest_research",
+  "requests": 2,
+  "notes": [
+    "ConnectionError: https://dbknews.com/"
+  ],
+  "articles": [],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": 10.0,
+  "home_status": null,
+  "access_profile": ""
+}

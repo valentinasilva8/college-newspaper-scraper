@@ -4,6 +4,8 @@ Role boundaries and hard constraints for every coding agent working in this
 repository. Keep this file aligned with `.cursor/rules/newspaper-scraper.mdc`
 (Cursor docs do not define precedence between Project Rules and `AGENTS.md`).
 
+Current state, where things run, and the planning model:
+[`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) (read first in a new chat).
 Detailed checklist: [`docs/AGENT_PLAYBOOK.md`](docs/AGENT_PLAYBOOK.md).
 Copy/paste prompts: [`docs/AGENT_PROMPTS.md`](docs/AGENT_PROMPTS.md).
 

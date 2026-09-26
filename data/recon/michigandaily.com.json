@@ -1,0 +1,67 @@
+{
+  "domain": "michigandaily.com",
+  "base_url": "https://www.michigandaily.com",
+  "reconned_at": "2026-09-25T21:03:51.985479+00:00",
+  "user_agent": "honest_research",
+  "requests": 8,
+  "notes": [],
+  "articles": [
+    {
+      "url": "https://www.michigandaily.com/archives/",
+      "status": null,
+      "error": "empty_body",
+      "publication_date": "",
+      "text_chars": 0,
+      "has_text": false,
+      "has_title": false,
+      "has_author": false,
+      "has_publication_date": false,
+      "has_section": false
+    },
+    {
+      "url": "https://www.michigandaily.com/statement/improvising-how-improvise/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2020-08-05",
+      "text_chars": 10551,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    },
+    {
+      "url": "https://www.michigandaily.com/arts/film/tiff-2026-wild-horse-nine-loves-to-riff/",
+      "status": 200,
+      "error": "",
+      "publication_date": "2026-09-25",
+      "text_chars": 2702,
+      "has_text": true,
+      "has_title": true,
+      "has_author": true,
+      "has_publication_date": true,
+      "has_section": true
+    }
+  ],
+  "robots_status": 200,
+  "robots_allows_home": true,
+  "wp_json_allowed": true,
+  "crawl_delay": null,
+  "home_status": 200,
+  "server": "nginx",
+  "cdn": "none",
+  "platform": "wordpress",
+  "sitemap_url": "https://www.michigandaily.com/sitemap.xml",
+  "sitemap_kind": "yoast",
+  "post_sitemaps": 25,
+  "est_urls": 120040,
+  "earliest_year": 2020,
+  "field_fill": {
+    "text": "2/3",
+    "title": "2/3",
+    "author": "2/3",
+    "publication_date": "2/3",
+    "section": "2/3"
+  },
+  "access_profile": "open"
+}
