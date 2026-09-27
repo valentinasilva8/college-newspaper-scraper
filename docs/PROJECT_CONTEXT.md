@@ -87,8 +87,14 @@ scheduling:
 
 ## Open items
 
-- Confirm Northwestern is healthy; install the updated systemd unit.
-- Deploy the SNO papers to the server; access probe + 200-article tests.
+- Liberal Arts 200-article tests (`conncoll`, `fandm`, `hillsdale`): paste
+  the last 20 log lines, then enable systemd full runs only if each wrote 200
+  rows. Command:
+  `tail -20 /tmp/conncoll-test.log /tmp/fandm-test.log /tmp/hillsdale-test.log`
+- **Biola:** service was `activating` with an ~11 hour stale checkpoint and
+  ~476 `empty_body`. Inspect with
+  `journalctl -u newspaper-scraper@biola -n 50 --no-pager` before adding more
+  Cloudflare papers.
 - Honest UA reaches the SNWorks homepages tested so far (Princeton, JHU, Penn,
   Cornell, Dartmouth); Brown and Rice return 403 like Duke. Bring this to
   Prof. Kim before building `src/snworks.py`.

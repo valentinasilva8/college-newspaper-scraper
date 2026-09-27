@@ -45,6 +45,8 @@ RECON_SUMMARY_PATH = PROJECT_ROOT / "docs" / "RECON_SUMMARY.md"
 CONFIG_PATH = PROJECT_ROOT / "config" / "sites.yaml"
 OVERRIDES_PATH = PROJECT_ROOT / "data" / "target_overrides.csv"
 RECON_DIR = PROJECT_ROOT / "data" / "recon"
+# Operational tabs in the workbook, not university lists.
+SKIP_TABS = frozenset({"Status"})
 
 URL_RE = re.compile(r"https?://[^\s<>\"')\]]+", re.I)
 DOMAIN_RE = re.compile(r"^(?:www\.)?([a-z0-9.-]+\.[a-z]{2,})", re.I)
@@ -361,6 +363,8 @@ def read_workbook(path: Path) -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = {}
 
     for tab_name in wb.sheetnames:
+        if tab_name in SKIP_TABS:
+            continue
         ws = wb[tab_name]
         raw_rows: list[list[object]] = []
         for r in range(1, ws.max_row + 1):

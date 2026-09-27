@@ -1,5 +1,5 @@
 key,category_labels,access_profile,wave,exclusion_reason,notes
-chicagomaroon.com,,,0,,Full run on the Mac (tmux chicago-full)
+chicagomaroon.com,,,0,,Full run on the server (newspaper-scraper@chicago)
 dailynorthwestern.com,,,0,,Full run on the server (newspaper-scraper@northwestern)
 smudailycampus.com,,,1,,
 tcu360.com,,,1,,
