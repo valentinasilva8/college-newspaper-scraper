@@ -205,7 +205,15 @@ def resolve_section_path(
         label = clean_text(a.get_text(" "))
         if not label:
             continue
-        segs = [s for s in urlparse(a["href"]).path.strip("/").split("/") if s]
+        href = a.get("href")
+        if not isinstance(href, str) or not href.strip():
+            continue
+        try:
+            path = urlparse(href).path
+        except ValueError:
+            # Python 3.14 urlparse raises on junk like "http://[" (Biola nav).
+            continue
+        segs = [s for s in path.strip("/").split("/") if s]
         if len(segs) >= 3 and segs[0] == "category":
             child_map.setdefault(label.lower(), (segs[1], label))
         elif len(segs) == 1:

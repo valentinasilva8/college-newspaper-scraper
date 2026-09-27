@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from src import sno, wordpress
-from src.extractor import make_soup, normalize_date
+from src.extractor import make_soup, normalize_date, resolve_section_path
 
 
 def _page(body: str) -> str:
@@ -111,6 +111,28 @@ def test_extract_text_sno_jsonld_section_and_empty_body():
     fullscreen = _page('<div class="storyfullscreen"><p></p></div>')
     empty = wordpress.fetch_page(url, _HtmlFetcher({url: fullscreen}), "T", "sno")
     assert empty["text"] == "" and empty["error"] == "empty_body"
+
+
+def test_resolve_section_path_skips_invalid_ipv6_href():
+    """Biola nav has junk hrefs that Python 3.14 urlparse rejects."""
+    html = (
+        '<a href="http://[">broken</a>'
+        '<a href="/category/campus/academic/">Academic</a>'
+        '<a href="/category/campus/">Campus</a>'
+    )
+    assert resolve_section_path(make_soup(html), "Academic") == ("Campus", "Academic")
+
+
+def test_fetch_page_logs_parse_error_instead_of_raising():
+    url = "https://chimesnewspaper.com/x/"
+    html = _page(
+        '<a href="http://[">x</a>'
+        '<meta property="article:section" content="News">'
+        f'<div id="sno-story-body-content">{PARAS}</div>'
+    )
+    page = wordpress.fetch_page(url, _HtmlFetcher({url: html}), "The Chimes", "sno")
+    assert page["text"] == "One. Two. Three."
+    assert page["section"] == "News"
 
 
 def test_discover_full_orders_by_bucket_and_filters(monkeypatch):

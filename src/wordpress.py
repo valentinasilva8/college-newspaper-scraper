@@ -367,8 +367,14 @@ def fetch_page(
         return out
 
     soup = make_soup(resp.text)
-    page = PAGE_PROFILES[profile](soup, url, label)
-    _apply_selector_overrides(soup, page, selectors or {})
+    try:
+        page = PAGE_PROFILES[profile](soup, url, label)
+        _apply_selector_overrides(soup, page, selectors or {})
+    except (ValueError, TypeError, AttributeError) as exc:
+        logger.warning("%s parse failed for %s: %s", label, url, exc)
+        out = _empty_page()
+        out["error"] = "parse_error"
+        return out
     if not page.get("text"):
         out = _empty_page()
         out["error"] = "empty_body"
