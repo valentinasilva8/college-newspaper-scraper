@@ -63,10 +63,10 @@ Domains reconned: 141
 | colbyecho.news | Liberal Arts | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
 | denisonian.com | Liberal Arts | open | none | 200 |  | yoast | 3697 | 0.3 | 2024 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | hcspire.com | Liberal Arts | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
-| hillsdalecollegian.com | Liberal Arts | open | none | 200 |  | yoast | 15692 | 1.1 | 2021 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| hillsdalecollegian.com | Liberal Arts | open | none | 200 |  | yoast | 15692 | 1.3 | 2021 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | pinnacle.berea.edu | Liberal Arts | cloudflare | cloudflare | 200 | 10.0 | wp_core | 879 | 0.1 | 2013 | 3/3 | 0/3 | 3/3 | 0/3 | 0/3 |
 | swarthmorephoenix.com | Liberal Arts | open | none | 200 |  | yoast | 13264 | 0.9 | 2000 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
-| the-college-reporter.com | Liberal Arts | open | none | 200 | 10.0 | yoast | 3583 | 0.4 | 2012 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| the-college-reporter.com | Liberal Arts | open | none | 200 | 10.0 | yoast | 3583 | 0.5 | 2012 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thecatalystnews.com | Liberal Arts | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
 | thecollegevoice.org | Liberal Arts | open | none | 200 |  | wp_core | 4320 | 0.3 | 2011 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | theoccidentalnews.com | Liberal Arts | open | sucuri | 200 |  | yoast | 10066 | 0.7 | 2014 | 3/3 | 2/3 | 3/3 | 2/3 | 3/3 |

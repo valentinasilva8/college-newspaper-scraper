@@ -161,3 +161,32 @@ sites:
     institution: "Manitou Messenger"
     base_url: "https://olafmessenger.com"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Generic WordPress papers (platform: wordpress, page_profile wp_generic).
+  # These three are Liberal Arts, no Cloudflare, so they use the published
+  # crawl delay with a 6 s floor -- not the Cloudflare 10-14 s pace.
+  # --------------------------------------------------------------------
+
+  conncoll:
+    name: "The College Voice (Connecticut College)"
+    platform: wordpress
+    institution: "The College Voice"
+    base_url: "https://thecollegevoice.org"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  fandm:
+    name: "The College Reporter (Franklin & Marshall College)"
+    platform: wordpress
+    institution: "The College Reporter"
+    base_url: "https://www.the-college-reporter.com"
+    sitemap_index: "https://www.the-college-reporter.com/sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 12.0, max_concurrency: 1}
+
+  hillsdale:
+    name: "The Collegian (Hillsdale College)"
+    platform: wordpress
+    institution: "The Collegian"
+    base_url: "https://hillsdalecollegian.com"
+    sitemap_index: "https://hillsdalecollegian.com/sitemap_index.xml"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
