@@ -36,7 +36,7 @@ Domains reconned: 141
 | njitvector.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 336 | 0.0 | 2021 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | nyunews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 22473 | 3.1 | 2012 | 2/3 | 1/3 | 2/3 | 2/3 | 2/3 |
 | pittnews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 55585 | 7.7 | 2001 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
-| reporter.rit.edu | National Universities | open | none | 200 | 6.0 | wp_core | 2136 | 0.1 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| reporter.rit.edu | National Universities | open | none | 200 | 6.0 | wp_core | 2136 | 0.2 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | sbstatesman.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 13648 | 1.9 | 2007 | 3/3 | 2/3 | 3/3 | 3/3 | 3/3 |
 | technicianonline.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 41019 | 5.7 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thefordhamram.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 13499 | 1.9 | 2012 | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
@@ -87,15 +87,15 @@ Domains reconned: 141
 | stanforddaily.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 39111 | 5.4 | 2009 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | studlife.com | National Universities | cloudflare | cloudflare | 200 | 30.0 | single | 1831 | 0.3 | 2010 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
 | thehilltoponline.com | National Universities | open | none | 200 | 30.0 | yoast | 2993 | 1.0 | 2016 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
-| themiamihurricane.com | National Universities | open | sucuri | 200 |  | yoast | 25629 | 1.8 | 2001 | 3/3 | 3/3 | 3/3 | 2/3 | 3/3 |
+| themiamihurricane.com | National Universities | open | sucuri | 200 |  | yoast | 25629 | 2.1 | 2001 | 3/3 | 3/3 | 3/3 | 2/3 | 3/3 |
 | thestute.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
 | thetriangle.org | National Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |
 | usforacle.com | National Universities | open | none | 200 |  | yoast | 32308 | 2.2 | 2018 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | yucommentator.org | National Universities | open | none | 200 | 10.0 | yoast | 4678 | 0.5 | 2011 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | dailybruin.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | none |  |  |  |  |  |  |  |  |
 | dailynexus.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 40455 | 5.6 | 2026 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
-| michigandaily.com | National Universities | Public Universities | open | none | 200 |  | yoast | 120040 | 8.3 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
-| newuniversity.org | National Universities | Public Universities | open | none | 200 |  | yoast | 17445 | 1.2 | 2026 | 1/3 | 1/3 | 1/3 | 0/3 | 0/3 |
+| michigandaily.com | National Universities | Public Universities | open | none | 200 |  | yoast | 120040 | 9.7 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
+| newuniversity.org | National Universities | Public Universities | open | none | 200 |  | yoast | 17445 | 1.4 | 2026 | 1/3 | 1/3 | 1/3 | 0/3 | 0/3 |
 | thelantern.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |
 
 ## snworks (15)

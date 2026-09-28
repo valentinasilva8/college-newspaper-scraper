@@ -215,3 +215,43 @@ sites:
     institution: "Lipscomb Media"
     base_url: "https://lipscombmedia.com"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 4: first Public Universities papers plus two open National ones.
+  # All are open (no Cloudflare). Michigan Daily and New University fill
+  # the empty Public tab; Miami and RIT add National coverage. RIT is SNO
+  # with Crawl-delay: 6, so it uses the open 6-8 s pace, not 10-14 s.
+  # --------------------------------------------------------------------
+
+  michigan:
+    name: "The Michigan Daily (University of Michigan)"
+    platform: wordpress
+    institution: "The Michigan Daily"
+    base_url: "https://www.michigandaily.com"
+    sitemap_index: "https://www.michigandaily.com/sitemap.xml"
+    exclude_url_patterns: ["/archives/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  uci:
+    name: "New University (University of California, Irvine)"
+    platform: wordpress
+    institution: "New University"
+    base_url: "https://newuniversity.org"
+    sitemap_index: "https://newuniversity.org/sitemap.xml"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  miami:
+    name: "The Miami Hurricane (University of Miami)"
+    platform: wordpress
+    institution: "The Miami Hurricane"
+    base_url: "https://themiamihurricane.com"
+    sitemap_index: "https://themiamihurricane.com/sitemap.xml"
+    exclude_url_patterns: ["/news/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  rit:
+    name: "Reporter (Rochester Institute of Technology)"
+    platform: sno
+    institution: "Reporter"
+    base_url: "https://reporter.rit.edu"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}

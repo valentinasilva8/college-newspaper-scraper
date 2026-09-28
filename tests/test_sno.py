@@ -213,6 +213,7 @@ def test_repo_config_sno_sites_are_complete():
         "smu", "tcu", "biola", "union", "stolaf",
         "conncoll", "fandm", "hillsdale",
         "swarthmore", "occidental", "lipscomb",
+        "michigan", "uci", "miami", "rit",
     } <= set(keys)
     for key in keys:
         cfg = sites[key]
