@@ -76,7 +76,7 @@ Domains reconned: 141
 | tsl.news | Liberal Arts | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
 | wesleyanargus.com | Liberal Arts | open | none | 200 |  | wp_core | 21917 | 1.5 | 2004 | 3/3 | 0/3 | 3/3 | 0/3 | 0/3 |
 | bupipedream.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
-| cityonahillpress.com | National Universities | open | none | 200 |  | yoast | 7032 | 0.5 | 2009 | 3/3 | 2/3 | 3/3 | 1/3 | 3/3 |
+| cityonahillpress.com | National Universities | open | none | 200 |  | yoast | 7032 | 0.6 | 2009 | 3/3 | 2/3 | 3/3 | 1/3 | 3/3 |
 | cuindependent.com | National Universities | open | none | 200 |  | yoast | 2141 | 0.1 | 2025 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | dailycampus.com | National Universities | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
 | dailyorange.com | National Universities | cloudflare | cloudflare | 200 | 1.0 | none |  |  |  |  |  |  |  |  |

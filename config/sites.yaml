@@ -258,3 +258,26 @@ sites:
     institution: "Reporter"
     base_url: "https://reporter.rit.edu"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 5: refill the 12-scraper cap after Chicago and RIT finished.
+  # Open WordPress only (no Cloudflare). Point Loma is the last easy
+  # Christian WP paper; UC Santa Cruz adds National coverage.
+  # --------------------------------------------------------------------
+
+  lomabeat:
+    name: "Loma Beat (Point Loma Nazarene University)"
+    platform: wordpress
+    institution: "Loma Beat"
+    base_url: "https://lomabeat.com"
+    sitemap_index: "https://lomabeat.com/wp-sitemap.xml"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  ucsc:
+    name: "City on a Hill Press (University of California, Santa Cruz)"
+    platform: wordpress
+    institution: "City on a Hill Press"
+    base_url: "https://cityonahillpress.com"
+    sitemap_index: "https://cityonahillpress.com/sitemap_index.xml"
+    exclude_url_patterns: ["/all/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
