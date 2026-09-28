@@ -389,9 +389,9 @@ def fetch_page(
 def extract_wordpress(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
     """Yield Articles for one WordPress paper.
 
-    Full mode: every discovered URL; rows dated before ``corpus_year_start``
-    are skipped after fetch; only ``max_fetch`` caps fetches. Sample mode:
-    per-year backfill until ``per_year`` rows have body text.
+    Full mode: every discovered URL. Rows whose permalink year is before
+    ``corpus_year_start`` are skipped without a fetch. Other pre-floor dates
+    are skipped after fetch. Only ``max_fetch`` caps fetches.
     """
     label = _label(config)
     institution = str(config.get("institution") or label)
@@ -410,6 +410,15 @@ def extract_wordpress(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
     for meta in _discover(config, fetcher):
         url = meta["url"]
         if url in skip_urls:
+            continue
+        url_date = sno.URL_DATE_RE.search(url)
+        if full and url_date and int(url_date.group(1)) < year_floor:
+            # Permalink year is enough; do not spend a fetch on 1990s pages
+            # (Swarthmore's first 200 URLs were all 1998).
+            year = int(url_date.group(1))
+            logger.info("Skipping %s pre-%d URL (%s): %s", label, year_floor, year, url)
+            if callable(failure_sink):
+                failure_sink(url, year, f"pre_{year_floor}")
             continue
         if max_fetch_i is not None and fetched >= max_fetch_i:
             break

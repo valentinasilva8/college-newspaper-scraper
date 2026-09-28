@@ -174,6 +174,25 @@ def test_extract_sno_full_mode(monkeypatch):
     assert len(capped) == 1  # two fetches: the pre-2000 skip and one row
 
 
+def test_url_dated_pre_2000_does_not_consume_max_fetch(monkeypatch):
+    """Swarthmore-style /1998/... permalinks must not burn a bounded test."""
+    metas = [
+        {"url": "https://swarthmorephoenix.com/1998/04/14/old/", "year": 1998},
+        {"url": "https://swarthmorephoenix.com/2000/11/22/ok/", "year": 2000},
+    ]
+    fetched = []
+
+    def fake_fetch(url, *a, **k):
+        fetched.append(url)
+        return {"text": "body", "publication_date": "November 22, 2000", "title": "T", "author": "", "section": "", "subsection": "", "subtitle": ""}
+
+    monkeypatch.setattr(wordpress, "_discover", lambda cfg, f: metas)
+    monkeypatch.setattr(wordpress, "fetch_page", fake_fetch)
+    rows = list(wordpress.extract_wordpress({"mode": "full", "institution": "The Phoenix", "max_fetch": 1}, None))
+    assert fetched == ["https://swarthmorephoenix.com/2000/11/22/ok/"]
+    assert len(rows) == 1 and rows[0].publication_date == "2000-11-22"
+
+
 def test_pipeline_resolves_sno_sites():
     from src import pipeline
 
