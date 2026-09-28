@@ -190,3 +190,28 @@ sites:
     base_url: "https://hillsdalecollegian.com"
     sitemap_index: "https://hillsdalecollegian.com/sitemap_index.xml"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  swarthmore:
+    name: "The Phoenix (Swarthmore College)"
+    platform: wordpress
+    institution: "The Phoenix"
+    base_url: "https://swarthmorephoenix.com"
+    sitemap_index: "https://swarthmorephoenix.com/sitemap_index.xml"
+    exclude_url_patterns: ["^https://swarthmorephoenix.com/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  occidental:
+    name: "The Occidental (Occidental College)"
+    platform: wordpress
+    institution: "The Occidental"
+    base_url: "https://www.theoccidentalnews.com"
+    sitemap_index: "https://www.theoccidentalnews.com/sitemap_index.xml"
+    exclude_url_patterns: ["/blog/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  lipscomb:
+    name: "Lipscomb Media (Lipscomb University)"
+    platform: wordpress
+    institution: "Lipscomb Media"
+    base_url: "https://lipscombmedia.com"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}

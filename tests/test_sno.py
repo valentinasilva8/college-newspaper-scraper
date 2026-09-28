@@ -190,7 +190,11 @@ def test_repo_config_sno_sites_are_complete():
 
     sites = pipeline.load_config()["sites"]
     keys = wordpress.wordpress_site_keys(sites)
-    assert {"smu", "tcu", "biola", "union", "stolaf", "conncoll", "fandm", "hillsdale"} <= set(keys)
+    assert {
+        "smu", "tcu", "biola", "union", "stolaf",
+        "conncoll", "fandm", "hillsdale",
+        "swarthmore", "occidental", "lipscomb",
+    } <= set(keys)
     for key in keys:
         cfg = sites[key]
         assert cfg.get("base_url") and cfg.get("institution"), key

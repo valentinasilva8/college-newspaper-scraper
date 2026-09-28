@@ -13,7 +13,7 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 - No-domain tracker rows: 54
 - Domains shared by multiple universities: 26
 - Workbook `done` markers: 2 (seeded as `workbook_done_no_local_output` unless a built site_key exists)
-- Sites configured in `config/sites.yaml`: 12 (yale, chicago, duke, northwestern, smu, tcu, fandm, union, conncoll, hillsdale, stolaf, biola)
+- Sites configured in `config/sites.yaml`: 15 (yale, chicago, duke, northwestern, smu, tcu, swarthmore, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb)
 
 ## Per-tab counts
 
@@ -32,9 +32,9 @@ listed in two categories counts in both.
 | Category | Domains | Excluded | Recon done | Configured | In a wave |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | National Universities | 100 | 0 | 79 | 6 | 4 |
-| Liberal Arts | 46 | 0 | 43 | 5 | 5 |
+| Liberal Arts | 46 | 0 | 43 | 7 | 7 |
 | Public Universities | 20 | 0 | 16 | 0 | 0 |
-| Christian Colleges | 14 | 5 | 5 | 4 | 4 |
+| Christian Colleges | 14 | 5 | 5 | 5 | 5 |
 
 ## Resolved by `data/target_overrides.csv`
 
