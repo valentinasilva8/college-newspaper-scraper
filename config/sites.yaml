@@ -238,6 +238,9 @@ sites:
     institution: "New University"
     base_url: "https://newuniversity.org"
     sitemap_index: "https://newuniversity.org/sitemap.xml"
+    # tagDiv/Newspaper theme: body lives in .td-post-content, not .entry-content.
+    selectors:
+      body: ".td-post-content"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
 
   miami:

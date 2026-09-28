@@ -265,6 +265,20 @@ def test_selector_overrides_win_when_they_match():
     assert (page["section"], page["author"], page["subtitle"]) == ("Opinion", "Lee Park", "")
 
 
+def test_td_post_content_body_override():
+    url = "https://newuniversity.org/2003/10/06/chicken_and_beer_122/"
+    html = _page(
+        "<article><div class='td-post-content'><p>Ludacris dropped a third album.</p></div>"
+        "<aside><p>a</p><p>b</p><p>c</p></aside></article>"
+    )
+    page = wordpress.fetch_page(
+        url, _HtmlFetcher({url: html}), "New University", "wp_generic",
+        {"body": ".td-post-content"},
+    )
+    assert page["text"] == "Ludacris dropped a third album."
+    assert page.get("error") in (None, "")
+
+
 def test_page_profile_defaults_and_validation():
     assert wordpress.page_profile({"platform": "sno"}) == "sno"
     assert wordpress.page_profile({"platform": "wordpress"}) == "wp_generic"
