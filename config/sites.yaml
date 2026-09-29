@@ -290,3 +290,33 @@ sites:
     sitemap_index: "https://www.usforacle.com/sitemap_index.xml"
     exclude_url_patterns: ["^https://www.usforacle.com/?$"]
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 6: refill three slots after Hillsdale, Occidental, and Loma Beat.
+  # Open WordPress only. Denison and Wesleyan add Liberal Arts; YU adds
+  # National. YU publishes Crawl-delay: 10.
+  # --------------------------------------------------------------------
+
+  denison:
+    name: "The Denisonian (Denison University)"
+    platform: wordpress
+    institution: "The Denisonian"
+    base_url: "https://denisonian.com"
+    sitemap_index: "https://denisonian.com/sitemap.xml"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  wesleyan:
+    name: "The Wesleyan Argus (Wesleyan University)"
+    platform: wordpress
+    institution: "The Wesleyan Argus"
+    base_url: "https://wesleyanargus.com"
+    sitemap_index: "https://wesleyanargus.com/wp-sitemap.xml"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  yu:
+    name: "The Commentator (Yeshiva University)"
+    platform: wordpress
+    institution: "The Commentator"
+    base_url: "https://yucommentator.org"
+    sitemap_index: "https://yucommentator.org/sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 12.0, max_concurrency: 1}

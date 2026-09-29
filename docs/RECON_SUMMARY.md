@@ -74,7 +74,7 @@ Domains reconned: 141
 | thesophian.com | Liberal Arts | open | none | 200 |  | wp_core | 2112 | 0.1 |  | 0/3 | 0/3 | 3/3 | 0/3 | 0/3 |
 | trinitytripod.com | Liberal Arts | open | none | 200 |  | wp_core | 3976 | 0.3 |  | 0/3 | 0/3 | 1/3 | 0/3 | 0/3 |
 | tsl.news | Liberal Arts | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
-| wesleyanargus.com | Liberal Arts | open | none | 200 |  | wp_core | 21917 | 1.5 | 2004 | 3/3 | 0/3 | 3/3 | 0/3 | 0/3 |
+| wesleyanargus.com | Liberal Arts | open | none | 200 |  | wp_core | 21917 | 1.8 | 2004 | 3/3 | 0/3 | 3/3 | 0/3 | 0/3 |
 | bupipedream.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
 | cityonahillpress.com | National Universities | open | none | 200 |  | yoast | 7032 | 0.6 | 2009 | 3/3 | 2/3 | 3/3 | 1/3 | 3/3 |
 | cuindependent.com | National Universities | open | none | 200 |  | yoast | 2141 | 0.1 | 2025 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
@@ -91,7 +91,7 @@ Domains reconned: 141
 | thestute.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
 | thetriangle.org | National Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |
 | usforacle.com | National Universities | open | none | 200 |  | yoast | 32308 | 2.6 | 2018 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
-| yucommentator.org | National Universities | open | none | 200 | 10.0 | yoast | 4678 | 0.5 | 2011 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
+| yucommentator.org | National Universities | open | none | 200 | 10.0 | yoast | 4678 | 0.6 | 2011 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | dailybruin.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | none |  |  |  |  |  |  |  |  |
 | dailynexus.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 40455 | 5.6 | 2026 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | michigandaily.com | National Universities | Public Universities | open | none | 200 |  | yoast | 120040 | 9.7 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
