@@ -90,7 +90,7 @@ Domains reconned: 141
 | themiamihurricane.com | National Universities | open | sucuri | 200 |  | yoast | 25629 | 2.1 | 2001 | 3/3 | 3/3 | 3/3 | 2/3 | 3/3 |
 | thestute.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
 | thetriangle.org | National Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |
-| usforacle.com | National Universities | open | none | 200 |  | yoast | 32308 | 2.2 | 2018 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
+| usforacle.com | National Universities | open | none | 200 |  | yoast | 32308 | 2.6 | 2018 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | yucommentator.org | National Universities | open | none | 200 | 10.0 | yoast | 4678 | 0.5 | 2011 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | dailybruin.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | none |  |  |  |  |  |  |  |  |
 | dailynexus.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 40455 | 5.6 | 2026 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |

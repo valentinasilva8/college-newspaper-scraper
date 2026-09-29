@@ -281,3 +281,12 @@ sites:
     sitemap_index: "https://cityonahillpress.com/sitemap_index.xml"
     exclude_url_patterns: ["/all/?$"]
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  usf:
+    name: "The Oracle (University of South Florida)"
+    platform: wordpress
+    institution: "The Oracle"
+    base_url: "https://www.usforacle.com"
+    sitemap_index: "https://www.usforacle.com/sitemap_index.xml"
+    exclude_url_patterns: ["^https://www.usforacle.com/?$"]
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
