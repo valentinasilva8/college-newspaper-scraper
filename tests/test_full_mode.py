@@ -92,6 +92,19 @@ def test_wrong_header_rejected(isolated_dirs):
         writer.prepare_append_csv("chicago")
 
 
+def test_read_site_csv_allows_oversized_text_fields(isolated_dirs):
+    """Regression: csv default field limit is 128 KiB; long bodies must resume."""
+    site = "chicago"
+    huge = "x" * 200_000
+    ckpt = writer.prepare_append_csv(site)
+    writer.append_article_batch(site, [_article(1, text=huge)], ckpt)
+    loaded = writer.read_site_csv(site)
+    assert len(loaded) == 1
+    assert len(loaded[0].text) == 200_000
+    ckpt2 = writer.prepare_append_csv(site)
+    assert ckpt2.rows_committed == 1
+
+
 def test_empty_text_preflight_blocks(isolated_dirs):
     _, out, _ = isolated_dirs
     writer.write_site_csv("chicago", [_article(1, text="")])

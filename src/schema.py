@@ -6,8 +6,26 @@ writer and pipeline can stay completely site-agnostic.
 
 from __future__ import annotations
 
+import csv
+import sys
 from dataclasses import asdict, dataclass, fields
 from typing import Any
+
+
+def raise_csv_field_limit() -> None:
+    """Allow article bodies larger than csv's default 128 KiB field cap.
+
+    Python's csv reader rejects a field over 131072 bytes. The Michigan Daily
+    senior-goodbye compilations (and similar roundups) exceed that; writing
+    them succeeds, then the next resume or status report crashes.
+    """
+    try:
+        csv.field_size_limit(sys.maxsize)
+    except OverflowError:
+        csv.field_size_limit(2**31 - 1)
+
+
+raise_csv_field_limit()
 
 
 @dataclass
