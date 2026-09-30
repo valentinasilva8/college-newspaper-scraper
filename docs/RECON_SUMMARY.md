@@ -86,7 +86,7 @@ Domains reconned: 141
 | pepperdine-graphic.com | National Universities | open | none | 200 |  | single | 1 | 0.0 |  | 0/1 | 0/1 | 0/1 | 0/1 | 0/1 |
 | stanforddaily.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 39111 | 5.4 | 2009 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | studlife.com | National Universities | cloudflare | cloudflare | 200 | 30.0 | single | 1831 | 0.3 | 2010 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
-| thehilltoponline.com | National Universities | open | none | 200 | 30.0 | yoast | 2993 | 1.0 | 2016 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| thehilltoponline.com | National Universities | open | none | 200 | 30.0 | yoast | 2993 | 1.1 | 2016 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | themiamihurricane.com | National Universities | open | sucuri | 200 |  | yoast | 25629 | 2.1 | 2001 | 3/3 | 3/3 | 3/3 | 2/3 | 3/3 |
 | thestute.com | National Universities | open | none | 200 |  | none |  |  |  |  |  |  |  |  |
 | thetriangle.org | National Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |

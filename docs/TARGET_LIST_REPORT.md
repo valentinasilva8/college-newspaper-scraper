@@ -13,7 +13,7 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 - No-domain tracker rows: 54
 - Domains shared by multiple universities: 26
 - Workbook `done` markers: 2 (seeded as `workbook_done_no_local_output` unless a built site_key exists)
-- Sites configured in `config/sites.yaml`: 25 (yale, chicago, duke, northwestern, michigan, uci, miami, yu, rit, smu, ucsc, usf, tcu, swarthmore, wesleyan, denison, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb, lomabeat)
+- Sites configured in `config/sites.yaml`: 27 (yale, chicago, duke, northwestern, michigan, uci, miami, yu, hilltop, rit, smu, ucsc, usf, tcu, swarthmore, tsl, wesleyan, denison, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb, lomabeat)
 
 ## Per-tab counts
 
@@ -31,8 +31,8 @@ listed in two categories counts in both.
 
 | Category | Domains | Excluded | Recon done | Configured | In a wave |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| National Universities | 100 | 0 | 79 | 13 | 11 |
-| Liberal Arts | 46 | 0 | 43 | 9 | 9 |
+| National Universities | 100 | 0 | 79 | 14 | 12 |
+| Liberal Arts | 46 | 0 | 43 | 10 | 10 |
 | Public Universities | 20 | 0 | 16 | 2 | 2 |
 | Christian Colleges | 14 | 5 | 5 | 6 | 6 |
 

@@ -105,6 +105,16 @@ def test_read_site_csv_allows_oversized_text_fields(isolated_dirs):
     assert ckpt2.rows_committed == 1
 
 
+def test_long_body_warns_but_stays_in_one_csv(isolated_dirs, caplog):
+    site = "chicago"
+    huge = "x" * (writer.CSV_FIELD_WARN_CHARS + 1)
+    ckpt = writer.prepare_append_csv(site)
+    with caplog.at_level("WARNING"):
+        writer.append_article_batch(site, [_article(1, text=huge)], ckpt)
+    assert any("Long article body" in rec.message for rec in caplog.records)
+    assert (isolated_dirs[1] / "chicago.csv").is_file()
+
+
 def test_empty_text_preflight_blocks(isolated_dirs):
     _, out, _ = isolated_dirs
     writer.write_site_csv("chicago", [_article(1, text="")])

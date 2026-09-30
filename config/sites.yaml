@@ -320,3 +320,29 @@ sites:
     base_url: "https://yucommentator.org"
     sitemap_index: "https://yucommentator.org/sitemap.xml"
     rate_limit: {delay_min: 10.0, delay_max: 12.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 7: refill two of seven open slots. Yoast WordPress only (current
+  # sitemap walker). TSL covers five Claremont Liberal Arts colleges.
+  # Hilltop is National; robots Crawl-delay: 30.
+  # --------------------------------------------------------------------
+
+  tsl:
+    name: "The Student Life (Claremont Colleges)"
+    platform: wordpress
+    institution: "The Student Life"
+    base_url: "https://tsl.news"
+    sitemap_index: "https://tsl.news/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://tsl.news/?$"
+      - "/wp-content/uploads/"
+      - "\\.(?:jpg|jpeg|png|gif|webp|pdf)$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  hilltop:
+    name: "The Hilltop (Howard University)"
+    platform: wordpress
+    institution: "The Hilltop"
+    base_url: "https://thehilltoponline.com"
+    sitemap_index: "https://thehilltoponline.com/sitemap.xml"
+    rate_limit: {delay_min: 30.0, delay_max: 32.0, max_concurrency: 1}

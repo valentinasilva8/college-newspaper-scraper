@@ -13,11 +13,12 @@ from typing import Any
 
 
 def raise_csv_field_limit() -> None:
-    """Allow article bodies larger than csv's default 128 KiB field cap.
+    """Lift csv's default 128 KiB field cap so long article bodies resume.
 
-    Python's csv reader rejects a field over 131072 bytes. The Michigan Daily
-    senior-goodbye compilations (and similar roundups) exceed that; writing
-    them succeeds, then the next resume or status report crashes.
+    One CSV per site. Do not split a paper across files: checkpoints store a
+    byte offset into that file, and full mode skips URLs already in it.
+    Compilation pages (e.g. Michigan Daily senior goodbyes) can exceed 128 KiB;
+    writing them always worked, but the next read crashed until this ran.
     """
     try:
         csv.field_size_limit(sys.maxsize)

@@ -24,6 +24,9 @@ OUTPUT_DIR = PROJECT_ROOT / "output"
 LOG_DIR = PROJECT_ROOT / "logs"
 BATCH_SIZE = 50
 FAILED_FIELDNAMES = ["url", "year", "reason"]
+# Python's csv module historically capped fields at 128 KiB. We raise that
+# limit in schema.py; warn when a body would have tripped the old cap.
+CSV_FIELD_WARN_CHARS = 131_072
 
 
 def _write_csv(path: Path, articles: Sequence[Article]) -> int:
@@ -109,6 +112,13 @@ def _serialize_rows(articles: Sequence[Article], *, include_header: bool) -> byt
     if include_header:
         writer.writeheader()
     for article in articles:
+        n = len(article.text or "")
+        if n > CSV_FIELD_WARN_CHARS:
+            logger.warning(
+                "Long article body (%d chars) for %s; keeping a single CSV",
+                n,
+                article.url,
+            )
         writer.writerow(article.to_row())
     return buf.getvalue().encode("utf-8")
 

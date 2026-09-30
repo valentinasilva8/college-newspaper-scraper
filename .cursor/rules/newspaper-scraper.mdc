@@ -18,3 +18,6 @@ alwaysApply: true
 - Do not commit, merge, or push unless the user explicitly asks.
 - Do not refactor `extractor.py` into `src/sites/` until crash-safe full mode is merged and the lead schedules that step.
 - Follow `docs/AGENT_PLAYBOOK.md` and `AGENTS.md`. Keep them consistent with this rule file.
+- Finished CSVs: download only papers that **just** finished. Do not recopy older CSVs into `~/Downloads`. Those copies were already moved to Google Drive and deleted locally to free disk.
+- One CSV per site. Do not split a paper across files. `csv.field_size_limit` is raised at import so long article bodies (compilation pages) can be read back; splitting would break checkpoints and resume.
+- Status tab: dual **Christian Colleges | Liberal Arts** papers (St. Olaf) group under **Christian Colleges**, not Liberal Arts.
