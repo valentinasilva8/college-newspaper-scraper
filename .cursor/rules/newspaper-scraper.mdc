@@ -6,7 +6,7 @@ alwaysApply: true
 # Newspaper scraper rules
 
 - Frozen 10-column schema/order in `src/schema.py`. Do not rename, reorder, or drop columns.
-- Honest research UA by default. Browser UA only for approved Duke/Yale paths.
+- Honest research UA by default. Browser UA is allowed when a site refuses the honest UA (Prof. Kim, 2026-10-01). Still no proxies, CAPTCHA solving, or IP rotation.
 - No proxies, CAPTCHA solving, paywall/login bypass, or robots ignoring.
 - Article-page date is authoritative. Never assign year from sitemap `lastmod`.
 - `lastmod` may select bounded-test candidates only.

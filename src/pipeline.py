@@ -20,8 +20,8 @@ from urllib.parse import urlparse
 import yaml
 
 from .checkpoint import DomainLock
-from .extractor import FULL_MODE_SITES, SITE_EXTRACTORS
-from .fetcher import Fetcher, SiteBlockedError
+from .extractor import BROWSER_UA, FULL_MODE_SITES, SITE_EXTRACTORS
+from .fetcher import USER_AGENT, Fetcher, SiteBlockedError
 from .schema import Article
 from .wordpress import extract_wordpress, is_wordpress_site, wordpress_site_keys
 from .writer import (
@@ -90,10 +90,14 @@ def _build_fetcher(site_config: dict) -> Fetcher:
         block_kwargs["block_cooldowns"] = tuple(
             float(m) * 60 for m in rl["block_cooldowns_min"]
         )
+    ua = BROWSER_UA if site_config.get("use_browser_ua") else (
+        site_config.get("user_agent") or USER_AGENT
+    )
     return Fetcher(
         delay_min=rl.get("delay_min", 1.0),
         delay_max=rl.get("delay_max", 3.0),
         max_concurrency=rl.get("max_concurrency", 1),
+        user_agent=ua,
         **block_kwargs,
     )
 

@@ -30,7 +30,9 @@ unless the lead opens an explicit change.
 ## Access and politeness
 
 - Default User-Agent: honest research bot from `config/sites.yaml`.
-- Browser UA: **Duke and Yale only**, and only on already-approved paths.
+- Browser UA: allowed when a site refuses the honest research UA (Prof. Kim,
+  2026-10-01). Default remains the honest bot. No proxies, CAPTCHA solving, or
+  IP rotation.
 - Honor `robots.txt` and configured crawl delays.
 - One process per domain (domain lock). Max 2–3 domains in parallel on the laptop.
 - No proxies, CAPTCHA farms, paywall/login bypass, or IP rotation.

@@ -4,7 +4,7 @@
 **Status:** Plan only (no cloud resources created; no scraper code changed in this pass)  
 **Date:** 2026-09-24  
 **Repo:** `college-newspaper-scraper`  
-**Hard rules still apply:** frozen 10-column schema; crawl delays; `max_concurrency: 1` per domain; honest research UA by default; browser UA only for approved Duke/Yale paths; no proxies / IP rotation / CAPTCHA solving; `config/sites.yaml` is lead-owned; corpus CSVs never in Git.
+**Hard rules still apply:** frozen 10-column schema; crawl delays; `max_concurrency: 1` per domain; honest research UA by default; browser UA when a site refuses the honest UA (Prof. Kim 2026-10-01); no proxies / IP rotation / CAPTCHA solving; `config/sites.yaml` is lead-owned; corpus CSVs never in Git.
 
 ---
 

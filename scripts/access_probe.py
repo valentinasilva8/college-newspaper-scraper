@@ -3,8 +3,11 @@
 
 This is the gate to run FIRST on any new server. A datacenter IP may be blocked
 where a home IP was not (Duke's WAF and Yale's bot checkpoint are the known
-risks). If a site is blocked here, the fallback is to run that site from an
-approved machine -- never proxies or IP rotation.
+risks). Probe with the honest research UA first, then retry with a browser UA
+if the site refuses it (Prof. Kim, 2026-10-01). Duke and Yale start with the
+browser UA because they always refuse the honest bot. If a site is still
+blocked, the fallback is to run it from an approved machine -- never proxies
+or IP rotation.
 
 The probe is deliberately tiny: robots.txt, the homepage, and two already-known
 article URLs per site, with the site's configured crawl delay between requests.
@@ -41,8 +44,9 @@ BROWSER_UA = (
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )
 
-# Only these sites are approved for the browser UA (see AGENTS.md).
-BROWSER_UA_SITES = {"duke", "yale"}
+# These sites always refuse the honest UA, so the probe starts with a browser
+# UA. Every other site is honest-first, then browser fallback if refused.
+ALWAYS_BROWSER_SITES = {"duke", "yale"}
 
 TIMEOUT = 30.0
 
@@ -62,12 +66,17 @@ def site_settings(config: dict, site: str) -> dict:
     return merged
 
 
-def user_agent_for(site: str, config: dict) -> str:
-    if site in BROWSER_UA_SITES:
-        return BROWSER_UA
+def honest_user_agent(config: dict) -> str:
     return (config.get("defaults") or {}).get("user_agent") or (
         "CollegeNewspaperResearchBot/1.0 (academic research)"
     )
+
+
+def user_agent_for(site: str, config: dict) -> str:
+    """Initial UA: browser for Duke/Yale, honest research bot otherwise."""
+    if site in ALWAYS_BROWSER_SITES:
+        return BROWSER_UA
+    return honest_user_agent(config)
 
 
 def probe_one(url: str, ua: str) -> dict:
@@ -113,9 +122,14 @@ def verdict_for(results: list[dict]) -> str:
     return "DEGRADED"
 
 
-def probe_site(site: str, config: dict, probe_urls: list[str]) -> dict:
+def _probe_with_ua(
+    site: str,
+    config: dict,
+    probe_urls: list[str],
+    ua: str,
+    ua_label: str,
+) -> dict:
     settings = site_settings(config, site)
-    ua = user_agent_for(site, config)
     delay = float((settings.get("rate_limit") or {}).get("delay_min", 3.0))
     base_url = settings.get("base_url") or ""
     if not base_url and probe_urls:
@@ -162,11 +176,33 @@ def probe_site(site: str, config: dict, probe_urls: list[str]) -> dict:
 
     return {
         "site": site,
-        "user_agent": "browser" if site in BROWSER_UA_SITES else "honest_research",
+        "user_agent": ua_label,
         "delay_used": delay,
         "verdict": verdict_for(results),
         "results": results,
+        "used_browser_fallback": False,
     }
+
+
+def probe_site(site: str, config: dict, probe_urls: list[str]) -> dict:
+    """Honest UA first; browser UA if that attempt is not OK.
+
+    Duke and Yale skip the honest pass because they always 403 it.
+    """
+    if site in ALWAYS_BROWSER_SITES:
+        return _probe_with_ua(site, config, probe_urls, BROWSER_UA, "browser")
+
+    honest = _probe_with_ua(
+        site, config, probe_urls, honest_user_agent(config), "honest_research"
+    )
+    if honest["verdict"] == "OK":
+        return honest
+
+    browser = _probe_with_ua(site, config, probe_urls, BROWSER_UA, "browser")
+    browser["used_browser_fallback"] = True
+    browser["honest_verdict"] = honest["verdict"]
+    browser["honest_results"] = honest["results"]
+    return browser
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -201,7 +237,12 @@ def main(argv: list[str] | None = None) -> int:
         for item in outcome["results"]:
             status = item["status"] if item["status"] is not None else item["error"]
             print(f"  {item['kind']:<9} {str(status):<16} {item['bytes']:>8}B  {item['url']}")
-        print(f"  verdict: {outcome['verdict']}  (UA: {outcome['user_agent']})")
+        ua_note = outcome["user_agent"]
+        if outcome.get("used_browser_fallback"):
+            ua_note += f" (honest was {outcome.get('honest_verdict')})"
+        print(f"  verdict: {outcome['verdict']}  (UA: {ua_note})")
+        if outcome.get("used_browser_fallback") and outcome["verdict"] == "OK":
+            print("  note: set use_browser_ua: true on this site before the 200-test")
 
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")

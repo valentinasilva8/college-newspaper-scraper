@@ -7,8 +7,9 @@ Responsibilities:
 - Exponential backoff + retries on transient failures.
 - Reads and respects robots.txt before every fetch, with explicit
   behavior for the 404 and fetch-error cases.
-- Sends an honest research User-Agent on every request (and uses the
-  same string when evaluating robots.txt rules).
+- Sends the configured User-Agent on every request (and uses the same
+  string when evaluating robots.txt rules). Default is the honest research
+  bot; ``use_browser_ua`` switches to a browser UA (Prof. Kim 2026-10-01).
 - Backs off when a site starts refusing us (403/429): after
   ``block_threshold`` consecutive refusals it sleeps through escalating
   cooldowns, probing once after each, and raises ``SiteBlockedError`` when
@@ -30,8 +31,8 @@ from urllib3.util.retry import Retry
 
 logger = logging.getLogger(__name__)
 
-# Honest, consistent research User-Agent. Used for BOTH the robots.txt
-# evaluation and every outbound request -- we do not impersonate a browser.
+# Default honest research User-Agent. Used for both robots.txt evaluation
+# and outbound requests unless a site sets use_browser_ua.
 USER_AGENT = (
     "CollegeNewspaperResearchBot/1.0 "
     "(academic research; contact: valentinatsilva@proton.me)"

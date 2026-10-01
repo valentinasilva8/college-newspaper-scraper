@@ -80,7 +80,7 @@ scheduling:
 
 - Families: WordPress (SNO + generic), SNWorks, BLOX, custom, archive/OCR.
 - Access profiles: `open`, `cloudflare` (slow pace; consider asking the paper),
-  `waf_browser_ua` (needs PI approval), `datacenter_blocked` (Mac only),
+  `waf_browser_ua` (browser UA allowed; Prof. Kim 2026-10-01), `datacenter_blocked` (Mac only),
   `excluded`.
 - `est_days = est_urls x delay / 86400` (about 12 s per article at 10-14 s).
 - Add 3-4 papers to the server at a time; check 403 counts after 24 h.
@@ -95,8 +95,8 @@ scheduling:
   ~476 `empty_body`. Inspect with
   `journalctl -u newspaper-scraper@biola -n 50 --no-pager` before adding more
   Cloudflare papers.
-- Honest UA reaches the SNWorks homepages tested so far (Princeton, JHU, Penn,
-  Cornell, Dartmouth); Brown and Rice return 403 like Duke. Bring this to
-  Prof. Kim before building `src/snworks.py`.
+- SNWorks: honest UA works on several homepages; Brown/Rice 403 like Duke.
+  Browser UA is now PI-approved when needed. Adapter `src/snworks.py` still
+  unbuilt.
 - Northwestern allow-list email (eic@ and web@dailynorthwestern.com).
 - Pick the first wave (12 per category; Christian has only 9 usable papers).

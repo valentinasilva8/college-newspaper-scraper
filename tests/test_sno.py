@@ -216,12 +216,25 @@ def test_repo_config_sno_sites_are_complete():
         "michigan", "uci", "miami", "rit",
         "lomabeat", "ucsc", "usf",
         "denison", "wesleyan", "yu",
-        "tsl", "hilltop",
+        "tsl", "hilltop", "ucsd",
     } <= set(keys)
     for key in keys:
         cfg = sites[key]
         assert cfg.get("base_url") and cfg.get("institution"), key
         assert cfg["rate_limit"]["delay_min"] >= 6, key  # published Crawl-delay
+
+
+def test_build_fetcher_honors_browser_ua_flag():
+    from src.extractor import BROWSER_UA
+    from src.fetcher import USER_AGENT
+    from src.pipeline import _build_fetcher
+
+    honest = _build_fetcher({"rate_limit": {"delay_min": 0, "delay_max": 0}})
+    assert honest.user_agent == USER_AGENT
+    browser = _build_fetcher(
+        {"rate_limit": {"delay_min": 0, "delay_max": 0}, "use_browser_ua": True}
+    )
+    assert browser.user_agent == BROWSER_UA
 
 
 # ----------------------------------------------------------------------

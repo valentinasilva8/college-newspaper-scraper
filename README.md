@@ -192,9 +192,9 @@ Rules:
 
 - **Honest User-Agent by default** —
   `CollegeNewspaperResearchBot/1.0 (academic research; contact: valentinatsilva@proton.me)`,
-  used for both robots.txt checks and requests. A browser UA is used **only**
-  where a site's bot protection blocks the honest one (Duke), and that decision
-  is documented per site.
+  used for both robots.txt checks and requests. If a site refuses the honest
+  UA, a browser UA is allowed (Prof. Kim, 2026-10-01). That decision is
+  documented per site. No proxies, CAPTCHA solving, or IP rotation.
 - **Sequential by default** — `max_concurrency: 1`. One request at a time per
   domain: intentional politeness toward small newsroom servers, not a limit.
 - **Polite, configurable delays** — randomized per request. Northwestern uses

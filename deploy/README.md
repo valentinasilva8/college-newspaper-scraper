@@ -6,7 +6,7 @@ file is the button-by-button version.
 
 **Rules that do not change on a server:** frozen 10-column schema, configured
 crawl delays, one process per domain, honest research UA by default (browser UA
-only for approved Duke/Yale paths), no proxies or IP rotation, corpus CSVs never
+when a site refuses the honest UA; Prof. Kim 2026-10-01), no proxies or IP rotation, corpus CSVs never
 in Git, and no multi-hour run without explicit approval.
 
 ---

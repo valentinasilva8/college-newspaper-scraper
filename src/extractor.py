@@ -59,8 +59,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Browser User-Agent used ONLY where a site's bot protection blocks the honest
-# research UA (Duke WAF, Yale Vercel checkpoint). Documented in RECON.md.
+# Browser User-Agent used when a site refuses the honest research bot
+# (Duke WAF, Yale Vercel checkpoint, and any later site that needs it).
+# Prof. Kim approved this on 2026-10-01. Documented per site.
 BROWSER_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"

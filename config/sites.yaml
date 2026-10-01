@@ -346,3 +346,17 @@ sites:
     base_url: "https://thehilltoponline.com"
     sitemap_index: "https://thehilltoponline.com/sitemap.xml"
     rate_limit: {delay_min: 30.0, delay_max: 32.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 8: Cloudflare canary. SNO + CF like Northwestern; start at the
+  # post-block 10-14 s pace. Honest UA first; set use_browser_ua if the
+  # site refuses it (Prof. Kim 2026-10-01).
+  # --------------------------------------------------------------------
+
+  ucsd:
+    name: "The UCSD Guardian (University of California San Diego)"
+    platform: sno
+    institution: "The UCSD Guardian"
+    base_url: "https://ucsdguardian.org"
+    sitemap_index: "https://ucsdguardian.org/wp-sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

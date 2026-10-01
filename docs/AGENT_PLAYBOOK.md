@@ -9,7 +9,8 @@ Frozen article schema: ten columns in `src/schema.py` (do not reorder).
 ## 0. Hard rules (read first)
 
 1. Honest research User-Agent is the default.
-2. Browser UA is allowed only for approved Duke and Yale access paths.
+2. Browser UA is allowed when a site refuses the honest research UA
+   (Prof. Kim, 2026-10-01). Default remains the honest bot.
 3. No proxies, CAPTCHA solving, paywall/login bypass, or robots ignoring.
 4. On-page publication date is authoritative; never assign year from sitemap
    `<lastmod>`.
@@ -169,7 +170,7 @@ Weekly ritual:
 | --- | --- |
 | Host | Always-on Mac (this laptop) for now |
 | Yale Library archive as corpus data | **Decide later** (see supervisor question below) |
-| Browser UA for Duke/Yale | Allowed whenever needed |
+| Browser UA | Allowed when a site refuses the honest UA (Prof. Kim 2026-10-01) |
 | Crosswords / galleries / podcasts | Exclude when body text is empty (do not store empty rows) |
 | Priority after Chicago | Finish already-started sites (Chicago → Northwestern → Duke → Yale current site) |
 | Git | Commit foundation code; keep `output/*.csv` local only (gitignored) |

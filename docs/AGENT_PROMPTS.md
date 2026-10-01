@@ -84,8 +84,8 @@ For each domain, document (Markdown under recon/ or docs/recon/):
 
 Hard limits:
 - Discovery only — no article-body corpus scraping
-- Honest research UA unless a site is already on the approved browser-UA list
-  (Duke/Yale only today)
+- Honest research UA by default; browser UA if the site refuses it
+  (Prof. Kim 2026-10-01)
 - No proxies/CAPTCHA/paywall bypass
 - Do not edit config/sites.yaml or src/extractor.py
 - Do not commit/push
