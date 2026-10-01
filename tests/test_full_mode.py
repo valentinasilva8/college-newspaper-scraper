@@ -395,6 +395,37 @@ def test_nw_full_mode_max_fetch(monkeypatch):
     assert len(articles) == 4
 
 
+def test_duke_full_mode_max_fetch(monkeypatch):
+    import src.extractor as ex
+
+    metas = [
+        {
+            "url": f"https://www.dukechronicle.com/article/story-{i}-20200101",
+            "title": f"Story {i}",
+            "author": "",
+            "publication_date": "",
+            "section": "News",
+        }
+        for i in range(10)
+    ]
+    monkeypatch.setattr(ex, "_discover_duke", lambda cfg, f: metas)
+
+    def fake_page(url, fetcher, config=None):
+        return {
+            "text": "body",
+            "author": "A",
+            "publication_date": "2020-01-01",
+            "subtitle": "",
+            "section": "News",
+            "subsection": "",
+        }
+
+    monkeypatch.setattr(ex, "_extract_text_duke", fake_page)
+    articles = list(ex.extract_duke({"mode": "full", "max_fetch": 4}, None))
+    assert len(articles) == 4
+    assert all(a.institution.startswith("The Chronicle") for a in articles)
+
+
 def test_nw_full_mode_rejects_rss_discovery():
     from src.extractor import extract_northwestern
 
@@ -531,4 +562,4 @@ def test_full_mode_rejects_unsupported_site():
     from src.pipeline import run_site_full
 
     with pytest.raises(ValueError, match="no full-mode extractor"):
-        run_site_full("duke", {"sites": {"duke": {}}}, set())
+        run_site_full("yale", {"sites": {"yale": {}}}, set())

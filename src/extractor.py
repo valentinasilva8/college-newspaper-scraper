@@ -857,10 +857,91 @@ def _duke_session() -> requests.Session:
 
 
 def _discover_duke(config: dict, fetcher: "Fetcher") -> Iterable[dict]:
-    """Discovery: stratified by year (deep pagination) or recent listing pages."""
+    """Discovery: full News listing walk, stratified sample, or recent pages."""
+    if str(config.get("mode", "sample")).lower() == "full":
+        return _discover_duke_full(config)
     if config.get("year_start") is not None and config.get("per_year"):
         return _discover_duke_stratified(config)
     return _discover_duke_recent(config)
+
+
+def _discover_duke_full(config: dict) -> list[dict]:
+    """Walk /section/news pagination and collect every article card.
+
+    Other Chronicle sections are not in this pass. Stop early when ``max_fetch``
+    new URLs (not already in skip_urls) are in hand, so a 200-test does not
+    crawl the whole listing.
+    """
+    base_url = config.get("base_url", "https://www.dukechronicle.com")
+    section_url = config.get("section_url") or f"{base_url}/section/news"
+    section_label = config.get("section_label", "News")
+    max_pages = int(config.get("duke_full_max_pages") or 2000)
+    skip_urls = _skip_urls(config)
+    max_fetch = config.get("max_fetch")
+    pending_needed = int(max_fetch) if max_fetch is not None else None
+
+    session = _duke_session()
+    by_url: dict[str, dict] = {}
+    next_url: str | None = section_url
+    pages = 0
+
+    while next_url and pages < max_pages:
+        _polite_sleep(config)
+        try:
+            resp = session.get(next_url, timeout=15)
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            logger.warning("Duke full discovery failed for %s: %s", next_url, exc)
+            break
+
+        soup = make_soup(resp.text)
+        for a in soup.select("a[href^='/article/']"):
+            href = a.get("href", "")
+            if not href:
+                continue
+            full = urljoin(base_url, href)
+            title = clean_text(a.get_text(" "))
+            if not title:
+                title = re.sub(
+                    r"^read\s+", "", clean_text(a.get("aria-label", "")), flags=re.IGNORECASE
+                )
+            existing = by_url.get(full)
+            if existing is None:
+                by_url[full] = {
+                    "url": full,
+                    "title": title,
+                    "author": "",
+                    "publication_date": "",
+                    "section": section_label,
+                }
+            elif title and not existing["title"]:
+                existing["title"] = title
+
+        pending = sum(1 for url in by_url if url not in skip_urls)
+        if pending_needed is not None and pending >= pending_needed:
+            break
+
+        next_url = None
+        pagination = soup.select_one("ol.index-pagination")
+        if pagination:
+            for a in pagination.select("a[href]"):
+                if "next" in a.get_text(" ").strip().lower():
+                    next_url = urljoin(base_url, a["href"])
+                    break
+        pages += 1
+        if pages == 1 or pages % DISCOVERY_PROGRESS_EVERY == 0:
+            logger.info(
+                "Duke full discovery: %d listing page(s), %d article URL(s)",
+                pages,
+                len(by_url),
+            )
+
+    logger.info(
+        "Duke full discovery: %d article URL(s) from %d listing page(s) (/section/news)",
+        len(by_url),
+        pages,
+    )
+    return list(by_url.values())
 
 
 def _discover_duke_recent(config: dict) -> list[dict]:
@@ -1312,11 +1393,22 @@ def _duke_section_from_jsonld(soup: BeautifulSoup) -> tuple[str, str]:
 
 
 def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
-    """Yield Duke Chronicle Article records (HTML listing + full-text fetch)."""
+    """Yield Duke Chronicle Article records (HTML listing + full-text fetch).
+
+    Sample mode: stratified ``per_year`` from /section/news, capped by
+    ``max_articles``. Full mode: every News listing URL, crash-safe via the
+    pipeline. Other Chronicle sections are out of scope until a later pass.
+    """
     institution = "The Chronicle (Duke University)"
-    max_articles = config.get("max_articles", 100)
+    full = str(config.get("mode", "sample")).lower() == "full"
     skip_urls = _skip_urls(config)
+    failure_sink = config.get("failure_sink")
+    year_floor = int(config.get("corpus_year_start", 2000))
+    max_articles = int(config.get("max_articles", 100))
+    max_fetch = config.get("max_fetch") if full else None
+    max_fetch_i = int(max_fetch) if max_fetch is not None else None
     count = 0
+    fetched = 0
     for meta in _discover_duke(config, fetcher):
         url = meta.get("url", "")
         if not url:
@@ -1324,18 +1416,30 @@ def extract_duke(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         if url in skip_urls:
             logger.debug("Skipping already-scraped Duke URL: %s", url)
             continue
-        if count >= max_articles:
+        slug_year = _year_from_duke_slug(url)
+        if full and slug_year is not None and slug_year < year_floor:
+            logger.info("Skipping Duke pre-%d URL (%s): %s", year_floor, slug_year, url)
+            if callable(failure_sink):
+                failure_sink(url, slug_year, f"pre_{year_floor}")
+            continue
+        if full:
+            if max_fetch_i is not None and fetched >= max_fetch_i:
+                break
+            fetched += 1
+        elif count >= max_articles:
             break
         page = _extract_text_duke(url, fetcher, config)
         text = page.get("text", "")
         if not text:
             logger.warning("Skipping Duke article with empty body: %s", url)
+            if callable(failure_sink):
+                failure_sink(url, slug_year, "empty_body")
             continue
         raw_date = page.get("publication_date") or meta.get("publication_date", "")
         section = page.get("section", "") or meta.get("section", "")
         yield Article(
             institution=institution,
-            title=meta.get("title", ""),
+            title=meta.get("title", "") or page.get("title", ""),
             subtitle=page.get("subtitle", ""),
             author=clean_text(page.get("author", "") or meta.get("author", "")),
             publication_date=normalize_date(raw_date, url),
@@ -2230,4 +2334,4 @@ SITE_EXTRACTORS = {
 
 # Sites whose extractor implements mode: full. Any other site would silently run
 # its sample selection through the full-mode writer.
-FULL_MODE_SITES = frozenset({"chicago", "northwestern"})
+FULL_MODE_SITES = frozenset({"chicago", "northwestern", "duke"})

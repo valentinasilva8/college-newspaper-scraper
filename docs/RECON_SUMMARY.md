@@ -37,8 +37,6 @@ Domains reconned: 141
 | nyunews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 22473 | 3.1 | 2012 | 2/3 | 1/3 | 2/3 | 2/3 | 2/3 |
 | pittnews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 55585 | 7.7 | 2001 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
 | reporter.rit.edu | National Universities | open | none | 200 | 6.0 | wp_core | 2136 | 0.2 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
-| sbstatesman.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 13648 | 1.9 | 2007 | 3/3 | 2/3 | 3/3 | 3/3 | 3/3 |
-| technicianonline.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 41019 | 5.7 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thefordhamram.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 13499 | 1.9 | 2012 | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
 | thehoya.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | single | 294 | 0.0 | 2026 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
 | thetigercu.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | yoast | 7447 | 1.0 | 2016 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
@@ -47,6 +45,8 @@ Domains reconned: 141
 | villanovan.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 15606 | 2.2 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | dailyillini.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 100435 | 13.9 | 2007 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
 | dailytarheel.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  |  |  |  |  |  |  |  |  |  |
+| sbstatesman.com | National Universities | Public Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 13648 | 1.9 | 2007 | 3/3 | 2/3 | 3/3 | 3/3 | 3/3 |
+| technicianonline.com | National Universities | Public Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 41019 | 5.7 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thedailytexan.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | wp_core | 51559 | 7.2 | 2011 | 2/3 | 1/3 | 2/3 | 2/3 | 2/3 |
 | ucsdguardian.org | National Universities | Public Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 22587 | 3.1 | 2012 | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
 

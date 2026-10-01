@@ -27,7 +27,8 @@ sites:
     base_url: "https://www.dukechronicle.com"
     # SNWorks CMS, server-rendered. No RSS endpoint. WAF (awselb) returns 403
     # for the honest research UA, so the Duke module uses a browser UA (see
-    # extractor.py / RECON.md). Discovery walks /section/news deep pagination.
+    # extractor.py / RECON.md). Full mode walks /section/news pagination;
+    # other Chronicle sections are a later pass.
     method: "html"
     section_url: "https://www.dukechronicle.com/section/news"
     section_label: "News"
@@ -43,6 +44,7 @@ sites:
       article_body: ".article-content"        # body container (.full-article.prose)
       byline: ".article--byline"              # author byline
       time: "time[datetime]"                  # publication date
+    use_browser_ua: true
     rate_limit:
       # robots.txt (readable with browser UA) requests Crawl-delay: 10.
       delay_min: 10.0
@@ -359,4 +361,52 @@ sites:
     institution: "The UCSD Guardian"
     base_url: "https://ucsdguardian.org"
     sitemap_index: "https://ucsdguardian.org/wp-sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 9: fill the 12-scraper cap. Public-first Cloudflare WordPress/SNO
+  # (adapter already built). Pace 10-14 s. NC State and Stony Brook are
+  # public flagships listed only on the National tab; overrides add Public.
+  # --------------------------------------------------------------------
+
+  texan:
+    name: "The Daily Texan (University of Texas at Austin)"
+    platform: sno
+    institution: "The Daily Texan"
+    base_url: "https://thedailytexan.com"
+    sitemap_index: "https://thedailytexan.com/sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  nexus:
+    name: "Daily Nexus (University of California, Santa Barbara)"
+    platform: wordpress
+    institution: "Daily Nexus"
+    base_url: "https://dailynexus.com"
+    sitemap_index: "https://dailynexus.com/sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  illini:
+    name: "The Daily Illini (University of Illinois Urbana-Champaign)"
+    platform: sno
+    institution: "The Daily Illini"
+    base_url: "https://dailyillini.com"
+    sitemap_index: "https://dailyillini.com/sitemap.xml"
+    exclude_url_patterns:
+      - "^https://dailyillini.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  technician:
+    name: "Technician (North Carolina State University)"
+    platform: sno
+    institution: "Technician"
+    base_url: "https://technicianonline.com"
+    sitemap_index: "https://technicianonline.com/sitemap.xml"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  statesman:
+    name: "The Statesman (Stony Brook University)"
+    platform: sno
+    institution: "The Statesman"
+    base_url: "https://sbstatesman.com"
+    sitemap_index: "https://sbstatesman.com/sitemap.xml"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
