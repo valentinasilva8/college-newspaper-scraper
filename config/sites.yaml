@@ -410,3 +410,30 @@ sites:
     base_url: "https://sbstatesman.com"
     sitemap_index: "https://sbstatesman.com/sitemap.xml"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 10: refill two slots after Miami and USF finished. Public-first
+  # Cloudflare WordPress/SNO. Pace 10-14 s. The Lantern (Ohio State) is
+  # skipped: robots Crawl-delay 30 and wp-sitemap.xml times out. UCR is
+  # a public campus listed only on the National tab.
+  # --------------------------------------------------------------------
+
+  tarheel:
+    name: "The Daily Tar Heel (University of North Carolina at Chapel Hill)"
+    platform: sno
+    institution: "The Daily Tar Heel"
+    base_url: "https://dailytarheel.com"
+    sitemap_index: "https://dailytarheel.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://dailytarheel.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  highlander:
+    name: "The Highlander (University of California, Riverside)"
+    platform: wordpress
+    institution: "The Highlander"
+    base_url: "https://www.highlandernews.org"
+    sitemap_index: "https://www.highlandernews.org/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://www.highlandernews.org/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

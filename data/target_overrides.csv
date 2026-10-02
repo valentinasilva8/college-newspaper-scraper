@@ -31,6 +31,8 @@ dailynexus.com,,,9,,"Cloudflare WordPress Yoast. Public. Pace 10-14 s."
 dailyillini.com,,,9,,"Cloudflare SNO Yoast. Public. Pace 10-14 s."
 technicianonline.com,National Universities | Public Universities,,9,,"NC State is a public flagship listed only on the National tab."
 sbstatesman.com,National Universities | Public Universities,,9,,"Stony Brook is a public flagship listed only on the National tab."
+dailytarheel.com,,,10,,"Cloudflare SNO. Public. Use wp-sitemap.xml; sitemap.xml returns 403. Pace 10-14 s."
+highlandernews.org,National Universities | Public Universities,,10,,"UC Riverside is a public campus listed only on the National tab. Cloudflare Yoast WP. Pace 10-14 s."
 dukechronicle.com,,waf_browser_ua,,,AWS ELB WAF refuses the honest UA; browser UA approved for Duke only
 yaledailynews.com,,datacenter_blocked,,,Vercel checkpoint; returns 429 to the AWS server; run from the Mac only
 anchor.hope.edu,Christian Colleges | Liberal Arts,,,,Liberal Arts row 87 lists Hope College without a URL

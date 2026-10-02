@@ -81,7 +81,6 @@ Domains reconned: 141
 | dailycampus.com | National Universities | open | none | 200 |  | other |  |  |  |  |  |  |  |  |
 | dailyorange.com | National Universities | cloudflare | cloudflare | 200 | 1.0 | none |  |  |  |  |  |  |  |  |
 | gleaner.rutgers.edu | National Universities | open | none | 200 |  | wp_core | 379 | 0.0 | 2019 | 3/3 | 0/3 | 3/3 | 0/3 | 0/3 |
-| highlandernews.org | National Universities | cloudflare | cloudflare | 200 |  | yoast | 10136 | 1.4 | 2012 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | panthernow.com | National Universities | open | none | 200 | 60.0 | yoast | 24730 | 17.2 | 2004 | 2/3 | 2/3 | 2/3 | 1/3 | 2/3 |
 | pepperdine-graphic.com | National Universities | open | none | 200 |  | single | 1 | 0.0 |  | 0/1 | 0/1 | 0/1 | 0/1 | 0/1 |
 | stanforddaily.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 39111 | 5.4 | 2009 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
@@ -94,6 +93,7 @@ Domains reconned: 141
 | yucommentator.org | National Universities | open | none | 200 | 10.0 | yoast | 4678 | 0.6 | 2011 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
 | dailybruin.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | none |  |  |  |  |  |  |  |  |
 | dailynexus.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 40455 | 5.6 | 2026 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
+| highlandernews.org | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 10136 | 1.4 | 2012 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | michigandaily.com | National Universities | Public Universities | open | none | 200 |  | yoast | 120040 | 9.7 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | newuniversity.org | National Universities | Public Universities | open | none | 200 |  | yoast | 17445 | 1.4 | 2026 | 1/3 | 1/3 | 1/3 | 0/3 | 0/3 |
 | thelantern.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | other |  |  |  |  |  |  |  |  |

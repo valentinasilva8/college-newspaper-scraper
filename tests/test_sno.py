@@ -218,6 +218,7 @@ def test_repo_config_sno_sites_are_complete():
         "denison", "wesleyan", "yu",
         "tsl", "hilltop", "ucsd",
         "texan", "nexus", "illini", "technician", "statesman",
+        "tarheel", "highlander",
     } <= set(keys)
     for key in keys:
         cfg = sites[key]
