@@ -426,6 +426,7 @@ sites:
     sitemap_index: "https://dailytarheel.com/wp-sitemap.xml"
     exclude_url_patterns:
       - "^https://dailytarheel.com/?$"
+      - "/multimedia/"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
 
   highlander:
