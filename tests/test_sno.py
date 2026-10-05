@@ -193,6 +193,25 @@ def test_url_dated_pre_2000_does_not_consume_max_fetch(monkeypatch):
     assert len(rows) == 1 and rows[0].publication_date == "2000-11-22"
 
 
+def test_year_month_pre_2000_does_not_consume_max_fetch(monkeypatch):
+    """Collegian-style /1999/11/slug/ permalinks must not burn a bounded test."""
+    metas = [
+        {"url": "https://dailycollegian.com/1999/11/old-story/", "year": 1999},
+        {"url": "https://dailycollegian.com/2009/10/ok-story/", "year": 2009},
+    ]
+    fetched = []
+
+    def fake_fetch(url, *a, **k):
+        fetched.append(url)
+        return {"text": "body", "publication_date": "October 21, 2009", "title": "T", "author": "", "section": "", "subsection": "", "subtitle": ""}
+
+    monkeypatch.setattr(wordpress, "_discover", lambda cfg, f: metas)
+    monkeypatch.setattr(wordpress, "fetch_page", fake_fetch)
+    rows = list(wordpress.extract_wordpress({"mode": "full", "institution": "Collegian", "max_fetch": 1}, None))
+    assert fetched == ["https://dailycollegian.com/2009/10/ok-story/"]
+    assert len(rows) == 1 and rows[0].publication_date == "2009-10-21"
+
+
 def test_pipeline_resolves_sno_sites():
     from src import pipeline
 

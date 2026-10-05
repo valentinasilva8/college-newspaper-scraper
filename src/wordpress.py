@@ -411,7 +411,9 @@ def extract_wordpress(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         url = meta["url"]
         if url in skip_urls:
             continue
-        url_date = sno.URL_DATE_RE.search(url)
+        url_date = sno.URL_DATE_RE.search(url) or re.search(
+            r"/((?:19|20)\d{2})/\d{2}/", url
+        )
         if full and url_date and int(url_date.group(1)) < year_floor:
             # Permalink year is enough; do not spend a fetch on 1990s pages
             # (Swarthmore's first 200 URLs were all 1998).
