@@ -474,3 +474,40 @@ sites:
     exclude_url_patterns:
       - "^https://pittnews.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 12: refill three slots after UCSD finished (plus two already
+  # open). Public-first Cloudflare SNO. Pitt stays queued after satire
+  # 403s. CU Independent is skipped: recon sampled SEO/spam pages, not
+  # the student paper. Carleton fills the third slot (Liberal Arts SNO).
+  # --------------------------------------------------------------------
+
+  tiger:
+    name: "The Tiger (Clemson University)"
+    platform: sno
+    institution: "The Tiger"
+    base_url: "https://thetigercu.com"
+    sitemap_index: "https://thetigercu.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://thetigercu.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  vector:
+    name: "The Vector (New Jersey Institute of Technology)"
+    platform: sno
+    institution: "The Vector"
+    base_url: "https://njitvector.com"
+    sitemap_index: "https://njitvector.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://njitvector.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  carleton:
+    name: "The Carletonian (Carleton College)"
+    platform: sno
+    institution: "The Carletonian"
+    base_url: "https://thecarletonian.com"
+    sitemap_index: "https://thecarletonian.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thecarletonian.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

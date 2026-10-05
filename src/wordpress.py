@@ -71,11 +71,24 @@ def _cache_path(config: dict):
     return CACHE_DIR / f"{key}_sitemap.json"
 
 
-def _bucket_year(url: str, lastmod: str) -> int | None:
-    """Candidate bucket: permalink year when present, else sitemap lastmod."""
-    m = sno.URL_DATE_RE.search(url)
+_YEAR_MONTH_RE = re.compile(r"/((?:19|20)\d{2})/\d{2}/")
+_MDY_RE = re.compile(r"/(\d{2})/(\d{2})/((?:19|20)\d{2})(?:/|$)")
+
+
+def _permalink_year(url: str) -> int | None:
+    """Year from /YYYY/MM/DD/, /YYYY/MM/, or trailing /MM/DD/YYYY/ permalinks."""
+    m = sno.URL_DATE_RE.search(url) or _YEAR_MONTH_RE.search(url)
     if m:
         return int(m.group(1))
+    m = _MDY_RE.search(url)
+    return int(m.group(3)) if m else None
+
+
+def _bucket_year(url: str, lastmod: str) -> int | None:
+    """Candidate bucket: permalink year when present, else sitemap lastmod."""
+    year = _permalink_year(url)
+    if year is not None:
+        return year
     return _year_from_iso(lastmod)
 
 
@@ -411,13 +424,11 @@ def extract_wordpress(config: dict, fetcher: "Fetcher") -> Iterator[Article]:
         url = meta["url"]
         if url in skip_urls:
             continue
-        url_date = sno.URL_DATE_RE.search(url) or re.search(
-            r"/((?:19|20)\d{2})/\d{2}/", url
-        )
-        if full and url_date and int(url_date.group(1)) < year_floor:
+        permalink_year = _permalink_year(url)
+        if full and permalink_year is not None and permalink_year < year_floor:
             # Permalink year is enough; do not spend a fetch on 1990s pages
             # (Swarthmore's first 200 URLs were all 1998).
-            year = int(url_date.group(1))
+            year = permalink_year
             logger.info("Skipping %s pre-%d URL (%s): %s", label, year_floor, year, url)
             if callable(failure_sink):
                 failure_sink(url, year, f"pre_{year_floor}")

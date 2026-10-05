@@ -212,6 +212,25 @@ def test_year_month_pre_2000_does_not_consume_max_fetch(monkeypatch):
     assert len(rows) == 1 and rows[0].publication_date == "2009-10-21"
 
 
+def test_mdy_pre_2000_does_not_consume_max_fetch(monkeypatch):
+    """Minnesota Daily /MM/DD/YYYY/ permalinks must not burn a bounded test."""
+    metas = [
+        {"url": "https://mndaily.com/news/old/06/26/1996/snoadmin/", "year": 1996},
+        {"url": "https://mndaily.com/news/ok/09/24/2026/snoadmin/", "year": 2026},
+    ]
+    fetched = []
+
+    def fake_fetch(url, *a, **k):
+        fetched.append(url)
+        return {"text": "body", "publication_date": "September 24, 2026", "title": "T", "author": "", "section": "", "subsection": "", "subtitle": ""}
+
+    monkeypatch.setattr(wordpress, "_discover", lambda cfg, f: metas)
+    monkeypatch.setattr(wordpress, "fetch_page", fake_fetch)
+    rows = list(wordpress.extract_wordpress({"mode": "full", "institution": "Minnesota Daily", "max_fetch": 1}, None))
+    assert fetched == ["https://mndaily.com/news/ok/09/24/2026/snoadmin/"]
+    assert len(rows) == 1 and rows[0].publication_date == "2026-09-24"
+
+
 def test_pipeline_resolves_sno_sites():
     from src import pipeline
 
@@ -239,6 +258,7 @@ def test_repo_config_sno_sites_are_complete():
         "texan", "nexus", "illini", "technician", "statesman",
         "tarheel", "highlander",
         "collegian", "mndaily", "pitt",
+        "tiger", "vector", "carleton",
     } <= set(keys)
     for key in keys:
         cfg = sites[key]

@@ -35,7 +35,10 @@ dailytarheel.com,,,10,,"Cloudflare SNO. Public. Use wp-sitemap.xml; sitemap.xml 
 highlandernews.org,National Universities | Public Universities,,10,,"UC Riverside is a public campus listed only on the National tab. Cloudflare Yoast WP. Pace 10-14 s."
 dailycollegian.com,National Universities | Public Universities,,11,,"UMass Amherst is a public flagship listed only on the National tab. Cloudflare SNO. Use wp-sitemap.xml. Pace 10-14 s."
 mndaily.com,National Universities | Public Universities,,11,,"Minnesota is a public flagship listed only on the National tab. Cloudflare SNO Yoast. Pace 10-14 s."
-pittnews.com,National Universities | Public Universities,,11,,"Pitt is a public university listed only on the National tab. Cloudflare SNO Yoast. Pace 10-14 s."
+pittnews.com,National Universities | Public Universities,,11,,"Pitt is a public university listed only on the National tab. Cloudflare SNO Yoast. Pace 10-14 s. 200-test HTTP 403 on /opinions/satire/; not started."
+thetigercu.com,National Universities | Public Universities,,12,,"Clemson is a public university listed only on the National tab. Cloudflare SNO Yoast. Pace 10-14 s."
+njitvector.com,National Universities | Public Universities,,12,,"NJIT is a public university listed only on the National tab. Cloudflare SNO. Use wp-sitemap.xml. Pace 10-14 s."
+thecarletonian.com,,,12,,"Cloudflare SNO. Liberal Arts. wp-sitemap.xml. Pace 10-14 s."
 dukechronicle.com,,waf_browser_ua,,,AWS ELB WAF refuses the honest UA; browser UA approved for Duke only
 yaledailynews.com,,datacenter_blocked,,,Vercel checkpoint; returns 429 to the AWS server; run from the Mac only
 anchor.hope.edu,Christian Colleges | Liberal Arts,,,,Liberal Arts row 87 lists Hope College without a URL
