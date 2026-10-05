@@ -438,3 +438,39 @@ sites:
     exclude_url_patterns:
       - "^https://www.highlandernews.org/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 11: refill three slots after Highlander, Statesman, and TSL
+  # finished. Public flagships listed only on the National tab.
+  # Cloudflare SNO, pace 10-14 s.
+  # --------------------------------------------------------------------
+
+  collegian:
+    name: "The Massachusetts Daily Collegian (University of Massachusetts Amherst)"
+    platform: sno
+    institution: "The Massachusetts Daily Collegian"
+    base_url: "https://dailycollegian.com"
+    sitemap_index: "https://dailycollegian.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://dailycollegian.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  mndaily:
+    name: "The Minnesota Daily (University of Minnesota)"
+    platform: sno
+    institution: "The Minnesota Daily"
+    base_url: "https://mndaily.com"
+    sitemap_index: "https://mndaily.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://mndaily.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  pitt:
+    name: "The Pitt News (University of Pittsburgh)"
+    platform: sno
+    institution: "The Pitt News"
+    base_url: "https://pittnews.com"
+    sitemap_index: "https://pittnews.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://pittnews.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

@@ -13,7 +13,7 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 - No-domain tracker rows: 54
 - Domains shared by multiple universities: 26
 - Workbook `done` markers: 2 (seeded as `workbook_done_no_local_output` unless a built site_key exists)
-- Sites configured in `config/sites.yaml`: 35 (yale, chicago, duke, northwestern, michigan, tarheel, ucsd, texan, uci, illini, nexus, statesman, technician, miami, highlander, yu, hilltop, rit, smu, ucsc, usf, tcu, swarthmore, tsl, wesleyan, denison, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb, lomabeat)
+- Sites configured in `config/sites.yaml`: 38 (yale, chicago, duke, northwestern, michigan, tarheel, ucsd, texan, uci, illini, nexus, statesman, mndaily, technician, collegian, miami, pitt, highlander, yu, hilltop, rit, smu, ucsc, usf, tcu, swarthmore, tsl, wesleyan, denison, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb, lomabeat)
 
 ## Per-tab counts
 
@@ -31,15 +31,18 @@ listed in two categories counts in both.
 
 | Category | Domains | Excluded | Recon done | Configured | In a wave |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| National Universities | 100 | 0 | 79 | 22 | 20 |
+| National Universities | 100 | 0 | 79 | 25 | 23 |
 | Liberal Arts | 46 | 0 | 43 | 10 | 10 |
-| Public Universities | 23 | 0 | 19 | 10 | 10 |
+| Public Universities | 26 | 0 | 22 | 13 | 13 |
 | Christian Colleges | 14 | 5 | 5 | 6 | 6 |
 
 ## Resolved by `data/target_overrides.csv`
 
 - `sbstatesman.com` — Stony Brook University, SUNY: categories 'National Universities' -> 'National Universities | Public Universities'
+- `mndaily.com` — University of Minnesota, Twin Cities: categories 'National Universities' -> 'National Universities | Public Universities'
 - `technicianonline.com` — North Carolina State University: categories 'National Universities' -> 'National Universities | Public Universities'
+- `dailycollegian.com` — University of Massachusetts, Amherst: categories 'National Universities' -> 'National Universities | Public Universities'
+- `pittnews.com` — University of Pittsburgh: categories 'National Universities' -> 'National Universities | Public Universities'
 - `highlandernews.org` — University of California, Riverside: categories 'National Universities' -> 'National Universities | Public Universities'
 - `concordiensis.com` — Union College | Union Univeristy: categories 'Christian Colleges | Liberal Arts' -> 'Liberal Arts'
 - `instagram.com` — College of the Ozarks: excluded (instagram_only)

@@ -28,14 +28,11 @@ Domains reconned: 141
 | trinitonian.com | Liberal Arts | cloudflare | cloudflare | 200 |  | yoast | 8018 | 1.1 | 2025 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | williamsrecord.com | Liberal Arts | cloudflare | cloudflare | 200 |  | wp_core | 4397 | 0.6 | 2018 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | bcheights.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | yoast | 20636 | 2.9 | 2015 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
-| dailycollegian.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 52160 | 7.2 | 2009 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | dailyfreepress.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | none |  |  |  |  |  |  |  |  |
 | gwhatchet.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 60745 | 8.4 | 2008 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | marquettewire.org | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 32180 | 4.5 | 2011 | 3/3 | 3/3 | 3/3 | 2/3 | 3/3 |
-| mndaily.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 80597 | 11.2 | 1996 | 2/3 | 1/3 | 3/3 | 1/3 | 3/3 |
 | njitvector.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 336 | 0.0 | 2021 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | nyunews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 22473 | 3.1 | 2012 | 2/3 | 1/3 | 2/3 | 2/3 | 2/3 |
-| pittnews.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 55585 | 7.7 | 2001 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
 | reporter.rit.edu | National Universities | open | none | 200 | 6.0 | wp_core | 2136 | 0.2 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thefordhamram.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 13499 | 1.9 | 2012 | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
 | thehoya.com | National Universities | cloudflare | cloudflare | 200 | 6.0 | single | 294 | 0.0 | 2026 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
@@ -43,8 +40,11 @@ Domains reconned: 141
 | tulanehullabaloo.com | National Universities | cloudflare | cloudflare | 200 |  | yoast | 11289 | 1.6 | 2010 | 2/3 | 1/3 | 3/3 | 2/3 | 3/3 |
 | vanderbilthustler.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 10310 | 1.4 | 2016 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | villanovan.com | National Universities | cloudflare | cloudflare | 200 |  | wp_core | 15606 | 2.2 | 2020 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
+| dailycollegian.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | wp_core | 52160 | 7.2 | 2009 | 2/3 | 2/3 | 2/3 | 2/3 | 2/3 |
 | dailyillini.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 100435 | 13.9 | 2007 | 2/3 | 2/3 | 3/3 | 2/3 | 3/3 |
 | dailytarheel.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  |  |  |  |  |  |  |  |  |  |
+| mndaily.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 80597 | 11.2 | 1996 | 2/3 | 1/3 | 3/3 | 1/3 | 3/3 |
+| pittnews.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | yoast | 55585 | 7.7 | 2001 | 1/3 | 1/3 | 2/3 | 1/3 | 2/3 |
 | sbstatesman.com | National Universities | Public Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 13648 | 1.9 | 2007 | 3/3 | 2/3 | 3/3 | 3/3 | 3/3 |
 | technicianonline.com | National Universities | Public Universities | cloudflare | cloudflare | 200 | 6.0 | wp_core | 41019 | 5.7 | 2013 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | thedailytexan.com | National Universities | Public Universities | cloudflare | cloudflare | 200 |  | wp_core | 51559 | 7.2 | 2011 | 2/3 | 1/3 | 2/3 | 2/3 | 2/3 |
