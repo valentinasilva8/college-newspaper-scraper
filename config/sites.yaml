@@ -511,3 +511,29 @@ sites:
     exclude_url_patterns:
       - "^https://thecarletonian.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 13: refill two slots after Northwestern and Vector finished.
+  # Remaining easy Public WP/SNO papers are blocked (Pitt 403, Lantern
+  # timeout, SNWorks/BLOX adapters unbuilt). Liberal Arts SNO instead.
+  # --------------------------------------------------------------------
+
+  macweekly:
+    name: "The Mac Weekly (Macalester College)"
+    platform: sno
+    institution: "The Mac Weekly"
+    base_url: "https://themacweekly.com"
+    sitemap_index: "https://themacweekly.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://themacweekly.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  sandb:
+    name: "Scarlet & Black (Grinnell College)"
+    platform: sno
+    institution: "Scarlet & Black"
+    base_url: "https://thesandb.com"
+    sitemap_index: "https://thesandb.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thesandb.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
