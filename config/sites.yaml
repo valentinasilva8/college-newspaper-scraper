@@ -537,3 +537,28 @@ sites:
     exclude_url_patterns:
       - "^https://thesandb.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 14: refill two slots after Carleton and Clemson finished.
+  # Remaining easy Public WP/SNO papers are still blocked.
+  # --------------------------------------------------------------------
+
+  colgate:
+    name: "The Colgate Maroon-News (Colgate University)"
+    platform: sno
+    institution: "The Colgate Maroon-News"
+    base_url: "https://thecolgatemaroonnews.com"
+    sitemap_index: "https://thecolgatemaroonnews.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thecolgatemaroonnews.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  bucknellian:
+    name: "The Bucknellian (Bucknell University)"
+    platform: sno
+    institution: "The Bucknellian"
+    base_url: "https://bucknellian.net"
+    sitemap_index: "https://bucknellian.net/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://bucknellian.net/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

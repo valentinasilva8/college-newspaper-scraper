@@ -260,6 +260,7 @@ def test_repo_config_sno_sites_are_complete():
         "collegian", "mndaily", "pitt",
         "tiger", "vector", "carleton",
         "macweekly", "sandb",
+        "colgate", "bucknellian",
     } <= set(keys)
     for key in keys:
         cfg = sites[key]
