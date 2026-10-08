@@ -607,3 +607,48 @@ sites:
     exclude_url_patterns:
       - "^https://nyunews.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 16: open WordPress buffer to fill CAP 16 (no Cloudflare).
+  # Site key "bachelor" = live Wabash Bachelor CMS (not hyku archive_wabash).
+  # --------------------------------------------------------------------
+
+  sophian:
+    name: "The Sophian (Smith College)"
+    platform: wordpress
+    institution: "The Sophian"
+    base_url: "https://thesophian.com"
+    sitemap_index: "https://thesophian.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thesophian.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  tripod:
+    name: "The Trinity Tripod (Trinity College)"
+    platform: wordpress
+    institution: "The Trinity Tripod"
+    base_url: "https://trinitytripod.com"
+    sitemap_index: "https://trinitytripod.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://trinitytripod.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  wheatonwire:
+    name: "The Wheaton Wire (Wheaton College Massachusetts)"
+    platform: wordpress
+    institution: "The Wheaton Wire"
+    base_url: "https://wheatonwire.com"
+    sitemap_index: "https://wheatonwire.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://wheatonwire.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  bachelor:
+    name: "The Bachelor (Wabash College)"
+    platform: wordpress
+    institution: "The Bachelor"
+    base_url: "https://bachelor.wabash.edu"
+    sitemap_index: "https://bachelor.wabash.edu/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://bachelor.wabash.edu/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
