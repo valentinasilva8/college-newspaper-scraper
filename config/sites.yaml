@@ -562,3 +562,48 @@ sites:
     exclude_url_patterns:
       - "^https://bucknellian.net/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 15: ready buffer for auto-fill (4 open slots after Mac Weekly /
+  # Scarlet & Black / Technician / Nexus finished). Easy WP/SNO only.
+  # --------------------------------------------------------------------
+
+  hatchet:
+    name: "The Hatchet (George Washington University)"
+    platform: sno
+    institution: "The Hatchet"
+    base_url: "https://gwhatchet.com"
+    sitemap_index: "https://gwhatchet.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://gwhatchet.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  stanford:
+    name: "The Stanford Daily (Stanford University)"
+    platform: wordpress
+    institution: "The Stanford Daily"
+    base_url: "https://stanforddaily.com"
+    sitemap_index: "https://stanforddaily.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://stanforddaily.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  marquette:
+    name: "Marquette Wire (Marquette University)"
+    platform: sno
+    institution: "Marquette Wire"
+    base_url: "https://marquettewire.org"
+    sitemap_index: "https://marquettewire.org/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://marquettewire.org/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  nyu:
+    name: "Washington Square News (New York University)"
+    platform: sno
+    institution: "Washington Square News"
+    base_url: "https://nyunews.com"
+    sitemap_index: "https://nyunews.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://nyunews.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

@@ -311,8 +311,8 @@ def classify(
     sitemap_kind = (t.get("sitemap_kind") or "").strip()
     crawl_delay = t.get("crawl_delay") or ""
 
-    if site_key and not status_val:
-        # Configured but not on Status / not started.
+    if site_key and status_val in ("", "queued"):
+        # Configured in sites.yaml; waiting on probe / 200-test / mark-ready.
         if access == "datacenter_blocked":
             return "mac_only", site_key, t.get("notes") or "datacenter blocked"
         return "candidate", site_key, "configured; needs 200-test before ready"
