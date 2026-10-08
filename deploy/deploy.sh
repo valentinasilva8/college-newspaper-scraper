@@ -27,23 +27,27 @@ echo "==> Installing requirements"
 echo "==> Refreshing scrape queue"
 .venv/bin/python scripts/refresh_queue.py || true
 
-echo "==> Installing/updating systemd units"
-sudo install -m 644 deploy/newspaper-scraper@.service \
-  /etc/systemd/system/newspaper-scraper@.service
-sudo install -m 644 deploy/newspaper-fill-slot.service \
-  /etc/systemd/system/newspaper-fill-slot.service
-sudo install -m 644 deploy/newspaper-fill-slot.timer \
-  /etc/systemd/system/newspaper-fill-slot.timer
-sudo install -m 755 deploy/fill_slot.sh deploy/fill_slot.sh
-if [[ ! -f /etc/sudoers.d/newspaper-fill-slot ]]; then
-  echo "scraper ALL=NOPASSWD: /bin/systemctl start newspaper-fill-slot.service" \
-    | sudo tee /etc/sudoers.d/newspaper-fill-slot >/dev/null
-  sudo chmod 440 /etc/sudoers.d/newspaper-fill-slot
+echo "==> Installing/updating systemd units (needs root; skipped if unavailable)"
+if sudo -n true 2>/dev/null; then
+  sudo install -m 644 deploy/newspaper-scraper@.service \
+    /etc/systemd/system/newspaper-scraper@.service
+  sudo install -m 644 deploy/newspaper-fill-slot.service \
+    /etc/systemd/system/newspaper-fill-slot.service
+  sudo install -m 644 deploy/newspaper-fill-slot.timer \
+    /etc/systemd/system/newspaper-fill-slot.timer
+  chmod 755 deploy/fill_slot.sh
+  if [[ ! -f /etc/sudoers.d/newspaper-fill-slot ]]; then
+    echo "scraper ALL=NOPASSWD: /bin/systemctl start newspaper-fill-slot.service" \
+      | sudo tee /etc/sudoers.d/newspaper-fill-slot >/dev/null
+    sudo chmod 440 /etc/sudoers.d/newspaper-fill-slot
+  fi
+  sudo systemctl daemon-reload
+  sudo systemctl enable newspaper-fill-slot.timer
+  sudo systemctl start newspaper-fill-slot.timer || true
+else
+  echo "    (scraper has no passwordless sudo for install; ubuntu should run:"
+  echo "     sudo bash -c 'install -m 644 deploy/newspaper-*.service deploy/newspaper-*.timer /etc/systemd/system/ && systemctl daemon-reload && systemctl enable --now newspaper-fill-slot.timer')"
 fi
-sudo systemctl daemon-reload
-# Timer is safe with an empty ready list (no-op). Enable so slots fill when ready.
-sudo systemctl enable newspaper-fill-slot.timer
-sudo systemctl start newspaper-fill-slot.timer || true
 
 echo "==> Running offline tests"
 .venv/bin/python -m pytest tests -q
