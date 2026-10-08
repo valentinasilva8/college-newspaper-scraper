@@ -26,6 +26,12 @@ RestartPreventExitStatus=75
 StandardOutput=append:/opt/newspaper-scraper/logs/systemd_%i.log
 StandardError=append:/opt/newspaper-scraper/logs/systemd_%i.log
 
+# When this unit stops (success or failure), try to start the next ready paper.
+# newspaper-fill-slot.service runs as root and only enables site_keys already
+# listed in data/queue_ready.txt. The scraper user needs passwordless:
+#   scraper ALL=NOPASSWD: /bin/systemctl start newspaper-fill-slot.service
+ExecStopPost=-/usr/bin/sudo -n /bin/systemctl start newspaper-fill-slot.service
+
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full

@@ -118,6 +118,30 @@ sudo -u scraper /opt/newspaper-scraper/.venv/bin/python \
 The nightly backup also uploads `status/status.json` to the bucket, so you can
 read progress from your phone without SSH.
 
+## 7b. Keep 12 slots filled from the ready queue
+
+`data/scrape_queue.csv` lists every ranking-CSV paper and its state. Only rows
+with `queue_state=ready` (and a matching `site_key` in `data/queue_ready.txt`)
+may auto-start. The VM never invents a new site.
+
+```bash
+# Rebuild the queue from data/rankings/*.csv + Status + systemd
+sudo -u scraper /opt/newspaper-scraper/.venv/bin/python \
+  /opt/newspaper-scraper/scripts/refresh_queue.py
+
+# After a 200-test passes, clear the paper for auto-fill
+sudo -u scraper /opt/newspaper-scraper/.venv/bin/python \
+  /opt/newspaper-scraper/scripts/refresh_queue.py --mark-ready SITE_KEY
+
+# Timer (every 5 min) + ExecStopPost on each scraper unit
+sudo systemctl enable --now newspaper-fill-slot.timer
+sudo systemctl start newspaper-fill-slot.service   # run once now
+```
+
+`deploy/fill_slot.sh` counts running `newspaper-scraper@*` units and, if under
+12, `systemctl enable --now` the next ready key. Exit code 75 (site blocked)
+does not promote untested candidates.
+
 ## 8. Shipping new code
 
 Cloud agents open pull requests; you merge. Then:

@@ -43,6 +43,8 @@ themacweekly.com,,,13,,"Cloudflare SNO Yoast. Liberal Arts. Pace 10-14 s."
 thesandb.com,,,13,,"Cloudflare SNO. Liberal Arts. Use wp-sitemap.xml. Pace 10-14 s."
 thecolgatemaroonnews.com,,,14,,"Cloudflare SNO. Liberal Arts. Use wp-sitemap.xml. Pace 10-14 s."
 bucknellian.net,,,14,,"Cloudflare SNO Yoast. Liberal Arts. Pace 10-14 s."
+bachelor.wabash.edu,,,,,Liberal Arts blank filled 2026-10-08: The Bachelor. Yoast sitemap.
+wheatonwire.com,,,,,Liberal Arts blank filled 2026-10-08: The Wheaton Wire (Wheaton College MA). Use wp-sitemap.xml. Distinct from Wheaton IL Record.
 dukechronicle.com,,waf_browser_ua,,,AWS ELB WAF refuses the honest UA; browser UA approved for Duke only
 yaledailynews.com,,datacenter_blocked,,,Vercel checkpoint; returns 429 to the AWS server; run from the Mac only
 anchor.hope.edu,Christian Colleges | Liberal Arts,,,,Liberal Arts row 87 lists Hope College without a URL

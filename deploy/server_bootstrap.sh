@@ -99,7 +99,19 @@ install -m 644 "${APP_DIR}/deploy/newspaper-backup.service" \
   /etc/systemd/system/newspaper-backup.service
 install -m 644 "${APP_DIR}/deploy/newspaper-backup.timer" \
   /etc/systemd/system/newspaper-backup.timer
+install -m 644 "${APP_DIR}/deploy/newspaper-fill-slot.service" \
+  /etc/systemd/system/newspaper-fill-slot.service
+install -m 644 "${APP_DIR}/deploy/newspaper-fill-slot.timer" \
+  /etc/systemd/system/newspaper-fill-slot.timer
+install -m 755 "${APP_DIR}/deploy/fill_slot.sh" \
+  "${APP_DIR}/deploy/fill_slot.sh"
+# Let the scraper user trigger a fill when a unit stops (ExecStopPost).
+cat > /etc/sudoers.d/newspaper-fill-slot <<EOF
+${APP_USER} ALL=NOPASSWD: /bin/systemctl start newspaper-fill-slot.service
+EOF
+chmod 440 /etc/sudoers.d/newspaper-fill-slot
 systemctl daemon-reload
+systemctl enable newspaper-fill-slot.timer
 
 log "Installing logrotate policy"
 cat > /etc/logrotate.d/newspaper-scraper <<EOF
@@ -140,4 +152,9 @@ Next steps (in order):
        sudo systemctl enable --now newspaper-scraper@chicago
   5. Enable nightly backups:
        sudo systemctl enable --now newspaper-backup.timer
+  6. Keep the 12-scraper cap full from the ready queue (timer installed):
+       sudo systemctl enable --now newspaper-fill-slot.timer
+       # After a 200-test passes on the VM:
+       sudo -u ${APP_USER} ${APP_DIR}/.venv/bin/python \\
+         ${APP_DIR}/scripts/refresh_queue.py --mark-ready SITE_KEY
 EOF

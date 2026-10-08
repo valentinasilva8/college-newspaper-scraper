@@ -50,6 +50,13 @@ unless the lead opens an explicit change.
 - Do not commit full corpus CSVs. Fixtures go under `tests/fixtures/`.
 - Do not `git commit`, `merge`, or `push` unless the user explicitly asks.
 
+## Scrape queue
+
+`data/scrape_queue.csv` (built by `scripts/refresh_queue.py` from
+`data/rankings/*.csv` + Status) is the remaining-work list. Auto-fill on the
+VM only starts `queue_state=ready` site keys (200-test passed, then
+`--mark-ready`). See `deploy/fill_slot.sh` and `deploy/README.md` §7b.
+
 ## Approval gates
 
 1. Offline unit/fixture tests before network use for new full-mode code.

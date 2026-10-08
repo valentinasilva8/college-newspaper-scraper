@@ -7,10 +7,10 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 
 - Workbook tabs: 4
 - Source university rows: 239
-- Rows with a URL: 185
-- Rows missing a URL: 54
-- Unique domains: 155
-- No-domain tracker rows: 54
+- Rows with a URL: 187
+- Rows missing a URL: 52
+- Unique domains: 157
+- No-domain tracker rows: 52
 - Domains shared by multiple universities: 26
 - Workbook `done` markers: 2 (seeded as `workbook_done_no_local_output` unless a built site_key exists)
 - Sites configured in `config/sites.yaml`: 45 (yale, chicago, duke, northwestern, michigan, tarheel, ucsd, texan, uci, illini, nexus, statesman, mndaily, technician, collegian, miami, pitt, tiger, highlander, vector, yu, hilltop, rit, smu, ucsc, usf, tcu, swarthmore, tsl, carleton, sandb, wesleyan, colgate, macweekly, bucknellian, denison, fandm, occidental, union, conncoll, hillsdale, stolaf, biola, lipscomb, lomabeat)
@@ -20,7 +20,7 @@ Suspicious rows are flagged only; nothing is auto-fixed or deleted.
 | Tab | Rows | With URL | Missing URL |
 | --- | ---: | ---: | ---: |
 | National Universities | 101 | 101 | 0 |
-| Liberal Arts | 102 | 49 | 53 |
+| Liberal Arts | 102 | 51 | 51 |
 | Public Universities | 20 | 20 | 0 |
 | Christian Colleges | 16 | 15 | 1 |
 
@@ -32,7 +32,7 @@ listed in two categories counts in both.
 | Category | Domains | Excluded | Recon done | Configured | In a wave |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | National Universities | 100 | 0 | 79 | 27 | 25 |
-| Liberal Arts | 46 | 0 | 43 | 15 | 15 |
+| Liberal Arts | 48 | 0 | 43 | 15 | 15 |
 | Public Universities | 28 | 0 | 24 | 15 | 15 |
 | Christian Colleges | 14 | 5 | 5 | 6 | 6 |
 
@@ -60,7 +60,7 @@ listed in two categories counts in both.
 
 ## Repeated university names within a tab
 
-- [Liberal Arts] 'Wheaton College' appears 2 times: row 55 -> (no URL), row 81 -> (no URL)
+- [Liberal Arts] 'Wheaton College' appears 2 times: row 55 -> wheatonwire.com, row 81 -> (no URL)
 
 ## Shared newspapers (same domain, multiple universities)
 
@@ -96,8 +96,6 @@ listed in two categories counts in both.
 - [Liberal Arts row 7] United States Air Force Academy — raw='N/A'
 - [Liberal Arts row 13] United States Military Academy at West Point — raw='N/A'
 - [Liberal Arts row 53] St. Olaf College — raw='nan'
-- [Liberal Arts row 54] Wabash College — raw='nan'
-- [Liberal Arts row 55] Wheaton College — raw='nan'
 - [Liberal Arts row 56] Centre College — raw='nan'
 - [Liberal Arts row 57] Rhodes College — raw='nan'
 - [Liberal Arts row 58] Thomas Aquinas College — raw='nan'

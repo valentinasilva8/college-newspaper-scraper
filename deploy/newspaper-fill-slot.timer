@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodically fill open newspaper-scraper slots from the ready queue
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+Unit=newspaper-fill-slot.service
+
+[Install]
+WantedBy=timers.target

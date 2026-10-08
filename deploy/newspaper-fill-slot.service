@@ -1,0 +1,17 @@
+[Unit]
+Description=Fill open newspaper-scraper slots from the ready queue
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/newspaper-scraper
+Environment=APP_DIR=/opt/newspaper-scraper
+Environment=CAP=12
+ExecStart=/usr/bin/env bash /opt/newspaper-scraper/deploy/fill_slot.sh
+# Do not fail the timer chain if the queue is empty.
+SuccessExitStatus=0
+
+[Install]
+WantedBy=multi-user.target

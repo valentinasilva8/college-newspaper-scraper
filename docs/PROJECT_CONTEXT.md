@@ -21,7 +21,7 @@ authoritative; sitemap `<lastmod>` only buckets candidates.
 | Machine | Runs | Why |
 | --- | --- | --- |
 | AWS EC2 (Ubuntu, `/opt/newspaper-scraper`) | One `newspaper-scraper@<site>` systemd service per paper, code from `main`; nightly S3 backup to `columbia-newspaper-corpus` | Always on |
-| Mac (this checkout) | Chicago full run (tmux `chicago-full`), Yale | Yale blocks datacenter IPs; Chicago was already mid-run |
+| Mac (this checkout) | Yale Daily News (Playwright) | Yale returns Vercel 429 from the AWS IP; live site only (~1k articles). Library PDFs are out of the scrape queue. |
 
 Server runbook: [`deploy/README.md`](../deploy/README.md). First-time AWS
 walkthrough: [`docs/AWS_SETUP.md`](AWS_SETUP.md). Cost and architecture:

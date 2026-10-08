@@ -168,17 +168,15 @@ Weekly ritual:
 
 | Decision | Status |
 | --- | --- |
-| Host | Always-on Mac (this laptop) for now |
-| Yale Library archive as corpus data | **Decide later** (see supervisor question below) |
+| Host | AWS VM for request scrapers (cap 12); Mac for Yale |
+| Yale live site | **In scope** — scrape `yaledailynews.com` from the Mac with Playwright (~1k recent articles). Does **not** use a VM slot. |
+| Yale Library archive as corpus data | **Out of this queue** — scans/PDFs need a separate OCR pipeline (same as Wabash repository PDFs). |
 | Browser UA | Allowed when a site refuses the honest UA (Prof. Kim 2026-10-01) |
 | Crosswords / galleries / podcasts | Exclude when body text is empty (do not store empty rows) |
-| Priority after Chicago | Finish already-started sites (Chicago → Northwestern → Duke → Yale current site) |
+| Priority after Chicago | Finish already-started sites; fill slots from `data/scrape_queue.csv` |
+| Queue auto-fill | Only `ready` papers (200-test passed + `--mark-ready`); see `deploy/fill_slot.sh` |
 | Git | Commit foundation code; keep `output/*.csv` local only (gitignored) |
 | Chicago run length | Until manually stopped; resume via checkpoint |
-
-### Supervisor question (Yale) — copy/paste
-
-> For the Yale Daily News, the current website only lists about 1,000 recent articles, and we cannot see a complete list of everything published since 2000 on that site alone. Yale’s library has a separate historical archive of older issues (often as scanned pages/PDFs, not the same HTML articles). **Should our research corpus include that library archive as a data source, or should we only collect articles from the live yaledailynews.com website?**
 
 ---
 
@@ -214,9 +212,11 @@ Weekly ritual:
 
 1. Current `articles-sitemap.xml` is capped (~1,000) with migration lastmods.
 2. Browser UA for sitemap; Playwright for article fields.
-3. Historical corpus needs a **separate** design (Library archive / Wayback);
-   do not pretend the current sitemap is complete history.
-4. PI decision pending on Library archive as data.
+3. **Run from the Mac only** — the AWS VM gets Vercel HTTP 429
+   (`access_profile: datacenter_blocked`). Queue state: `mac_only`.
+4. Do **not** pretend the live sitemap is 2000–today history. The Yale Library
+   scan/PDF archive is **out of the scrape queue**; design a separate OCR
+   pipeline if Kim wants that depth later.
 
 ---
 
