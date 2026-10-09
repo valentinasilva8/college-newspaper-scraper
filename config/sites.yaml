@@ -676,3 +676,77 @@ sites:
     exclude_url_patterns:
       - "^https://gleaner.rutgers.edu/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 18: Liberal Arts buffer to refill CAP 16 after finish wave.
+  # --------------------------------------------------------------------
+
+  williams:
+    name: "The Williams Record (Williams College)"
+    platform: sno
+    institution: "The Williams Record"
+    base_url: "https://williamsrecord.com"
+    sitemap_index: "https://williamsrecord.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://williamsrecord.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  bates:
+    name: "The Bates Student (Bates College)"
+    platform: sno
+    institution: "The Bates Student"
+    base_url: "https://thebatesstudent.com"
+    sitemap_index: "https://thebatesstudent.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thebatesstudent.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  lafayette:
+    name: "The Lafayette (Lafayette College)"
+    platform: sno
+    institution: "The Lafayette"
+    base_url: "https://lafayettestudentnews.com"
+    sitemap_index: "https://lafayettestudentnews.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://lafayettestudentnews.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  hamilton:
+    name: "The Spectator (Hamilton College)"
+    platform: sno
+    institution: "The Spectator"
+    base_url: "https://hcspectator.com"
+    sitemap_index: "https://hcspectator.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://hcspectator.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  bowdoin:
+    name: "The Bowdoin Orient (Bowdoin College)"
+    platform: wordpress
+    institution: "The Bowdoin Orient"
+    base_url: "https://bowdoinorient.com"
+    sitemap_index: "https://bowdoinorient.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://bowdoinorient.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  davidson:
+    name: "The Davidsonian (Davidson College)"
+    platform: sno
+    institution: "The Davidsonian"
+    base_url: "https://thedavidsonian.news"
+    sitemap_index: "https://thedavidsonian.news/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thedavidsonian.news/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  dickinson:
+    name: "The Dickinsonian (Dickinson College)"
+    platform: sno
+    institution: "The Dickinsonian"
+    base_url: "https://thedickinsonian.com"
+    sitemap_index: "https://thedickinsonian.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thedickinsonian.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
