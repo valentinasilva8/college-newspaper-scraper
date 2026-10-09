@@ -652,3 +652,27 @@ sites:
     exclude_url_patterns:
       - "^https://bachelor.wabash.edu/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 17: two more open WP to finish CAP 16 after wave 16 mark-ready.
+  # --------------------------------------------------------------------
+
+  pepperdine:
+    name: "Pepperdine Graphic (Pepperdine University)"
+    platform: wordpress
+    institution: "Pepperdine Graphic"
+    base_url: "https://pepperdine-graphic.com"
+    sitemap_index: "https://pepperdine-graphic.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://pepperdine-graphic.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  gleaner:
+    name: "The Gleaner (Rutgers University Camden)"
+    platform: wordpress
+    institution: "The Gleaner"
+    base_url: "https://gleaner.rutgers.edu"
+    sitemap_index: "https://gleaner.rutgers.edu/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://gleaner.rutgers.edu/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
