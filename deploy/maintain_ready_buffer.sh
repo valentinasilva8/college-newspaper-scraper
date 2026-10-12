@@ -13,7 +13,7 @@
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/opt/newspaper-scraper}"
-CAP="${CAP:-16}"
+CAP="${CAP:-18}"
 # Keep this many papers in ready + active 200-test so finishes never idle CAP.
 TARGET_PIPELINE="${TARGET_PIPELINE:-6}"
 LOG="${APP_DIR}/logs/ready_buffer.log"
