@@ -35,18 +35,23 @@ if sudo -n true 2>/dev/null; then
     /etc/systemd/system/newspaper-fill-slot.service
   sudo install -m 644 deploy/newspaper-fill-slot.timer \
     /etc/systemd/system/newspaper-fill-slot.timer
-  chmod 755 deploy/fill_slot.sh
+  sudo install -m 644 deploy/newspaper-ready-buffer.service \
+    /etc/systemd/system/newspaper-ready-buffer.service
+  sudo install -m 644 deploy/newspaper-ready-buffer.timer \
+    /etc/systemd/system/newspaper-ready-buffer.timer
+  chmod 755 deploy/fill_slot.sh deploy/maintain_ready_buffer.sh
   if [[ ! -f /etc/sudoers.d/newspaper-fill-slot ]]; then
     echo "scraper ALL=NOPASSWD: /bin/systemctl start newspaper-fill-slot.service" \
       | sudo tee /etc/sudoers.d/newspaper-fill-slot >/dev/null
     sudo chmod 440 /etc/sudoers.d/newspaper-fill-slot
   fi
   sudo systemctl daemon-reload
-  sudo systemctl enable newspaper-fill-slot.timer
+  sudo systemctl enable newspaper-fill-slot.timer newspaper-ready-buffer.timer
   sudo systemctl start newspaper-fill-slot.timer || true
+  sudo systemctl start newspaper-ready-buffer.timer || true
 else
   echo "    (scraper has no passwordless sudo for install; ubuntu should run:"
-  echo "     sudo bash -c 'install -m 644 deploy/newspaper-*.service deploy/newspaper-*.timer /etc/systemd/system/ && systemctl daemon-reload && systemctl enable --now newspaper-fill-slot.timer')"
+  echo "     sudo bash -c 'install -m 644 deploy/newspaper-*.service deploy/newspaper-*.timer /etc/systemd/system/ && systemctl daemon-reload && systemctl enable --now newspaper-fill-slot.timer newspaper-ready-buffer.timer')"
 fi
 
 echo "==> Running offline tests"

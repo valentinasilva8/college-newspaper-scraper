@@ -845,3 +845,70 @@ sites:
     exclude_url_patterns:
       - "^https://thebrownandwhite.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 20: pre-staged ready buffer so CAP 16 never idles after wave 19.
+  # Start 200-tests as soon as wave 19 finishes / pipeline < TARGET.
+  # --------------------------------------------------------------------
+
+  baylor:
+    name: "The Baylor Lariat (Baylor University)"
+    platform: wordpress
+    institution: "The Baylor Lariat"
+    base_url: "https://baylorlariat.com"
+    sitemap_index: "https://baylorlariat.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://baylorlariat.com/?$"
+      - "^https://baylorlariat.com/blog/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  paladin:
+    name: "The Paladin (Furman University)"
+    platform: sno
+    institution: "The Paladin"
+    base_url: "https://thepaladin.news"
+    sitemap_index: "https://www.thepaladin.news/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thepaladin\\.news/?$"
+      - "^https://www\\.thepaladin\\.news/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  trinitonian:
+    name: "The Trinitonian (Trinity University)"
+    platform: sno
+    institution: "The Trinitonian"
+    base_url: "https://trinitonian.com"
+    sitemap_index: "https://trinitonian.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://trinitonian.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  ringtumphi:
+    name: "The Ring-tum Phi (Washington and Lee University)"
+    platform: sno
+    institution: "The Ring-tum Phi"
+    base_url: "https://ringtumphi.net"
+    sitemap_index: "https://ringtumphi.net/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://ringtumphi.net/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  freepress:
+    name: "The Daily Free Press (Boston University)"
+    platform: sno
+    institution: "The Daily Free Press"
+    base_url: "https://dailyfreepress.com"
+    sitemap_index: "https://dailyfreepress.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://dailyfreepress.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  hullabaloo:
+    name: "The Tulane Hullabaloo (Tulane University)"
+    platform: sno
+    institution: "The Tulane Hullabaloo"
+    base_url: "https://tulanehullabaloo.com"
+    sitemap_index: "https://tulanehullabaloo.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://tulanehullabaloo.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}

@@ -168,13 +168,15 @@ Weekly ritual:
 
 | Decision | Status |
 | --- | --- |
-| Host | AWS VM for request scrapers (cap 12); Mac for Yale |
+| Host | AWS VM for request scrapers (**CAP 16** on t3.xlarge); Mac for Yale |
 | Yale live site | **In scope** — scrape `yaledailynews.com` from the Mac with Playwright (~1k recent articles). Does **not** use a VM slot. |
-| Yale Library archive as corpus data | **Out of this queue** — scans/PDFs need a separate OCR pipeline (same as Wabash repository PDFs). |
+| Yale Library archive as corpus data | **Cannot crawl.** `ydnhistorical.library.yale.edu` robots.txt is `Disallow: /` except archive.org, Google, Bing, and Yahoo. Ask Prof. Kim: live site only, or a Yale Library export. If an export arrives, ingest their article OCR; do not re-OCR PDFs. |
 | Browser UA | Allowed when a site refuses the honest UA (Prof. Kim 2026-10-01) |
 | Crosswords / galleries / podcasts | Exclude when body text is empty (do not store empty rows) |
 | Priority after Chicago | Finish already-started sites; fill slots from `data/scrape_queue.csv` |
 | Queue auto-fill | Only `ready` papers (200-test passed + `--mark-ready`); see `deploy/fill_slot.sh` |
+| Ready buffer | Keep **≥6** papers in `ready` + mid-200-test (`TARGET_PIPELINE`). Stage the next wave *before* CAP dips. `deploy/maintain_ready_buffer.sh` + timer logs `WARN thin_ready_buffer` when thin. |
+| Raising CAP | Do **not** raise above 16 until a full day at 16 with healthy CPU credits and no 403/429 spike. Hardware is idle; publisher rate limits are the gate. |
 | Git | Commit foundation code; keep `output/*.csv` local only (gitignored) |
 | Chicago run length | Until manually stopped; resume via checkpoint |
 
@@ -214,9 +216,25 @@ Weekly ritual:
 2. Browser UA for sitemap; Playwright for article fields.
 3. **Run from the Mac only** — the AWS VM gets Vercel HTTP 429
    (`access_profile: datacenter_blocked`). Queue state: `mac_only`.
-4. Do **not** pretend the live sitemap is 2000–today history. The Yale Library
-   scan/PDF archive is **out of the scrape queue**; design a separate OCR
-   pipeline if Kim wants that depth later.
+4. Do **not** pretend the live sitemap is 2000–today history. Do **not**
+   fetch `ydnhistorical.library.yale.edu`: robots.txt disallows our bot.
+   Historical text only if Yale Library provides an export. Use their
+   article OCR; do not re-OCR the issue PDFs.
+
+### Wabash, The Bachelor (Hyku issue PDFs)
+
+1. Not an HTML extractor. Run `python scripts/archive_wabash.py --max-issues N`
+   from `newspaper-scraper/`. Default N is 1 (a download probe).
+2. One CSV row per issue in `output/wabash.csv`. `title` is the issue title,
+   `author` / `section` / `subsection` stay empty, `text` is the whole issue.
+3. Discover from the collection pages sorted by date. Do not use `/catalog` facet
+   URLs (robots disallows them). Strip `locale=` from request URLs.
+4. Read the PDF text layer. OCR a page only when that layer is empty, and only
+   if `pdftoppm` and `tesseract` are installed.
+5. Request each PDF with the work-page URL as `Referer`. A bare download URL
+   gets a Cloudflare challenge; the link from the issue page does not. If a
+   referred download is still challenged, stop. Do not automate the challenge.
+6. Corpus window is 2000-01-01 onward. No full-collection run without approval.
 
 ---
 

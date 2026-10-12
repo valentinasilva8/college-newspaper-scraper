@@ -1,0 +1,11 @@
+[Unit]
+Description=Check ready buffer and fill CAP every 15 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=15min
+Persistent=true
+Unit=newspaper-ready-buffer.service
+
+[Install]
+WantedBy=timers.target

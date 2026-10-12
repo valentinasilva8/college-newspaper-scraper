@@ -1,0 +1,12 @@
+[Unit]
+Description=Maintain newspaper-scraper ready buffer and fill CAP slots
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Environment=APP_DIR=/opt/newspaper-scraper
+Environment=CAP=16
+Environment=TARGET_PIPELINE=6
+ExecStart=/bin/bash /opt/newspaper-scraper/deploy/maintain_ready_buffer.sh
+Nice=10
