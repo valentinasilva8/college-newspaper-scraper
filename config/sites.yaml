@@ -750,3 +750,98 @@ sites:
     exclude_url_patterns:
       - "^https://thedickinsonian.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 19: refill CAP 16 after weekend finish wave (need 9 slots).
+  # --------------------------------------------------------------------
+
+  wellesley:
+    name: "The Wellesley News (Wellesley College)"
+    platform: sno
+    institution: "The Wellesley News"
+    base_url: "https://thewellesleynews.com"
+    sitemap_index: "https://thewellesleynews.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thewellesleynews.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  villanova:
+    name: "The Villanovan (Villanova University)"
+    platform: sno
+    institution: "The Villanovan"
+    base_url: "https://villanovan.com"
+    sitemap_index: "https://villanovan.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://villanovan.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  vanderbilt:
+    name: "The Vanderbilt Hustler (Vanderbilt University)"
+    platform: sno
+    institution: "The Vanderbilt Hustler"
+    base_url: "https://vanderbilthustler.com"
+    sitemap_index: "https://vanderbilthustler.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://vanderbilthustler.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  wakeforest:
+    name: "Old Gold & Black (Wake Forest University)"
+    platform: sno
+    institution: "Old Gold & Black"
+    base_url: "https://wfuogb.com"
+    sitemap_index: "https://wfuogb.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://wfuogb.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  case:
+    name: "The Observer (Case Western Reserve University)"
+    platform: sno
+    institution: "The Observer"
+    base_url: "https://observer.case.edu"
+    sitemap_index: "https://observer.case.edu/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://observer.case.edu/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  campustimes:
+    name: "Campus Times (University of Rochester)"
+    platform: wordpress
+    institution: "Campus Times"
+    base_url: "https://www.campustimes.org"
+    sitemap_index: "https://campustimes.org/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://www\\.campustimes\\.org/?$"
+      - "^https://campustimes\\.org/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  fordham:
+    name: "The Fordham Ram (Fordham University)"
+    platform: sno
+    institution: "The Fordham Ram"
+    base_url: "https://thefordhamram.com"
+    sitemap_index: "https://thefordhamram.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thefordhamram.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  northeastern:
+    name: "The Huntington News (Northeastern University)"
+    platform: sno
+    institution: "The Huntington News"
+    base_url: "https://huntnewsnu.com"
+    sitemap_index: "https://huntnewsnu.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://huntnewsnu.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  lehigh:
+    name: "The Brown and White (Lehigh University)"
+    platform: wordpress
+    institution: "The Brown and White"
+    base_url: "https://thebrownandwhite.com"
+    sitemap_index: "https://thebrownandwhite.com/sitemap_index.xml"
+    exclude_url_patterns:
+      - "^https://thebrownandwhite.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
