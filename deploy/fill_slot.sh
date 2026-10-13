@@ -5,15 +5,15 @@
 # queue_state=ready in data/scrape_queue.csv. Never invents a new site.
 #
 #   sudo -u scraper bash /opt/newspaper-scraper/deploy/fill_slot.sh
-#   CAP=18 sudo -u scraper bash /opt/newspaper-scraper/deploy/fill_slot.sh
+#   CAP=20 sudo -u scraper bash /opt/newspaper-scraper/deploy/fill_slot.sh
 #
 # Wired from newspaper-scraper@.service ExecStopPost and a systemd timer.
-# Cap raised to 18 on t3.xlarge (2026-10-12) after a quiet day at 16.
+# Cap raised to 20 on t3.xlarge (2026-10-13) after a quiet stretch at 18.
 
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/opt/newspaper-scraper}"
-CAP="${CAP:-18}"
+CAP="${CAP:-20}"
 QUEUE="${APP_DIR}/data/scrape_queue.csv"
 READY="${APP_DIR}/data/queue_ready.txt"
 LOG="${APP_DIR}/logs/fill_slot.log"

@@ -168,7 +168,7 @@ Weekly ritual:
 
 | Decision | Status |
 | --- | --- |
-| Host | AWS VM for request scrapers (**CAP 18** on t3.xlarge); Mac for Yale |
+| Host | AWS VM for request scrapers (**CAP 20** on t3.xlarge); Mac for Yale |
 | Yale live site | **In scope** — scrape `yaledailynews.com` from the Mac with Playwright (~1k recent articles). Does **not** use a VM slot. |
 | Yale Library archive as corpus data | **Cannot crawl.** `ydnhistorical.library.yale.edu` robots.txt is `Disallow: /` except archive.org, Google, Bing, and Yahoo. Ask Prof. Kim: live site only, or a Yale Library export. If an export arrives, ingest their article OCR; do not re-OCR PDFs. |
 | Browser UA | Allowed when a site refuses the honest UA (Prof. Kim 2026-10-01) |
@@ -176,7 +176,7 @@ Weekly ritual:
 | Priority after Chicago | Finish already-started sites; fill slots from `data/scrape_queue.csv` |
 | Queue auto-fill | Only `ready` papers (200-test passed + `--mark-ready`); see `deploy/fill_slot.sh` |
 | Ready buffer | Keep **≥6** papers in `ready` + mid-200-test (`TARGET_PIPELINE`). Stage the next wave *before* CAP dips. `deploy/maintain_ready_buffer.sh` + timer logs `WARN thin_ready_buffer` when thin. |
-| Raising CAP | At **18** as of 2026-10-12 (after a quiet stretch at 16). Watch 403/429 and CPU credits before any further bump. Hardware is idle; publisher rate limits are the gate. |
+| Raising CAP | At **20** as of 2026-10-13 (after a quiet stretch at 18; load ~0.1, no fresh 403/429 spike). Watch credits and publisher errors before any further bump. |
 | Git | Commit foundation code; keep `output/*.csv` local only (gitignored) |
 | Chicago run length | Until manually stopped; resume via checkpoint |
 

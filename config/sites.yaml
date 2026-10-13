@@ -912,3 +912,37 @@ sites:
     exclude_url_patterns:
       - "^https://tulanehullabaloo.com/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 21: fill CAP 18→20 and keep a ready buffer.
+  # --------------------------------------------------------------------
+
+  bc:
+    name: "The Heights (Boston College)"
+    platform: sno
+    institution: "The Heights"
+    base_url: "https://bcheights.com"
+    sitemap_index: "https://bcheights.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://bcheights.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  berea:
+    name: "The Pinnacle (Berea College)"
+    platform: wordpress
+    institution: "The Pinnacle"
+    base_url: "https://pinnacle.berea.edu"
+    sitemap_index: "https://pinnacle.berea.edu/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://pinnacle.berea.edu/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  sewanee:
+    name: "The Sewanee Purple (The University of the South)"
+    platform: wordpress
+    institution: "The Sewanee Purple"
+    base_url: "https://thesewaneepurple.org"
+    sitemap_index: "https://thesewaneepurple.org/sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thesewaneepurple.org/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}

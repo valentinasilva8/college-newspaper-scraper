@@ -11,7 +11,7 @@ Queue states:
   running         systemd unit active, or Status says running
   ready           in sites.yaml, 200-test passed, not yet started (auto-fill only)
   candidate       WP/SNO with a sitemap; needs yaml + probe + 200-test first
-  needs_adapter   SNWorks / BLOX / WAF-unknown / no sitemap / unknown CMS
+  needs_adapter   SNWorks/BLOX without proven index / WAF-unknown / no sitemap / unknown CMS
   blocked         probe or 200-test failed, or known park (Pitt, Hilltop, …)
   excluded        Instagram, login, PDF archive, wrong school, discontinued
   later_pass      more work later on the same CSV (Duke other sections)
@@ -91,6 +91,36 @@ MAC_ONLY = {
 KNOWN_CANDIDATES = {
     "bachelor.wabash.edu": "The Bachelor; Yoast sitemap_index.xml (verified 2026-10-08)",
     "wheatonwire.com": "The Wheaton Wire (Wheaton MA); wp-sitemap.xml (verified 2026-10-08)",
+    "westpoint.edu": (
+        "Pointer View (https://www.westpoint.edu/pointer-view); "
+        "historical issues on contentdm. Needs adapter / archive pass "
+        "(verified 2026-10-13)"
+    ),
+}
+
+# Ranking rows with blank newspaper URLs, resolved by research (2026-10-13).
+# Keys are university names as they appear in the ranking CSVs.
+NO_URL_RESOLUTIONS = {
+    "College of the Ozarks": (
+        "excluded",
+        "The Outlook has no dedicated student-paper site; cofo.edu/News is institutional",
+    ),
+    "Moody Bible Institute": (
+        "excluded",
+        "The Moody Standard closed 2019; moodystandard.com DNS dead (historical only)",
+    ),
+    "United States Air Force Academy": (
+        "excluded",
+        "Academy Spirit ended print 2015; usafa.af.mil is institutional, not student paper",
+    ),
+    "United States Military Academy at West Point": (
+        "needs_adapter",
+        "Pointer View live + contentdm archive; see westpoint.edu candidate row",
+    ),
+    "St. Olaf College": (
+        "excluded",
+        "Blank Liberal Arts duplicate; covered by Manitou Messenger (stolaf / olafmessenger.com)",
+    ),
 }
 
 URL_RE = re.compile(r"https?://[^\s<>\"')\]]+", re.I)
@@ -320,10 +350,6 @@ def classify(
     if not domain:
         return "excluded", "", "missing newspaper URL"
 
-    if platform == "snworks":
-        return "needs_adapter", site_key, "SNWorks adapter unbuilt"
-    if platform == "blox":
-        return "needs_adapter", site_key, "BLOX adapter unbuilt"
     if platform in ("library_archive",) or exclusion == "pdf_archive":
         return "excluded", site_key, "PDF / library archive"
     if access == "waf_browser_ua" and not site_key:
@@ -337,6 +363,16 @@ def classify(
 
     if domain in KNOWN_CANDIDATES:
         return "candidate", site_key, KNOWN_CANDIDATES[domain]
+    # Proven URL lists (sitemap XML or wp-json X-WP-Total) promote to candidate.
+    if platform == "snworks" and sitemap_kind == "snworks_index":
+        return "candidate", site_key, "SNWorks sitemap verified; needs yaml/probe/200-test"
+    if platform == "blox" and sitemap_kind == "blox_index":
+        return "candidate", site_key, "BLOX sitemap verified; needs yaml/probe/200-test"
+    if platform == "snworks":
+        return "needs_adapter", site_key, "SNWorks adapter unbuilt"
+    if platform == "blox":
+        return "needs_adapter", site_key, "BLOX adapter unbuilt"
+    # wp_core / yoast / aioseo / wp_json / single / other all count once set.
     if platform in ("sno", "wordpress") and sitemap_kind and sitemap_kind not in ("none", ""):
         return "candidate", site_key, f"{platform} + {sitemap_kind}; needs yaml/probe/200-test"
     if platform in ("sno", "wordpress"):
@@ -355,10 +391,16 @@ def build_queue(rankings_dir: Path) -> list[dict]:
     active = systemd_active_sites()
     ranking_rows = read_ranking_rows(rankings_dir)
 
-    # Also inject Wabash / Wheaton Wire if ranking copies are stale but tracker has them.
+    # Also inject verified papers if ranking copies are stale / blank.
     for domain, university, url, category in (
         ("bachelor.wabash.edu", "Wabash College", "https://bachelor.wabash.edu/", "Liberal Arts"),
         ("wheatonwire.com", "Wheaton College", "https://wheatonwire.com/", "Liberal Arts"),
+        (
+            "westpoint.edu",
+            "United States Military Academy at West Point",
+            "https://www.westpoint.edu/pointer-view",
+            "Liberal Arts",
+        ),
     ):
         if not any(r["domain"] == domain for r in ranking_rows):
             ranking_rows.append(
@@ -435,23 +477,30 @@ def build_queue(rankings_dir: Path) -> list[dict]:
         )
 
     for r in no_domain_rows:
+        uni = (r.get("university") or "").strip()
+        # Skip blank West Point Liberal Arts row once we inject westpoint.edu.
+        if uni == "United States Military Academy at West Point":
+            continue
+        state, reason = NO_URL_RESOLUTIONS.get(
+            uni, ("excluded", "missing newspaper URL")
+        )
         queue.append(
             {
                 "category": r["category"],
                 "also_categories": "",
-                "queue_state": "excluded",
+                "queue_state": state,
                 "site_key": "",
                 "domain": "",
                 "url": "",
-                "university": r["university"],
+                "university": uni,
                 "paper": "",
                 "platform": "",
                 "access_profile": "",
                 "est_urls": "",
                 "est_days": "",
                 "articles": "",
-                "reason": "missing newspaper URL",
-                "notes": "",
+                "reason": reason,
+                "notes": reason if state != "excluded" or "missing" not in reason else "",
             }
         )
 
