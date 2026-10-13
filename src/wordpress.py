@@ -111,11 +111,33 @@ def _fetch_sitemap_urls(config: dict, fetcher: "Fetcher") -> list[list[str]]:
         return []
 
     index = BeautifulSoup(index_resp.text, "xml")
+    # Core WP / Yoast / AIOSEO post sitemaps, plus Jetpack page sitemaps
+    # (sitemap-N.xml nested under sitemap-index-N.xml). Skip image/video.
+    raw_locs = [loc.text.strip() for loc in index.find_all("loc") if loc.text]
+    nested = [
+        u for u in raw_locs
+        if re.search(r"/sitemap-index-\d+\.xml$", u)
+    ]
+    for nested_url in nested:
+        try:
+            nested_resp = fetcher.get(nested_url)
+        except requests.RequestException as exc:
+            logger.warning("%s nested sitemap index failed for %s: %s", label, nested_url, exc)
+            continue
+        if nested_resp is None:
+            continue
+        raw_locs.extend(
+            loc.text.strip()
+            for loc in BeautifulSoup(nested_resp.text, "xml").find_all("loc")
+            if loc.text
+        )
     subs = [
-        loc.text.strip()
-        for loc in index.find_all("loc")
-        if loc.text
-        and ("wp-sitemap-posts-post" in loc.text or "post-sitemap" in loc.text)
+        u for u in raw_locs
+        if (
+            "wp-sitemap-posts-post" in u
+            or "post-sitemap" in u
+            or re.search(r"/sitemap-\d+\.xml$", u)
+        )
     ]
     total = len(subs)
     logger.info("%s sitemap: scanning %d post sub-sitemap(s)", label, total)

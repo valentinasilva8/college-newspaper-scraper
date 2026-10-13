@@ -942,7 +942,9 @@ sites:
     platform: wordpress
     institution: "The Sewanee Purple"
     base_url: "https://thesewaneepurple.org"
+    # Jetpack master index; wordpress.py follows sitemap-index-N → sitemap-N.xml
     sitemap_index: "https://thesewaneepurple.org/sitemap.xml"
     exclude_url_patterns:
       - "^https://thesewaneepurple.org/?$"
+      - "^https://thesewaneepurple.org/[^/]+e1/?$"  # section hubs
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
