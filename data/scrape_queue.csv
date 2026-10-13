@@ -35,13 +35,13 @@ Christian Colleges,,excluded,,,,College of the Ozarks,,,,,,,The Outlook has no d
 Christian Colleges,,excluded,,thelink.harding.edu,https://thelink.harding.edu/the-bison/,Harding Univeristy,,unknown,excluded,,,,login_required,The Bison returns HTTP 401
 Christian Colleges,,excluded,,,,Moody Bible Institute,,,,,,,The Moody Standard closed 2019; moodystandard.com DNS dead (historical only),The Moody Standard closed 2019; moodystandard.com DNS dead (historical only)
 Christian Colleges,,excluded,,oudaily.com,https://www.oudaily.com/,Oklahoma City Univeristy,,unknown,excluded,,,,wrong_school,OU Daily is the University of Oklahoma's paper; Oklahoma City University needs its own
+Liberal Arts,,running,berea,pinnacle.berea.edu,https://pinnacle.berea.edu/,Berea College,The Pinnacle,wordpress,cloudflare,879,0.1,,Status tab running,Started wave21 full scrape 2026-10-13 (CAP 20).
+Liberal Arts,,running,sewanee,thesewaneepurple.org,https://thesewaneepurple.org/,The Univeristy of the South,The Sewanee Purple,wordpress,open,,,,Status tab running,Started wave21 full scrape 2026-10-13 (CAP 20).
 Liberal Arts,,running,trinitonian,trinitonian.com,https://trinitonian.com/,Trinity University,The Trinitonian,sno,cloudflare,8018,1.1,5500,Status tab running,newspaper-scraper@trinitonian; 5500 articles as of 2026-10-13. systemd active on AWS VM.
-Liberal Arts,,candidate,berea,pinnacle.berea.edu,https://pinnacle.berea.edu/,Berea College,,wordpress,cloudflare,879,0.1,,configured; needs 200-test before ready,
 Liberal Arts,,candidate,,colbyecho.news,https://colbyecho.news/,Colby College,,wordpress,open,,,,wordpress + other; needs yaml/probe/200-test,
 Liberal Arts,,candidate,,hcspire.com,https://hcspire.com/,College of the Holy Cross,,wordpress,open,,,,wordpress + other; needs yaml/probe/200-test,
 Liberal Arts,,candidate,,thecatalystnews.com,https://thecatalystnews.com/,Colorado College,,wordpress,open,,,,wordpress + other; needs yaml/probe/200-test,
 Liberal Arts,,candidate,,middleburycampus.com,https://www.middleburycampus.com/,Middlebury College,,snworks,open,650,0.1,,SNWorks sitemap verified; needs yaml/probe/200-test,
-Liberal Arts,,candidate,sewanee,thesewaneepurple.org,https://thesewaneepurple.org/,The Univeristy of the South,,wordpress,open,,,,configured; needs 200-test before ready,
 Liberal Arts,,candidate,,westpoint.edu,https://www.westpoint.edu/pointer-view,United States Military Academy at West Point,Pointer View,,,,,,Pointer View (https://www.westpoint.edu/pointer-view); historical issues on contentdm. Needs adapter / archive pass (verified 2026-10-13),Live: westpoint.edu/pointer-view. Historical: usmalibrary.contentdm. Needs adapter (2026-10-13).
 Liberal Arts,,needs_adapter,,amherststudent.com,https://amherststudent.com/,Amherst College,,unknown,cloudflare,,,,unknown platform or missing recon,
 Liberal Arts,,needs_adapter,,thebarnardbulletin.com,https://www.thebarnardbulletin.com/campus-news,Barnard College,,unknown,open,,,,unknown platform or missing recon,
@@ -83,6 +83,7 @@ Liberal Arts,,done,wheatonwire,wheatonwire.com,https://wheatonwire.com/,Wheaton 
 Liberal Arts,,done,williams,williamsrecord.com,https://williamsrecord.com/,Williams College,The Williams Record,sno,cloudflare,4397,0.6,4226,Status tab done,Finished as of 2026-10-13. 4226 articles. systemd inactive. File: ~/Downloads/williams.csv
 Liberal Arts,,excluded,,,,St. Olaf College,,,,,,,Blank Liberal Arts duplicate; covered by Manitou Messenger (stolaf / olafmessenger.com),Blank Liberal Arts duplicate; covered by Manitou Messenger (stolaf / olafmessenger.com)
 Liberal Arts,,excluded,,,,United States Air Force Academy,,,,,,,"Academy Spirit ended print 2015; usafa.af.mil is institutional, not student paper","Academy Spirit ended print 2015; usafa.af.mil is institutional, not student paper"
+National Universities,,running,bc,bcheights.com,https://bcheights.com/,Boston College,The Heights,sno,cloudflare,20636,2.9,,Status tab running,Started wave21 full scrape 2026-10-13 (CAP 20).
 National Universities,,running,freepress,dailyfreepress.com,https://dailyfreepress.com/,Boston University,The Daily Free Press,sno,cloudflare,51548,7.2,2050,Status tab running,newspaper-scraper@freepress; 2050 articles as of 2026-10-13. systemd active on AWS VM.
 National Universities,,running,fordham,thefordhamram.com,https://thefordhamram.com/,Fordham University,The Fordham Ram,sno,cloudflare,13499,1.9,6575,Status tab running,newspaper-scraper@fordham; 6575 articles as of 2026-10-13. systemd active on AWS VM.
 National Universities,,running,hatchet,gwhatchet.com,https://gwhatchet.com/,George Washington University,The Hatchet,sno,cloudflare,60745,8.4,30994,Status tab running,newspaper-scraper@hatchet; 30994 articles as of 2026-10-13. systemd active on AWS VM.
@@ -98,7 +99,6 @@ National Universities,,running,villanova,villanovan.com,https://villanovan.com/,
 National Universities,,running,wakeforest,wfuogb.com,https://wfuogb.com/,Wake Forest University,Old Gold & Black,sno,cloudflare,8050,1.1,6482,Status tab running,newspaper-scraper@wakeforest; 6482 articles as of 2026-10-13. systemd active on AWS VM.
 National Universities,,candidate,,theeagleonline.com,https://www.theeagleonline.com/,American University,,snworks,open,2050,0.2,,SNWorks sitemap verified; needs yaml/probe/200-test,
 National Universities,,candidate,,bupipedream.com,https://www.bupipedream.com/,"Binghamton University, SUNY",,wordpress,open,24135,1.7,,wordpress + wp_json; needs yaml/probe/200-test,
-National Universities,,candidate,bc,bcheights.com,https://bcheights.com/,Boston College,,sno,cloudflare,20636,2.9,,configured; needs 200-test before ready,
 National Universities,,candidate,,thejustice.org,https://www.thejustice.org/,Brandeis University,,snworks,open,450,0.1,,SNWorks sitemap verified; needs yaml/probe/200-test,
 National Universities,,candidate,,cornellsun.com,https://www.cornellsun.com/,Cornell University 🌿,,snworks,open,300,0.0,,SNWorks sitemap verified; needs yaml/probe/200-test,
 National Universities,,candidate,,thedartmouth.com,https://www.thedartmouth.com/,Dartmouth College 🌿,,snworks,open,1500,0.2,,SNWorks sitemap verified; needs yaml/probe/200-test,
