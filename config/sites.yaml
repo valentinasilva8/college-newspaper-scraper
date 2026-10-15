@@ -960,7 +960,7 @@ sites:
     platform: wordpress
     institution: "The Colby Echo"
     base_url: "https://colbyecho.news"
-    sitemap_index: "https://colbyecho.news/wp-sitemap.xml"
+    sitemap_index: "https://colbyecho.news/sitemap.xml"
     exclude_url_patterns:
       - "^https://colbyecho.news/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
@@ -970,7 +970,7 @@ sites:
     platform: wordpress
     institution: "The Catalyst"
     base_url: "https://thecatalystnews.com"
-    sitemap_index: "https://thecatalystnews.com/wp-sitemap.xml"
+    sitemap_index: "https://thecatalystnews.com/sitemap.xml"
     exclude_url_patterns:
       - "^https://thecatalystnews.com/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
@@ -980,7 +980,7 @@ sites:
     platform: wordpress
     institution: "The Spire"
     base_url: "https://hcspire.com"
-    sitemap_index: "https://hcspire.com/wp-sitemap.xml"
+    sitemap_index: "https://hcspire.com/sitemap.xml"
     exclude_url_patterns:
       - "^https://hcspire.com/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
@@ -990,7 +990,7 @@ sites:
     platform: wordpress
     institution: "The Wheaton Record"
     base_url: "https://thewheatonrecord.com"
-    sitemap_index: "https://thewheatonrecord.com/wp-sitemap.xml"
+    sitemap_index: "https://thewheatonrecord.com/sitemap.xml"
     exclude_url_patterns:
       - "^https://thewheatonrecord.com/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
@@ -1000,7 +1000,7 @@ sites:
     platform: wordpress
     institution: "The Daily Campus"
     base_url: "https://dailycampus.com"
-    sitemap_index: "https://dailycampus.com/wp-sitemap.xml"
+    sitemap_index: "https://dailycampus.com/sitemap.xml"
     exclude_url_patterns:
       - "^https://dailycampus.com/?$"
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
@@ -1030,7 +1030,7 @@ sites:
     platform: wordpress
     institution: "The Lantern"
     base_url: "https://www.thelantern.com"
-    sitemap_index: "https://www.thelantern.com/wp-sitemap.xml"
+    sitemap_index: "https://www.thelantern.com/wp-sitemap-posts-post-1.xml"
     exclude_url_patterns:
       - "^https://www\\.thelantern\\.com/?$"
       - "^https://thelantern\\.com/?$"
@@ -1054,6 +1054,11 @@ sites:
     sitemap_index: "https://www.studlife.com/sitemap.xml"
     exclude_url_patterns:
       - "^https://www\\.studlife\\.com/?$"
+      - "/category/"
+      - "/tag/"
+      - "/author/"
+      - "/archives/?$"
+      - "/register/?$"
     rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
 
   santaclara:
