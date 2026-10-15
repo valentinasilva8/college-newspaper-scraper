@@ -948,3 +948,120 @@ sites:
       - "^https://thesewaneepurple.org/?$"
       - "^https://thesewaneepurple.org/[^/]+e1/?$"  # section hubs
     rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  # --------------------------------------------------------------------
+  # Wave 22: refill CAP after Oct-14 mass 403 blocks. Prefer open
+  # WordPress; leave blocked SNO sites alone. hilltop + pitt already
+  # configured earlier and never launched.
+  # --------------------------------------------------------------------
+
+  colby:
+    name: "The Colby Echo (Colby College)"
+    platform: wordpress
+    institution: "The Colby Echo"
+    base_url: "https://colbyecho.news"
+    sitemap_index: "https://colbyecho.news/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://colbyecho.news/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  catalyst:
+    name: "The Catalyst (Colorado College)"
+    platform: wordpress
+    institution: "The Catalyst"
+    base_url: "https://thecatalystnews.com"
+    sitemap_index: "https://thecatalystnews.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thecatalystnews.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  holycross:
+    name: "The Spire (College of the Holy Cross)"
+    platform: wordpress
+    institution: "The Spire"
+    base_url: "https://hcspire.com"
+    sitemap_index: "https://hcspire.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://hcspire.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  wheatonrecord:
+    name: "The Wheaton Record (Wheaton College Illinois)"
+    platform: wordpress
+    institution: "The Wheaton Record"
+    base_url: "https://thewheatonrecord.com"
+    sitemap_index: "https://thewheatonrecord.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thewheatonrecord.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  dailycampus:
+    name: "The Daily Campus (University of Connecticut)"
+    platform: wordpress
+    institution: "The Daily Campus"
+    base_url: "https://dailycampus.com"
+    sitemap_index: "https://dailycampus.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://dailycampus.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  panthernow:
+    name: "PantherNOW (Florida International University)"
+    platform: wordpress
+    institution: "PantherNOW"
+    base_url: "https://panthernow.com"
+    sitemap_index: "https://panthernow.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://panthernow.com/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}
+
+  triangle:
+    name: "The Triangle (Drexel University)"
+    platform: wordpress
+    institution: "The Triangle"
+    base_url: "https://www.thetriangle.org"
+    sitemap_index: "https://www.thetriangle.org/sitemap-index.xml"
+    exclude_url_patterns:
+      - "^https://www\\.thetriangle\\.org/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  lantern:
+    name: "The Lantern (The Ohio State University)"
+    platform: wordpress
+    institution: "The Lantern"
+    base_url: "https://www.thelantern.com"
+    sitemap_index: "https://www.thelantern.com/wp-sitemap.xml"
+    exclude_url_patterns:
+      - "^https://www\\.thelantern\\.com/?$"
+      - "^https://thelantern\\.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  batt:
+    name: "The Battalion (Texas A&M University)"
+    platform: sno
+    institution: "The Battalion"
+    base_url: "https://thebatt.com"
+    sitemap_index: "https://thebatt.com/sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thebatt.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  studlife:
+    name: "Student Life (Washington University in St. Louis)"
+    platform: wordpress
+    institution: "Student Life"
+    base_url: "https://www.studlife.com"
+    sitemap_index: "https://www.studlife.com/sitemap.xml"
+    exclude_url_patterns:
+      - "^https://www\\.studlife\\.com/?$"
+    rate_limit: {delay_min: 10.0, delay_max: 14.0, max_concurrency: 1}
+
+  santaclara:
+    name: "The Santa Clara (Santa Clara University)"
+    platform: wordpress
+    institution: "The Santa Clara"
+    base_url: "https://thesantaclara.org"
+    sitemap_index: "https://thesantaclara.org/sitemap.xml"
+    exclude_url_patterns:
+      - "^https://thesantaclara.org/?$"
+    rate_limit: {delay_min: 6.0, delay_max: 8.0, max_concurrency: 1}

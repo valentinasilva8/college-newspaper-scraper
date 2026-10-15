@@ -332,6 +332,8 @@ def classify(
         return "running", site_key, "Status tab running"
     if status_val == "done":
         return "done", site_key, "Status tab done"
+    if status_val == "blocked":
+        return "blocked", site_key, st.get("notes") or "Status tab blocked"
 
     if site_key and site_key in ready_keys:
         return "ready", site_key, "200-test passed; waiting for a free slot"

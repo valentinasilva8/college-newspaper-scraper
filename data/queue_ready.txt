@@ -1,8 +1,1 @@
-# site_keys cleared for auto-fill after a 200-test passes.
-# Example (uncomment after testing):
-# williams
-# bates
-#
-# Mark with:  python scripts/refresh_queue.py --mark-ready SITE_KEY
-# The fill_slot hook only starts keys listed here that also have
-# queue_state=ready in data/scrape_queue.csv.
+# site_keys cleared for auto-fill (200-test passed)

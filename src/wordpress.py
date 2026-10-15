@@ -136,23 +136,15 @@ def _fetch_sitemap_urls(config: dict, fetcher: "Fetcher") -> list[list[str]]:
         if (
             "wp-sitemap-posts-post" in u
             or "post-sitemap" in u
-            or re.search(r"/sitemap-\d+\.xml$", u)
+            or "sitemap-post-type-post" in u  # Slim SEO (e.g. thebatt.com)
+            or re.search(r"/sitemap-\d+\.xml$", u)  # Jetpack / year sitemaps
         )
     ]
-    total = len(subs)
-    logger.info("%s sitemap: scanning %d post sub-sitemap(s)", label, total)
-
     excludes = [re.compile(p) for p in config.get("exclude_url_patterns") or []]
     pairs: dict[str, str] = {}
-    for idx, sub_url in enumerate(subs, start=1):
-        try:
-            sub_resp = fetcher.get(sub_url)
-        except requests.RequestException as exc:
-            logger.warning("%s sub-sitemap fetch failed for %s: %s", label, sub_url, exc)
-            continue
-        if sub_resp is None:
-            continue
-        for url_el in BeautifulSoup(sub_resp.text, "xml").find_all("url"):
+
+    def _ingest_urlset(soup: BeautifulSoup) -> None:
+        for url_el in soup.find_all("url"):
             loc_el = url_el.find("loc")
             if not loc_el or not loc_el.text:
                 continue
@@ -161,6 +153,24 @@ def _fetch_sitemap_urls(config: dict, fetcher: "Fetcher") -> list[list[str]]:
                 continue
             lm_el = url_el.find("lastmod")
             pairs[loc] = lm_el.text.strip() if lm_el and lm_el.text else ""
+
+    # Flat urlset served as the "index" (legacy generators).
+    if not subs and index.find_all("url"):
+        logger.info("%s sitemap: flat urlset (no post sub-sitemaps)", label)
+        _ingest_urlset(index)
+        return [[url, lastmod] for url, lastmod in sorted(pairs.items())]
+
+    total = len(subs)
+    logger.info("%s sitemap: scanning %d post sub-sitemap(s)", label, total)
+    for idx, sub_url in enumerate(subs, start=1):
+        try:
+            sub_resp = fetcher.get(sub_url)
+        except requests.RequestException as exc:
+            logger.warning("%s sub-sitemap fetch failed for %s: %s", label, sub_url, exc)
+            continue
+        if sub_resp is None:
+            continue
+        _ingest_urlset(BeautifulSoup(sub_resp.text, "xml"))
         if idx == 1 or idx % DISCOVERY_PROGRESS_EVERY == 0 or idx == total:
             logger.info(
                 "%s sitemap progress: %d/%d sub-sitemap(s), %d article URL(s)",
